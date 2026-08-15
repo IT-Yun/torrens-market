@@ -28,13 +28,22 @@ export function ListingRow({
       style={({ pressed }) => [styles.card, pressed && { backgroundColor: colors.surface }]}
       onPress={() => router.push(`/listing/${item.id}`)}
     >
-      {photo ? (
-        <Image source={{ uri: photoUrl(photo.storage_path) }} style={styles.cardImage} />
-      ) : (
-        <View style={[styles.cardImage, styles.cardImagePlaceholder]}>
-          <Package size={24} color={colors.textSecondary} strokeWidth={1.5} />
-        </View>
-      )}
+      <View>
+        {photo ? (
+          <Image source={{ uri: photoUrl(photo.storage_path) }} style={styles.cardImage} />
+        ) : (
+          <View style={[styles.cardImage, styles.cardImagePlaceholder]}>
+            <Package size={24} color={colors.textSecondary} strokeWidth={1.5} />
+          </View>
+        )}
+        {item.status !== 'active' && (
+          <View style={styles.statusOverlay}>
+            <Text style={styles.statusOverlayText}>
+              {t(item.status === 'sold' ? 'listingDetail.sold' : 'listingDetail.reserved')}
+            </Text>
+          </View>
+        )}
+      </View>
       <View style={styles.cardBody}>
         <Text style={styles.cardTitle} numberOfLines={2}>
           {item.title}
@@ -109,5 +118,13 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   likes: { flexDirection: 'row', alignItems: 'center', gap: 3 },
+  statusOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(20, 20, 20, 0.5)',
+    borderRadius: radius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  statusOverlayText: { color: colors.white, fontSize: 13, fontWeight: '700' },
   likesText: { fontSize: 12, color: colors.textSecondary },
 });

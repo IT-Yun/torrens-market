@@ -145,3 +145,9 @@ export async function markRead(roomId: string, userId: string): Promise<void> {
     .eq('room_id', roomId)
     .eq('user_id', userId);
 }
+
+/** Number of rooms with unread messages — used for the chat tab badge. */
+export async function fetchUnreadCount(userId: string): Promise<number> {
+  const rooms = await fetchRooms(userId);
+  return rooms.filter((r) => r.unread).length;
+}
