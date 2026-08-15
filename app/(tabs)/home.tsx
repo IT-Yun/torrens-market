@@ -7,12 +7,13 @@ import { AdelaideHero } from '../../src/components/AdelaideHero';
 import { ListingRow } from '../../src/components/ListingRow';
 import i18n from '../../src/lib/i18n';
 import { fetchCategories, fetchListings, type Category, type ListingCard } from '../../src/lib/listings';
+import { fetchBlockedIds } from '../../src/lib/moderation';
 import { useSession } from '../../src/lib/session';
 import { colors, radius, spacing } from '../../src/theme';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
-  const { profile } = useSession();
+  const { session, profile } = useSession();
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [listings, setListings] = useState<ListingCard[]>([]);
@@ -22,17 +23,18 @@ export default function HomeScreen() {
 
   const load = useCallback(async () => {
     try {
-      const [cats, items] = await Promise.all([
+      const [cats, items, blocked] = await Promise.all([
         categories.length ? Promise.resolve(categories) : fetchCategories(),
         fetchListings(selectedCategory),
+        session ? fetchBlockedIds(session.user.id) : Promise.resolve(new Set<string>()),
       ]);
       setCategories(cats);
-      setListings(items);
+      setListings(items.filter((item) => !blocked.has(item.seller_id)));
       setLoadError(false);
     } catch {
       setLoadError(true);
     }
-  }, [categories, selectedCategory]);
+  }, [categories, selectedCategory, session]);
 
   useEffect(() => {
     load();

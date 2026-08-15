@@ -132,5 +132,19 @@
     "markActive": "Relist",
     "empty": "You haven't posted anything yet.",
     "markReserved": "Reserve"
+  },
+  "report": {
+    "menuTitle": "Report or block",
+    "action": "Report this listing",
+    "reasonTitle": "Why are you reporting this?",
+    "spam": "Spam",
+    "scam": "Possible scam",
+    "inappropriate": "Inappropriate content",
+    "other": "Other",
+    "done": "Thanks — we'll review this report."
+  },
+  "block": {
+    "action": "Block this seller",
+    "done": "Seller blocked. You won't see their listings."
   }
 }

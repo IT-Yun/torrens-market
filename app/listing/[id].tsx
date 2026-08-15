@@ -16,6 +16,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Button } from '../../src/components/ui';
 import { startChat } from '../../src/lib/chat';
 import { isFavorite, toggleFavorite } from '../../src/lib/favorites';
+import { blockUser, reportListing, type ReportReason } from '../../src/lib/moderation';
 import i18n from '../../src/lib/i18n';
 import { useSession } from '../../src/lib/session';
 import {
@@ -47,6 +48,47 @@ export default function ListingDetailScreen() {
     }
     fetchCategories().then(setCategories).catch(() => {});
   }, [id, session]);
+
+  function openModeration() {
+    if (!session || !listing) return;
+    const reasons: [string, ReportReason][] = [
+      [t('report.spam'), 'spam'],
+      [t('report.scam'), 'scam'],
+      [t('report.inappropriate'), 'inappropriate'],
+      [t('report.other'), 'other'],
+    ];
+    Alert.alert(t('report.menuTitle'), undefined, [
+      {
+        text: t('report.action'),
+        onPress: () =>
+          Alert.alert(
+            t('report.reasonTitle'),
+            undefined,
+            reasons
+              .map(([label, reason]) => ({
+                text: label,
+                onPress: async () => {
+                  await reportListing(session.user.id, listing.id, listing.seller_id, reason).catch(
+                    () => {},
+                  );
+                  Alert.alert(t('report.done'));
+                },
+              }))
+              .concat([{ text: t('common.cancel'), onPress: async () => {} }]),
+          ),
+      },
+      {
+        text: t('block.action'),
+        style: 'destructive',
+        onPress: async () => {
+          await blockUser(session.user.id, listing.seller_id).catch(() => {});
+          Alert.alert(t('block.done'));
+          router.back();
+        },
+      },
+      { text: t('common.cancel'), style: 'cancel' },
+    ]);
+  }
 
   async function onToggleFavorite() {
     if (!session || !id) return;
@@ -89,15 +131,27 @@ export default function ListingDetailScreen() {
         <Pressable onPress={() => router.back()}>
           <Text style={styles.back}>‹</Text>
         </Pressable>
-        <Pressable
-          onPress={onToggleFavorite}
-          hitSlop={8}
-          accessibilityRole="button"
-          accessibilityLabel={t('tabs.favorites')}
-          accessibilityState={{ selected: liked }}
-        >
-          <Text style={styles.heart}>{liked ? '❤️' : '🤍'}</Text>
-        </Pressable>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+          <Pressable
+            onPress={onToggleFavorite}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel={t('tabs.favorites')}
+            accessibilityState={{ selected: liked }}
+          >
+            <Text style={styles.heart}>{liked ? '❤️' : '🤍'}</Text>
+          </Pressable>
+          {session?.user.id !== listing.seller_id && (
+            <Pressable
+              onPress={openModeration}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel={t('report.menuTitle')}
+            >
+              <Text style={styles.moreButton}>⋯</Text>
+            </Pressable>
+          )}
+        </View>
       </View>
       <ScrollView>
         <View>
@@ -222,6 +276,7 @@ const styles = StyleSheet.create({
   },
   back: { fontSize: 32, color: colors.text, lineHeight: 34 },
   heart: { fontSize: 24 },
+  moreButton: { fontSize: 26, color: colors.text, fontWeight: '700' },
   photo: { width, height: width * 0.9, backgroundColor: colors.surface },
   photoPlaceholder: { alignItems: 'center', justifyContent: 'center' },
   body: { padding: spacing.md, gap: spacing.sm },

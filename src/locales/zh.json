@@ -132,5 +132,19 @@
     "markActive": "重新上架",
     "empty": "你还没有发布商品。",
     "markReserved": "标记预订"
+  },
+  "report": {
+    "menuTitle": "举报或屏蔽",
+    "action": "举报该商品",
+    "reasonTitle": "请选择举报原因",
+    "spam": "垃圾信息",
+    "scam": "疑似诈骗",
+    "inappropriate": "不当内容",
+    "other": "其他",
+    "done": "已收到举报，我们会尽快审核。"
+  },
+  "block": {
+    "action": "屏蔽该卖家",
+    "done": "已屏蔽。你将不再看到该卖家的商品。"
   }
 }

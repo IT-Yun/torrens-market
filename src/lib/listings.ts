@@ -19,6 +19,7 @@ export type Category = {
 
 export type ListingCard = {
   id: string;
+  seller_id: string;
   title: string;
   price_cents: number;
   suburb: string;
@@ -55,7 +56,7 @@ export async function fetchListings(categoryId?: number | null): Promise<Listing
   let query = supabase
     .from('listings')
     .select(
-      'id, title, price_cents, suburb, status, created_at, category_id, attributes, listing_photos (storage_path, sort_order)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, listing_photos (storage_path, sort_order)',
     )
     .eq('status', 'active')
     .order('created_at', { ascending: false })
@@ -78,7 +79,7 @@ export async function searchListings(filters: SearchFilters): Promise<ListingCar
   let query = supabase
     .from('listings')
     .select(
-      `id, title, price_cents, suburb, status, created_at, category_id, attributes,
+      `id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes,
        listing_photos (storage_path, sort_order),
        profiles!inner (nationality, is_phone_verified)`,
     )
@@ -188,7 +189,7 @@ export async function fetchMyListings(userId: string): Promise<ListingCard[]> {
   const { data, error } = await supabase
     .from('listings')
     .select(
-      'id, title, price_cents, suburb, status, created_at, category_id, attributes, listing_photos (storage_path, sort_order)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, listing_photos (storage_path, sort_order)',
     )
     .eq('seller_id', userId)
     .neq('status', 'deleted')

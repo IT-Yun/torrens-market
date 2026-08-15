@@ -36,7 +36,7 @@ export async function fetchFavorites(userId: string): Promise<ListingCard[]> {
     .from('favorites')
     .select(
       `created_at,
-       listings (id, title, price_cents, suburb, status, created_at, category_id, attributes,
+       listings (id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes,
                  listing_photos (storage_path, sort_order))`,
     )
     .eq('user_id', userId)

@@ -132,5 +132,19 @@
     "markActive": "판매중으로",
     "empty": "아직 등록한 매물이 없어요.",
     "markReserved": "예약중으로"
+  },
+  "report": {
+    "menuTitle": "신고 또는 차단",
+    "action": "이 매물 신고하기",
+    "reasonTitle": "신고 사유를 선택해 주세요",
+    "spam": "스팸/광고",
+    "scam": "사기 의심",
+    "inappropriate": "부적절한 내용",
+    "other": "기타",
+    "done": "접수됐어요 — 검토 후 조치할게요."
+  },
+  "block": {
+    "action": "이 판매자 차단하기",
+    "done": "차단했어요. 이 판매자의 매물이 더 이상 보이지 않아요."
   }
 }
