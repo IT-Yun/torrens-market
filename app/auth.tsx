@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { AdelaideHero } from '../src/components/AdelaideHero';
 import { Button, Field, Screen } from '../src/components/ui';
 import { signInWithEmailPassword, signInWithProvider } from '../src/lib/auth';
 import { colors, spacing } from '../src/theme';
@@ -32,7 +33,7 @@ export default function AuthScreen() {
   return (
     <Screen>
       <View style={styles.container}>
-        <Text style={styles.logo}>🏞️</Text>
+        <AdelaideHero width={280} height={157} />
         <Text style={styles.title}>Torrens Market</Text>
         <Text style={styles.tagline}>{t('auth.tagline')}</Text>
 
@@ -88,8 +89,7 @@ export default function AuthScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  logo: { fontSize: 56 },
-  title: { fontSize: 28, fontWeight: '700', color: colors.primary, marginTop: spacing.sm },
+  title: { fontSize: 28, fontWeight: '700', color: colors.primary, marginTop: spacing.md },
   tagline: { fontSize: 15, color: colors.textSecondary, marginTop: spacing.sm },
   divider: {
     textAlign: 'center',

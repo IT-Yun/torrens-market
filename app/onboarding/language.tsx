@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { AdelaideHero } from '../../src/components/AdelaideHero';
 import { Screen } from '../../src/components/ui';
 import { LANGUAGES, setAppLanguage, type AppLanguage } from '../../src/lib/i18n';
 import { colors, radius, spacing } from '../../src/theme';
@@ -16,7 +17,7 @@ export default function LanguageScreen() {
   return (
     <Screen>
       <View style={styles.container}>
-        <Text style={styles.logo}>🏞️</Text>
+        <AdelaideHero width={300} height={168} />
         <Text style={styles.title}>Torrens Market</Text>
         <Text style={styles.subtitle}>{t('onboarding.chooseLanguage')}</Text>
         <View style={{ gap: spacing.sm, alignSelf: 'stretch', marginTop: spacing.lg }}>
@@ -34,8 +35,7 @@ export default function LanguageScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  logo: { fontSize: 56 },
-  title: { fontSize: 28, fontWeight: '700', color: colors.primary, marginTop: spacing.sm },
+  title: { fontSize: 28, fontWeight: '700', color: colors.primary, marginTop: spacing.md },
   subtitle: { fontSize: 16, color: colors.textSecondary, marginTop: spacing.md },
   langButton: {
     borderWidth: 1,
