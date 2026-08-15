@@ -14,7 +14,9 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Button } from '../../src/components/ui';
+import { isFavorite, toggleFavorite } from '../../src/lib/favorites';
 import i18n from '../../src/lib/i18n';
+import { useSession } from '../../src/lib/session';
 import {
   fetchCategories,
   fetchListing,
@@ -30,14 +32,30 @@ const { width } = Dimensions.get('window');
 export default function ListingDetailScreen() {
   const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { session } = useSession();
   const [listing, setListing] = useState<ListingDetail | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [liked, setLiked] = useState(false);
   const lang = i18n.language;
 
   useEffect(() => {
-    if (id) fetchListing(id).then(setListing).catch(() => {});
+    if (id) {
+      fetchListing(id).then(setListing).catch(() => {});
+      if (session) isFavorite(session.user.id, id).then(setLiked).catch(() => {});
+    }
     fetchCategories().then(setCategories).catch(() => {});
-  }, [id]);
+  }, [id, session]);
+
+  async function onToggleFavorite() {
+    if (!session || !id) return;
+    const next = !liked;
+    setLiked(next);
+    try {
+      await toggleFavorite(session.user.id, id, next);
+    } catch {
+      setLiked(!next);
+    }
+  }
 
   const category = useMemo(
     () => categories.find((c) => c.id === listing?.category_id) ?? null,
@@ -68,6 +86,9 @@ export default function ListingDetailScreen() {
       <View style={styles.header}>
         <Pressable onPress={() => router.back()}>
           <Text style={styles.back}>‹</Text>
+        </Pressable>
+        <Pressable onPress={onToggleFavorite} hitSlop={8}>
+          <Text style={styles.heart}>{liked ? '❤️' : '🤍'}</Text>
         </Pressable>
       </View>
       <ScrollView>
@@ -133,8 +154,15 @@ export default function ListingDetailScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  header: { paddingHorizontal: spacing.md, paddingVertical: spacing.xs },
+  header: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   back: { fontSize: 32, color: colors.text, lineHeight: 34 },
+  heart: { fontSize: 24 },
   photo: { width, height: width * 0.9, backgroundColor: colors.surface },
   photoPlaceholder: { alignItems: 'center', justifyContent: 'center' },
   body: { padding: spacing.md, gap: spacing.sm },

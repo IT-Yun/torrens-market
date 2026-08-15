@@ -48,8 +48,12 @@
     "signOut": "로그아웃",
     "myListings": "내 매물"
   },
-  "favorites": { "empty": "♥ 누른 매물이 여기에 모여요." },
-  "chat": { "empty": "채팅이 여기에 표시돼요." },
+  "favorites": {
+    "empty": "♥ 누른 매물이 여기에 모여요."
+  },
+  "chat": {
+    "empty": "채팅이 여기에 표시돼요."
+  },
   "listingCreate": {
     "title": "매물 등록",
     "photos": "사진",
@@ -75,15 +79,31 @@
     "sold": "판매완료",
     "reserved": "예약중"
   },
-  "conditions": { "new": "새상품", "like_new": "거의 새것", "used": "중고" },
+  "conditions": {
+    "new": "새상품",
+    "like_new": "거의 새것",
+    "used": "중고"
+  },
   "pickupModes": {
     "pickup_only": "픽업만 가능",
     "seller_delivers": "판매자 배달",
     "buyer_collects": "구매자 수령"
   },
   "nationalities": {
-    "CN": "중국", "KR": "대한민국", "AU": "호주", "IN": "인도",
-    "VN": "베트남", "JP": "일본", "MY": "말레이시아", "HK": "홍콩",
-    "TW": "대만", "OTHER": "기타"
+    "CN": "중국",
+    "KR": "대한민국",
+    "AU": "호주",
+    "IN": "인도",
+    "VN": "베트남",
+    "JP": "일본",
+    "MY": "말레이시아",
+    "HK": "홍콩",
+    "TW": "대만",
+    "OTHER": "기타"
+  },
+  "search": {
+    "title": "검색",
+    "verifiedOnly": "인증 판매자만",
+    "noResults": "결과가 없어요 — 다른 키워드나 필터를 써보세요."
   }
 }

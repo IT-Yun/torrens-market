@@ -48,8 +48,12 @@
     "signOut": "退出登录",
     "myListings": "我的商品"
   },
-  "favorites": { "empty": "你收藏的商品会显示在这里。" },
-  "chat": { "empty": "你的会话会显示在这里。" },
+  "favorites": {
+    "empty": "你收藏的商品会显示在这里。"
+  },
+  "chat": {
+    "empty": "你的会话会显示在这里。"
+  },
   "listingCreate": {
     "title": "发布商品",
     "photos": "照片",
@@ -75,15 +79,31 @@
     "sold": "已售出",
     "reserved": "已预订"
   },
-  "conditions": { "new": "全新", "like_new": "几乎全新", "used": "二手" },
+  "conditions": {
+    "new": "全新",
+    "like_new": "几乎全新",
+    "used": "二手"
+  },
   "pickupModes": {
     "pickup_only": "仅自取",
     "seller_delivers": "卖家配送",
     "buyer_collects": "买家自提"
   },
   "nationalities": {
-    "CN": "中国", "KR": "韩国", "AU": "澳大利亚", "IN": "印度",
-    "VN": "越南", "JP": "日本", "MY": "马来西亚", "HK": "香港",
-    "TW": "台湾", "OTHER": "其他"
+    "CN": "中国",
+    "KR": "韩国",
+    "AU": "澳大利亚",
+    "IN": "印度",
+    "VN": "越南",
+    "JP": "日本",
+    "MY": "马来西亚",
+    "HK": "香港",
+    "TW": "台湾",
+    "OTHER": "其他"
+  },
+  "search": {
+    "title": "搜索",
+    "verifiedOnly": "仅认证卖家",
+    "noResults": "没有结果 — 换个关键词或筛选条件试试。"
   }
 }

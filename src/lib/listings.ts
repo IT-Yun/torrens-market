@@ -65,6 +65,41 @@ export async function fetchListings(categoryId?: number | null): Promise<Listing
   return (data as ListingCard[]) ?? [];
 }
 
+export type SearchFilters = {
+  query?: string;
+  categoryId?: number | null;
+  nationality?: string | null;
+  verifiedOnly?: boolean;
+  maxPriceCents?: number | null;
+};
+
+export async function searchListings(filters: SearchFilters): Promise<ListingCard[]> {
+  let query = supabase
+    .from('listings')
+    .select(
+      `id, title, price_cents, suburb, status, created_at, category_id, attributes,
+       listing_photos (storage_path, sort_order),
+       profiles!inner (nationality, is_phone_verified)`,
+    )
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(50);
+
+  if (filters.query?.trim())
+    query = query.textSearch('search_vector', filters.query.trim(), {
+      type: 'websearch',
+      config: 'simple',
+    });
+  if (filters.categoryId != null) query = query.eq('category_id', filters.categoryId);
+  if (filters.nationality) query = query.eq('profiles.nationality', filters.nationality);
+  if (filters.verifiedOnly) query = query.eq('profiles.is_phone_verified', true);
+  if (filters.maxPriceCents != null) query = query.lte('price_cents', filters.maxPriceCents);
+
+  const { data, error } = await query;
+  if (error) throw error;
+  return (data as unknown as ListingCard[]) ?? [];
+}
+
 export async function fetchListing(id: string): Promise<ListingDetail | null> {
   const { data, error } = await supabase
     .from('listings')

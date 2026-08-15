@@ -53,6 +53,9 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.safe} edges={['top']}>
       <View style={styles.header}>
         <Text style={styles.brand}>{t('common.appName')}</Text>
+        <Pressable onPress={() => router.push('/search')} hitSlop={8}>
+          <Text style={{ fontSize: 22 }}>🔍</Text>
+        </Pressable>
       </View>
 
       <View>
@@ -132,7 +135,13 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
-  header: { paddingHorizontal: spacing.md, paddingVertical: spacing.sm },
+  header: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   brand: { fontSize: 22, fontWeight: '800', color: colors.primary },
   chipRow: { paddingHorizontal: spacing.md, gap: spacing.sm, paddingVertical: spacing.xs },
   chip: {

@@ -1,16 +1,39 @@
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from 'expo-router';
+import { ListingRow } from '../../src/components/ListingRow';
+import { fetchFavorites } from '../../src/lib/favorites';
+import type { ListingCard } from '../../src/lib/listings';
+import { useSession } from '../../src/lib/session';
 import { colors, spacing } from '../../src/theme';
 
 export default function FavoritesScreen() {
   const { t } = useTranslation();
+  const { session } = useSession();
+  const [items, setItems] = useState<ListingCard[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (session) fetchFavorites(session.user.id).then(setItems).catch(() => {});
+    }, [session]),
+  );
+
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
-      <View style={styles.empty}>
-        <Text style={styles.emoji}>❤️</Text>
-        <Text style={styles.text}>{t('favorites.empty')}</Text>
-      </View>
+      <FlatList
+        data={items}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <ListingRow item={item} />}
+        ListEmptyComponent={
+          <View style={styles.empty}>
+            <Text style={styles.emoji}>❤️</Text>
+            <Text style={styles.text}>{t('favorites.empty')}</Text>
+          </View>
+        }
+        contentContainerStyle={items.length === 0 ? { flex: 1 } : undefined}
+      />
     </SafeAreaView>
   );
 }

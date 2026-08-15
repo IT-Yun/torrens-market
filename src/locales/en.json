@@ -48,8 +48,12 @@
     "signOut": "Sign out",
     "myListings": "My listings"
   },
-  "favorites": { "empty": "Listings you ♥ will appear here." },
-  "chat": { "empty": "Your conversations will appear here." },
+  "favorites": {
+    "empty": "Listings you ♥ will appear here."
+  },
+  "chat": {
+    "empty": "Your conversations will appear here."
+  },
   "listingCreate": {
     "title": "New listing",
     "photos": "Photos",
@@ -75,15 +79,31 @@
     "sold": "Sold",
     "reserved": "Reserved"
   },
-  "conditions": { "new": "New", "like_new": "Like new", "used": "Used" },
+  "conditions": {
+    "new": "New",
+    "like_new": "Like new",
+    "used": "Used"
+  },
   "pickupModes": {
     "pickup_only": "Pickup only",
     "seller_delivers": "Seller delivers",
     "buyer_collects": "Buyer collects"
   },
   "nationalities": {
-    "CN": "China", "KR": "South Korea", "AU": "Australia", "IN": "India",
-    "VN": "Vietnam", "JP": "Japan", "MY": "Malaysia", "HK": "Hong Kong",
-    "TW": "Taiwan", "OTHER": "Other"
+    "CN": "China",
+    "KR": "South Korea",
+    "AU": "Australia",
+    "IN": "India",
+    "VN": "Vietnam",
+    "JP": "Japan",
+    "MY": "Malaysia",
+    "HK": "Hong Kong",
+    "TW": "Taiwan",
+    "OTHER": "Other"
+  },
+  "search": {
+    "title": "Search",
+    "verifiedOnly": "Verified only",
+    "noResults": "No results — try different keywords or filters."
   }
 }
