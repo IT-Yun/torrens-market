@@ -59,7 +59,10 @@
     "language": "Language",
     "signOut": "Sign out",
     "myListings": "My listings",
-    "editProfile": "Edit profile"
+    "editProfile": "Edit profile",
+    "sectionTrading": "Trading",
+    "sectionAlerts": "Alerts",
+    "sectionSettings": "Settings"
   },
   "favorites": {
     "empty": "Listings you ♥ will appear here."

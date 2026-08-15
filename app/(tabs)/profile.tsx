@@ -2,13 +2,21 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Button } from '../../src/components/ui';
 import { LANGUAGES, setAppLanguage } from '../../src/lib/i18n';
 import i18n from '../../src/lib/i18n';
 import { signOut } from '../../src/lib/auth';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
-import { BadgeCheck, Bell, ChevronRight, MapPin, Package, Pencil } from 'lucide-react-native';
+import {
+  BadgeCheck,
+  Bell,
+  ChevronRight,
+  Globe,
+  LogOut,
+  MapPin,
+  Package,
+  Pencil,
+} from 'lucide-react-native';
 import { Avatar } from '../../src/components/Avatar';
 import { colors, radius, spacing } from '../../src/theme';
 
@@ -52,55 +60,74 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>{t('profile.language')}</Text>
-        <View style={styles.langRow}>
-          {LANGUAGES.map((l) => {
-            const selected = i18n.language === l.code;
-            return (
-              <Pressable
-                key={l.code}
-                style={[styles.chip, selected && styles.chipSelected]}
-                onPress={() => changeLanguage(l.code)}
-              >
-                <Text style={[styles.chipText, selected && { color: colors.white }]}>{l.label}</Text>
-              </Pressable>
-            );
-          })}
+        <Text style={styles.sectionTitle}>{t('profile.sectionTrading')}</Text>
+        <View style={styles.menuGroup}>
+          <Pressable style={styles.menuRow} onPress={() => router.push('/my-listings')}>
+            <View style={styles.menuLeft}>
+              <Package size={18} color={colors.textSecondary} />
+              <Text style={styles.menuText}>{t('profile.myListings')}</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </Pressable>
         </View>
 
-        <Pressable style={styles.menuRow} onPress={() => router.push('/onboarding/profile')}>
-          <View style={styles.menuLeft}>
-            <Pencil size={18} color={colors.textSecondary} />
-            <Text style={styles.menuText}>{t('profile.editProfile')}</Text>
-          </View>
-          <ChevronRight size={18} color={colors.textSecondary} />
-        </Pressable>
+        <Text style={styles.sectionTitle}>{t('profile.sectionAlerts')}</Text>
+        <View style={styles.menuGroup}>
+          <Pressable style={styles.menuRow} onPress={() => router.push('/keywords')}>
+            <View style={styles.menuLeft}>
+              <Bell size={18} color={colors.textSecondary} />
+              <Text style={styles.menuText}>{t('keywords.title')}</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </Pressable>
+        </View>
 
-        <Pressable style={styles.menuRow} onPress={() => router.push('/my-listings')}>
-          <View style={styles.menuLeft}>
-            <Package size={18} color={colors.textSecondary} />
-            <Text style={styles.menuText}>{t('profile.myListings')}</Text>
+        <Text style={styles.sectionTitle}>{t('profile.sectionSettings')}</Text>
+        <View style={styles.menuGroup}>
+          <Pressable style={styles.menuRow} onPress={() => router.push('/onboarding/profile')}>
+            <View style={styles.menuLeft}>
+              <Pencil size={18} color={colors.textSecondary} />
+              <Text style={styles.menuText}>{t('profile.editProfile')}</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </Pressable>
+          <View style={styles.separator} />
+          <View style={[styles.menuRow, { justifyContent: 'flex-start', gap: 10 }]}>
+            <View style={styles.menuLeft}>
+              <Globe size={18} color={colors.textSecondary} />
+              <Text style={styles.menuText}>{t('profile.language')}</Text>
+            </View>
+            <View style={[styles.langRow, { flex: 1, justifyContent: 'flex-end' }]}>
+              {LANGUAGES.map((l) => {
+                const selected = i18n.language === l.code;
+                return (
+                  <Pressable
+                    key={l.code}
+                    style={[styles.chip, selected && styles.chipSelected]}
+                    onPress={() => changeLanguage(l.code)}
+                  >
+                    <Text style={[styles.chipText, selected && { color: colors.white }]}>
+                      {l.label}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
           </View>
-          <ChevronRight size={18} color={colors.textSecondary} />
-        </Pressable>
-
-        <Pressable style={styles.menuRow} onPress={() => router.push('/keywords')}>
-          <View style={styles.menuLeft}>
-            <Bell size={18} color={colors.textSecondary} />
-            <Text style={styles.menuText}>{t('keywords.title')}</Text>
-          </View>
-          <ChevronRight size={18} color={colors.textSecondary} />
-        </Pressable>
-
-        <View style={{ flex: 1 }} />
-        <Button
-          title={t('profile.signOut')}
-          variant="outline"
-          onPress={async () => {
-            await signOut();
-            router.replace('/');
-          }}
-        />
+          <View style={styles.separator} />
+          <Pressable
+            style={styles.menuRow}
+            onPress={async () => {
+              await signOut();
+              router.replace('/');
+            }}
+          >
+            <View style={styles.menuLeft}>
+              <LogOut size={18} color={colors.textSecondary} />
+              <Text style={styles.menuText}>{t('profile.signOut')}</Text>
+            </View>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -140,16 +167,21 @@ const styles = StyleSheet.create({
   },
   chipSelected: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipText: { fontSize: 14, color: colors.text },
+  menuGroup: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    backgroundColor: colors.white,
+    overflow: 'hidden',
+  },
   menuRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.md,
     paddingHorizontal: spacing.md,
     paddingVertical: 14,
   },
+  separator: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border },
   menuText: { fontSize: 15, fontWeight: '600', color: colors.text },
   menuLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
 });

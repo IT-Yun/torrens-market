@@ -59,7 +59,10 @@
     "language": "언어",
     "signOut": "로그아웃",
     "myListings": "내 매물",
-    "editProfile": "프로필 수정"
+    "editProfile": "프로필 수정",
+    "sectionTrading": "거래",
+    "sectionAlerts": "알림",
+    "sectionSettings": "설정"
   },
   "favorites": {
     "empty": "♥ 누른 매물이 여기에 모여요."
