@@ -1,0 +1,58 @@
+{
+  "common": {
+    "appName": "Torrens 市集",
+    "continue": "继续",
+    "save": "保存",
+    "cancel": "取消",
+    "loading": "加载中..."
+  },
+  "onboarding": {
+    "chooseLanguage": "选择你的语言",
+    "languageNote": "以后可以随时在个人资料中更改。"
+  },
+  "auth": {
+    "tagline": "阿德莱德本地二手市集 — 用你的语言",
+    "continueWithGoogle": "使用 Google 继续",
+    "continueWithApple": "使用 Apple 继续",
+    "orEmail": "或使用邮箱",
+    "emailPlaceholder": "you@example.com",
+    "sendCode": "发送验证码",
+    "codeSent": "请输入邮箱收到的6位验证码",
+    "codePlaceholder": "6位验证码",
+    "verifyCode": "验证",
+    "error": "登录失败，请重试。"
+  },
+  "profileSetup": {
+    "title": "设置个人资料",
+    "displayName": "昵称",
+    "suburb": "区域 (Suburb)",
+    "suburbPlaceholder": "如: Adelaide CBD, Norwood",
+    "nationality": "国籍（可选）",
+    "nationalityNote": "会显示在你的资料上，买家可以按国籍筛选，也可以留空。",
+    "done": "开始交易"
+  },
+  "tabs": {
+    "home": "首页",
+    "favorites": "收藏",
+    "chat": "聊天",
+    "profile": "我的"
+  },
+  "home": {
+    "searchPlaceholder": "搜索 Torrens 市集",
+    "empty": "还没有商品 — 来发布第一个吧！",
+    "all": "全部"
+  },
+  "profile": {
+    "verified": "已认证",
+    "language": "语言",
+    "signOut": "退出登录",
+    "myListings": "我的商品"
+  },
+  "favorites": { "empty": "你收藏的商品会显示在这里。" },
+  "chat": { "empty": "你的会话会显示在这里。" },
+  "nationalities": {
+    "CN": "中国", "KR": "韩国", "AU": "澳大利亚", "IN": "印度",
+    "VN": "越南", "JP": "日本", "MY": "马来西亚", "HK": "香港",
+    "TW": "台湾", "OTHER": "其他"
+  }
+}

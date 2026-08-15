@@ -1,0 +1,58 @@
+{
+  "common": {
+    "appName": "토렌스 마켓",
+    "continue": "계속",
+    "save": "저장",
+    "cancel": "취소",
+    "loading": "불러오는 중..."
+  },
+  "onboarding": {
+    "chooseLanguage": "언어를 선택하세요",
+    "languageNote": "프로필에서 언제든지 변경할 수 있어요."
+  },
+  "auth": {
+    "tagline": "애들레이드 동네 마켓 — 내 언어로",
+    "continueWithGoogle": "Google로 계속하기",
+    "continueWithApple": "Apple로 계속하기",
+    "orEmail": "또는 이메일로",
+    "emailPlaceholder": "you@example.com",
+    "sendCode": "인증코드 받기",
+    "codeSent": "이메일로 받은 6자리 코드를 입력하세요",
+    "codePlaceholder": "6자리 코드",
+    "verifyCode": "확인",
+    "error": "로그인에 실패했어요. 다시 시도해 주세요."
+  },
+  "profileSetup": {
+    "title": "프로필 설정",
+    "displayName": "닉네임",
+    "suburb": "지역 (Suburb)",
+    "suburbPlaceholder": "예: Adelaide CBD, Norwood",
+    "nationality": "국적 (선택)",
+    "nationalityNote": "프로필에 표시돼요. 구매자가 필터로 쓸 수 있고, 비워둬도 돼요.",
+    "done": "거래 시작하기"
+  },
+  "tabs": {
+    "home": "홈",
+    "favorites": "찜",
+    "chat": "채팅",
+    "profile": "프로필"
+  },
+  "home": {
+    "searchPlaceholder": "토렌스 마켓 검색",
+    "empty": "아직 매물이 없어요 — 첫 매물을 올려보세요!",
+    "all": "전체"
+  },
+  "profile": {
+    "verified": "인증됨",
+    "language": "언어",
+    "signOut": "로그아웃",
+    "myListings": "내 매물"
+  },
+  "favorites": { "empty": "♥ 누른 매물이 여기에 모여요." },
+  "chat": { "empty": "채팅이 여기에 표시돼요." },
+  "nationalities": {
+    "CN": "중국", "KR": "대한민국", "AU": "호주", "IN": "인도",
+    "VN": "베트남", "JP": "일본", "MY": "말레이시아", "HK": "홍콩",
+    "TW": "대만", "OTHER": "기타"
+  }
+}

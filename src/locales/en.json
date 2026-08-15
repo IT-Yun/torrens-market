@@ -1,0 +1,58 @@
+{
+  "common": {
+    "appName": "Torrens Market",
+    "continue": "Continue",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading..."
+  },
+  "onboarding": {
+    "chooseLanguage": "Choose your language",
+    "languageNote": "You can change this anytime in your profile."
+  },
+  "auth": {
+    "tagline": "Adelaide's local marketplace — in your language",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithApple": "Continue with Apple",
+    "orEmail": "or use email",
+    "emailPlaceholder": "you@example.com",
+    "sendCode": "Send code",
+    "codeSent": "Check your email for a 6-digit code",
+    "codePlaceholder": "6-digit code",
+    "verifyCode": "Verify",
+    "error": "Sign-in failed. Please try again."
+  },
+  "profileSetup": {
+    "title": "Set up your profile",
+    "displayName": "Display name",
+    "suburb": "Suburb",
+    "suburbPlaceholder": "e.g. Adelaide CBD, Norwood",
+    "nationality": "Nationality (optional)",
+    "nationalityNote": "Shown on your profile. Buyers can filter by it — or leave it empty.",
+    "done": "Start trading"
+  },
+  "tabs": {
+    "home": "Home",
+    "favorites": "Favorites",
+    "chat": "Chat",
+    "profile": "Profile"
+  },
+  "home": {
+    "searchPlaceholder": "Search Torrens Market",
+    "empty": "No listings yet — be the first to post!",
+    "all": "All"
+  },
+  "profile": {
+    "verified": "Verified",
+    "language": "Language",
+    "signOut": "Sign out",
+    "myListings": "My listings"
+  },
+  "favorites": { "empty": "Listings you ♥ will appear here." },
+  "chat": { "empty": "Your conversations will appear here." },
+  "nationalities": {
+    "CN": "China", "KR": "South Korea", "AU": "Australia", "IN": "India",
+    "VN": "Vietnam", "JP": "Japan", "MY": "Malaysia", "HK": "Hong Kong",
+    "TW": "Taiwan", "OTHER": "Other"
+  }
+}
