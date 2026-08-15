@@ -1,6 +1,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { router } from 'expo-router';
 import { AdelaideHero } from '../src/components/AdelaideHero';
 import { Button, Field, Screen } from '../src/components/ui';
@@ -33,7 +41,15 @@ export default function AuthScreen() {
 
   return (
     <Screen>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView
+          contentContainerStyle={styles.container}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
         <AdelaideHero width={280} height={157} />
         <Text style={styles.title}>Torrens Market</Text>
         <Text style={styles.tagline}>{t('auth.tagline')}</Text>
@@ -100,14 +116,15 @@ export default function AuthScreen() {
               />
             </>
           )}
-        </View>
-      </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  container: { flexGrow: 1, alignItems: 'center', justifyContent: 'center' },
   title: { fontSize: 28, fontWeight: '700', color: colors.primary, marginTop: spacing.md },
   tagline: { fontSize: 15, color: colors.textSecondary, marginTop: spacing.sm },
   divider: {
