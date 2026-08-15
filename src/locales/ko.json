@@ -127,7 +127,9 @@
     "title": "검색",
     "verifiedOnly": "인증 판매자만",
     "noResults": "결과가 없어요 — 다른 키워드나 필터를 써보세요.",
-    "keywordCta": "올라오면 알림 받기"
+    "keywordCta": "올라오면 알림 받기",
+    "recent": "최근 검색어",
+    "clearRecent": "지우기"
   },
   "keywords": {
     "title": "키워드 알림",

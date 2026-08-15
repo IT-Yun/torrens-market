@@ -127,7 +127,9 @@
     "title": "搜索",
     "verifiedOnly": "仅认证卖家",
     "noResults": "没有结果 — 换个关键词或筛选条件试试。",
-    "keywordCta": "有货时通知我"
+    "keywordCta": "有货时通知我",
+    "recent": "最近搜索",
+    "clearRecent": "清除"
   },
   "keywords": {
     "title": "关键词提醒",

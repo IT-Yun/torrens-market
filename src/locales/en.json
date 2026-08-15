@@ -127,7 +127,9 @@
     "title": "Search",
     "verifiedOnly": "Verified only",
     "noResults": "No results — try different keywords or filters.",
-    "keywordCta": "Get notified when it's posted"
+    "keywordCta": "Get notified when it's posted",
+    "recent": "Recent searches",
+    "clearRecent": "Clear"
   },
   "keywords": {
     "title": "Keyword alerts",

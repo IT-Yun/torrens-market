@@ -10,7 +10,8 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { BadgeCheck, Bell, SearchX } from 'lucide-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BadgeCheck, Bell, History, SearchX } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { ListingRow } from '../src/components/ListingRow';
 import { getPositionIfGranted } from '../src/lib/location';
@@ -24,6 +25,7 @@ import {
 import { colors, radius, spacing } from '../src/theme';
 
 const NATIONALITY_CODES = ['CN', 'KR', 'AU', 'IN', 'VN', 'JP', 'MY', 'HK', 'TW', 'OTHER'];
+const RECENTS_KEY = 'recent_searches';
 
 export default function SearchScreen() {
   const { t } = useTranslation();
@@ -40,16 +42,36 @@ export default function SearchScreen() {
     getPositionIfGranted().then((p) => p && setPos(p)).catch(() => {});
   }, []);
   const [searched, setSearched] = useState(false);
+  const [recents, setRecents] = useState<string[]>([]);
 
   useEffect(() => {
     fetchCategories().then(setCategories).catch(() => {});
+    AsyncStorage.getItem(RECENTS_KEY)
+      .then((v) => v && setRecents(JSON.parse(v)))
+      .catch(() => {});
   }, []);
 
-  const run = useCallback(async () => {
-    const items = await searchListings({ query, categoryId, nationality, verifiedOnly });
-    setResults(items);
-    setSearched(true);
-  }, [query, categoryId, nationality, verifiedOnly]);
+  function saveRecent(term: string) {
+    const next = [term, ...recents.filter((r) => r !== term)].slice(0, 8);
+    setRecents(next);
+    AsyncStorage.setItem(RECENTS_KEY, JSON.stringify(next)).catch(() => {});
+  }
+
+  function clearRecents() {
+    setRecents([]);
+    AsyncStorage.removeItem(RECENTS_KEY).catch(() => {});
+  }
+
+  const run = useCallback(
+    async (override?: string) => {
+      const term = override ?? query;
+      const items = await searchListings({ query: term, categoryId, nationality, verifiedOnly });
+      setResults(items);
+      setSearched(true);
+      if (term.trim()) saveRecent(term.trim());
+    },
+    [query, categoryId, nationality, verifiedOnly, recents],
+  );
 
   useEffect(() => {
     run().catch(() => {});
@@ -122,6 +144,34 @@ export default function SearchScreen() {
         data={results}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ListingRow item={item} viewerPos={pos} />}
+        ListHeaderComponent={
+          query.trim() === '' && recents.length > 0 ? (
+            <View style={styles.recents}>
+              <View style={styles.recentsHeader}>
+                <Text style={styles.recentsTitle}>{t('search.recent')}</Text>
+                <Pressable onPress={clearRecents} hitSlop={8} accessibilityRole="button">
+                  <Text style={styles.recentsClear}>{t('search.clearRecent')}</Text>
+                </Pressable>
+              </View>
+              <View style={styles.recentsChips}>
+                {recents.map((r) => (
+                  <Pressable
+                    key={r}
+                    style={[styles.chip, styles.iconChip]}
+                    onPress={() => {
+                      setQuery(r);
+                      run(r).catch(() => {});
+                    }}
+                    accessibilityRole="button"
+                  >
+                    <History size={13} color={colors.textSecondary} />
+                    <Text style={styles.chipText}>{r}</Text>
+                  </Pressable>
+                ))}
+              </View>
+            </View>
+          ) : null
+        }
         ListEmptyComponent={
           searched ? (
             <View style={styles.empty}>
@@ -171,6 +221,11 @@ const styles = StyleSheet.create({
   chipSelected: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipText: { fontSize: 14, color: colors.text },
   iconChip: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+  recents: { paddingHorizontal: spacing.md, paddingTop: spacing.sm, gap: spacing.sm },
+  recentsHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  recentsTitle: { fontSize: 13, fontWeight: '600', color: colors.textSecondary },
+  recentsClear: { fontSize: 13, color: colors.textSecondary, textDecorationLine: 'underline' },
+  recentsChips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
   keywordCta: {
     marginTop: spacing.sm,
