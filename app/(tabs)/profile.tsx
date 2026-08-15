@@ -26,15 +26,22 @@ export default function ProfileScreen() {
     <SafeAreaView style={styles.safe} edges={['top']}>
       <View style={styles.container}>
         <View style={styles.card}>
-          <Text style={styles.name}>
-            {profile?.display_name ?? '—'}
-            {profile?.is_phone_verified ? `  ✓ ${t('profile.verified')}` : ''}
-          </Text>
-          <Text style={styles.meta}>
-            {[profile?.suburb, profile?.nationality ? t(`nationalities.${profile.nationality}`) : null]
-              .filter(Boolean)
-              .join(' · ') || ' '}
-          </Text>
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>
+              {(profile?.display_name ?? '?').slice(0, 1).toUpperCase()}
+            </Text>
+          </View>
+          <View style={{ flex: 1, gap: 2 }}>
+            <Text style={styles.name}>
+              {profile?.display_name ?? '—'}
+              {profile?.is_phone_verified ? `  ✓ ${t('profile.verified')}` : ''}
+            </Text>
+            <Text style={styles.meta}>
+              {[profile?.suburb, profile?.nationality ? t(`nationalities.${profile.nationality}`) : null]
+                .filter(Boolean)
+                .join(' · ') || ' '}
+            </Text>
+          </View>
         </View>
 
         <Text style={styles.sectionTitle}>{t('profile.language')}</Text>
@@ -84,8 +91,19 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
     padding: spacing.lg,
-    gap: spacing.xs,
+    gap: spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
+  avatar: {
+    width: 52,
+    height: 52,
+    borderRadius: radius.full,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarText: { color: colors.white, fontSize: 20, fontWeight: '700' },
   name: { fontSize: 20, fontWeight: '700', color: colors.text },
   meta: { fontSize: 14, color: colors.textSecondary },
   sectionTitle: { fontSize: 14, fontWeight: '600', color: colors.textSecondary },

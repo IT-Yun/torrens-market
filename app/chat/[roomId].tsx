@@ -14,10 +14,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import {
   fetchMessages,
+  fetchRoomHeader,
   markRead,
   sendMessage,
   subscribeToRoom,
   type Message,
+  type RoomHeader,
 } from '../../src/lib/chat';
 import { useSession } from '../../src/lib/session';
 import { colors, radius, spacing } from '../../src/theme';
@@ -28,10 +30,12 @@ export default function ChatRoomScreen() {
   const { session } = useSession();
   const [messages, setMessages] = useState<Message[]>([]);
   const [draft, setDraft] = useState('');
+  const [header, setHeader] = useState<RoomHeader | null>(null);
   const seenIds = useRef(new Set<string>());
 
   useEffect(() => {
     if (!roomId || !session) return;
+    fetchRoomHeader(roomId, session.user.id).then(setHeader).catch(() => {});
     fetchMessages(roomId)
       .then((items) => {
         items.forEach((m) => seenIds.current.add(m.id));
@@ -68,6 +72,18 @@ export default function ChatRoomScreen() {
         <Pressable onPress={() => router.back()}>
           <Text style={styles.back}>‹</Text>
         </Pressable>
+        {header && (
+          <Pressable
+            style={styles.headerCenter}
+            onPress={() => router.push(`/listing/${header.listingId}`)}
+          >
+            <Text style={styles.headerName}>{header.otherName}</Text>
+            <Text style={styles.headerListing} numberOfLines={1}>
+              {header.listingTitle}
+            </Text>
+          </Pressable>
+        )}
+        <View style={{ width: 24 }} />
       </View>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -81,13 +97,19 @@ export default function ChatRoomScreen() {
           contentContainerStyle={styles.list}
           renderItem={({ item }) => {
             const mine = item.sender_id === session?.user.id;
+            const time = new Date(item.created_at).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            });
             return (
               <View style={[styles.bubbleRow, mine && { justifyContent: 'flex-end' }]}>
+                {mine && <Text style={styles.time}>{time}</Text>}
                 <View style={[styles.bubble, mine ? styles.bubbleMine : styles.bubbleTheirs]}>
                   <Text style={[styles.bubbleText, mine && { color: colors.white }]}>
                     {item.body}
                   </Text>
                 </View>
+                {!mine && <Text style={styles.time}>{time}</Text>}
               </View>
             );
           }}
@@ -114,8 +136,20 @@ export default function ChatRoomScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
-  header: { paddingHorizontal: spacing.md, paddingVertical: spacing.xs },
-  back: { fontSize: 32, color: colors.text, lineHeight: 34 },
+  header: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    paddingBottom: spacing.sm,
+  },
+  headerCenter: { flex: 1, alignItems: 'center' },
+  headerName: { fontSize: 16, fontWeight: '700', color: colors.text },
+  headerListing: { fontSize: 12, color: colors.textSecondary, maxWidth: 220 },
+  back: { fontSize: 32, color: colors.text, lineHeight: 34, width: 24 },
+  time: { fontSize: 10, color: colors.textSecondary, alignSelf: 'flex-end', marginHorizontal: 4 },
   list: { padding: spacing.md, gap: spacing.sm },
   bubbleRow: { flexDirection: 'row' },
   bubble: { maxWidth: '78%', borderRadius: radius.lg, paddingHorizontal: 14, paddingVertical: 10 },

@@ -37,6 +37,7 @@ export default function ListingDetailScreen() {
   const [listing, setListing] = useState<ListingDetail | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [liked, setLiked] = useState(false);
+  const [photoIndex, setPhotoIndex] = useState(0);
   const lang = i18n.language;
 
   useEffect(() => {
@@ -93,19 +94,42 @@ export default function ListingDetailScreen() {
         </Pressable>
       </View>
       <ScrollView>
-        <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
-          {photos.length > 0 ? (
-            photos.map((p) => (
-              <Image key={p.storage_path} source={{ uri: photoUrl(p.storage_path) }} style={styles.photo} />
-            ))
-          ) : (
-            <View style={[styles.photo, styles.photoPlaceholder]}>
-              <Text style={{ fontSize: 40 }}>📦</Text>
+        <View>
+          <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            onMomentumScrollEnd={(e) =>
+              setPhotoIndex(Math.round(e.nativeEvent.contentOffset.x / width))
+            }
+          >
+            {photos.length > 0 ? (
+              photos.map((p) => (
+                <Image key={p.storage_path} source={{ uri: photoUrl(p.storage_path) }} style={styles.photo} />
+              ))
+            ) : (
+              <View style={[styles.photo, styles.photoPlaceholder]}>
+                <Text style={{ fontSize: 40 }}>📦</Text>
+              </View>
+            )}
+          </ScrollView>
+          {photos.length > 1 && (
+            <View style={styles.dots}>
+              {photos.map((p, i) => (
+                <View key={p.storage_path} style={[styles.dot, i === photoIndex && styles.dotActive]} />
+              ))}
             </View>
           )}
-        </ScrollView>
+        </View>
 
         <View style={styles.body}>
+          {listing.status !== 'active' && (
+            <View style={styles.statusBadge}>
+              <Text style={styles.statusBadgeText}>
+                {t(listing.status === 'sold' ? 'listingDetail.sold' : 'listingDetail.reserved')}
+              </Text>
+            </View>
+          )}
           <Text style={styles.title}>{listing.title}</Text>
           <Text style={styles.price}>{formatPrice(listing.price_cents)}</Text>
           <Text style={styles.meta}>
@@ -127,36 +151,53 @@ export default function ListingDetailScreen() {
           {listing.description ? <Text style={styles.description}>{listing.description}</Text> : null}
 
           <View style={styles.sellerCard}>
-            <Text style={styles.attrTitle}>{t('listingDetail.sellerTitle')}</Text>
-            <Text style={styles.sellerName}>
-              {listing.profiles.display_name}
-              {listing.profiles.is_phone_verified ? `  ✓ ${t('profile.verified')}` : ''}
-            </Text>
-            <Text style={styles.meta}>
-              {[
-                listing.profiles.suburb,
-                listing.profiles.nationality ? t(`nationalities.${listing.profiles.nationality}`) : null,
-              ]
-                .filter(Boolean)
-                .join(' · ')}
-            </Text>
+            <View style={styles.avatar}>
+              <Text style={styles.avatarText}>
+                {listing.profiles.display_name.slice(0, 1).toUpperCase()}
+              </Text>
+            </View>
+            <View style={{ flex: 1, gap: 2 }}>
+              <Text style={styles.sellerName}>
+                {listing.profiles.display_name}
+                {listing.profiles.is_phone_verified ? `  ✓ ${t('profile.verified')}` : ''}
+              </Text>
+              <Text style={styles.meta}>
+                {[
+                  listing.profiles.suburb,
+                  listing.profiles.nationality
+                    ? t(`nationalities.${listing.profiles.nationality}`)
+                    : null,
+                ]
+                  .filter(Boolean)
+                  .join(' · ')}
+              </Text>
+            </View>
           </View>
         </View>
       </ScrollView>
 
       {session?.user.id !== listing.seller_id && (
         <View style={styles.footer}>
-          <Button
-            title={t('listingDetail.chat')}
-            onPress={async () => {
-              try {
-                const roomId = await startChat(listing.id);
-                router.push(`/chat/${roomId}`);
-              } catch (e) {
-                Alert.alert((e as Error).message);
-              }
-            }}
-          />
+          <Pressable onPress={onToggleFavorite} hitSlop={8} style={styles.footerHeart}>
+            <Text style={{ fontSize: 22 }}>{liked ? '❤️' : '🤍'}</Text>
+          </Pressable>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.footerPrice}>{formatPrice(listing.price_cents)}</Text>
+            <Text style={styles.footerMeta}>{t(`pickupModes.${listing.pickup_mode}`)}</Text>
+          </View>
+          <View style={{ width: 150 }}>
+            <Button
+              title={t('listingDetail.chat')}
+              onPress={async () => {
+                try {
+                  const roomId = await startChat(listing.id);
+                  router.push(`/chat/${roomId}`);
+                } catch (e) {
+                  Alert.alert((e as Error).message);
+                }
+              }}
+            />
+          </View>
         </View>
       )}
     </SafeAreaView>
@@ -198,9 +239,57 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: radius.md,
     padding: spacing.md,
-    gap: spacing.xs,
+    gap: spacing.md,
     marginTop: spacing.sm,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
+  avatar: {
+    width: 44,
+    height: 44,
+    borderRadius: radius.full,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarText: { color: colors.white, fontSize: 18, fontWeight: '700' },
   sellerName: { fontSize: 16, fontWeight: '600', color: colors.text },
-  footer: { padding: spacing.md, borderTopWidth: 1, borderTopColor: colors.border },
+  dots: {
+    position: 'absolute',
+    bottom: 10,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    gap: 6,
+  },
+  dot: {
+    width: 7,
+    height: 7,
+    borderRadius: radius.full,
+    backgroundColor: '#FFFFFF',
+    opacity: 0.45,
+  },
+  dotActive: { opacity: 1 },
+  statusBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: colors.text,
+    borderRadius: radius.sm,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+  },
+  statusBadgeText: { color: colors.white, fontSize: 12, fontWeight: '700' },
+  footer: {
+    padding: spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+  },
+  footerHeart: {
+    borderRightWidth: 1,
+    borderRightColor: colors.border,
+    paddingRight: spacing.md,
+  },
+  footerPrice: { fontSize: 18, fontWeight: '800', color: colors.text },
+  footerMeta: { fontSize: 12, color: colors.textSecondary },
 });

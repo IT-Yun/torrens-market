@@ -79,6 +79,27 @@ export async function fetchRooms(userId: string): Promise<ChatRoomSummary[]> {
     );
 }
 
+export type RoomHeader = { otherName: string; listingTitle: string; listingId: string };
+
+export async function fetchRoomHeader(roomId: string, myUserId: string): Promise<RoomHeader | null> {
+  const { data, error } = await supabase
+    .from('chat_rooms')
+    .select('listings (id, title), chat_participants (user_id, profiles (display_name))')
+    .eq('id', roomId)
+    .single();
+  if (error) return null;
+  const room = data as unknown as {
+    listings: { id: string; title: string };
+    chat_participants: { user_id: string; profiles: { display_name: string } }[];
+  };
+  const other = room.chat_participants.find((p) => p.user_id !== myUserId);
+  return {
+    otherName: other?.profiles?.display_name ?? '?',
+    listingTitle: room.listings?.title ?? '',
+    listingId: room.listings?.id ?? '',
+  };
+}
+
 export async function fetchMessages(roomId: string): Promise<Message[]> {
   const { data, error } = await supabase
     .from('messages')
