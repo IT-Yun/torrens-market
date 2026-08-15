@@ -52,7 +52,9 @@
     "empty": "你收藏的商品会显示在这里。"
   },
   "chat": {
-    "empty": "你的会话会显示在这里。"
+    "empty": "你的会话会显示在这里。",
+    "typeMessage": "输入消息...",
+    "send": "发送"
   },
   "listingCreate": {
     "title": "发布商品",

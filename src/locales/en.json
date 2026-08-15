@@ -52,7 +52,9 @@
     "empty": "Listings you ♥ will appear here."
   },
   "chat": {
-    "empty": "Your conversations will appear here."
+    "empty": "Your conversations will appear here.",
+    "typeMessage": "Type a message...",
+    "send": "Send"
   },
   "listingCreate": {
     "title": "New listing",

@@ -14,6 +14,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Button } from '../../src/components/ui';
+import { startChat } from '../../src/lib/chat';
 import { isFavorite, toggleFavorite } from '../../src/lib/favorites';
 import i18n from '../../src/lib/i18n';
 import { useSession } from '../../src/lib/session';
@@ -143,10 +144,21 @@ export default function ListingDetailScreen() {
         </View>
       </ScrollView>
 
-      <View style={styles.footer}>
-        {/* Chat flow lands in M4 */}
-        <Button title={t('listingDetail.chat')} onPress={() => Alert.alert('M4 🚧')} />
-      </View>
+      {session?.user.id !== listing.seller_id && (
+        <View style={styles.footer}>
+          <Button
+            title={t('listingDetail.chat')}
+            onPress={async () => {
+              try {
+                const roomId = await startChat(listing.id);
+                router.push(`/chat/${roomId}`);
+              } catch (e) {
+                Alert.alert((e as Error).message);
+              }
+            }}
+          />
+        </View>
+      )}
     </SafeAreaView>
   );
 }

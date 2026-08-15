@@ -52,7 +52,9 @@
     "empty": "♥ 누른 매물이 여기에 모여요."
   },
   "chat": {
-    "empty": "채팅이 여기에 표시돼요."
+    "empty": "채팅이 여기에 표시돼요.",
+    "typeMessage": "메시지 입력...",
+    "send": "전송"
   },
   "listingCreate": {
     "title": "매물 등록",
