@@ -87,7 +87,8 @@
     "yes": "是",
     "no": "否",
     "uploading": "正在上传照片 {{done}}/{{total}}...",
-    "locationNote": "只会保存你的大致位置（约1公里精度）。"
+    "locationNote": "只会保存你的大致位置（约1公里精度）。",
+    "suggestedCategory": "推荐分类：{{name}}"
   },
   "listingDetail": {
     "chat": "联系卖家",

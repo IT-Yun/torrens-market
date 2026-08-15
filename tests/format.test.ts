@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { attributeSnippet, flagEmoji, formatPrice, timeAgo } from '../src/lib/format.ts';
 import { fuzzCoord, haversineKm, travelEstimate } from '../src/lib/geo.ts';
+import { suggestCategorySlug } from '../src/lib/categorize.ts';
 
 test('formatPrice renders AUD with grouping', () => {
   assert.equal(formatPrice(125000), '$1,250');
@@ -59,4 +60,13 @@ test('geo: haversineKm and travelEstimate', () => {
   assert.ok(km > 4 && km < 5);
   assert.deepEqual(travelEstimate(1.5), { mode: 'walk', minutes: 20 });
   assert.equal(travelEstimate(4.6).mode, 'drive');
+});
+
+test('suggestCategorySlug: trilingual keywords, priority order', () => {
+  assert.equal(suggestCategorySlug('IKEA desk white'), 'furniture');
+  assert.equal(suggestCategorySlug('아이폰 15 프로'), 'electronics');
+  assert.equal(suggestCategorySlug('婴儿推车 almost new'), 'baby_kids');
+  assert.equal(suggestCategorySlug('Yamaha motorbike 2019'), 'cars_bikes');
+  assert.equal(suggestCategorySlug('road bike shimano'), 'cars_bikes');
+  assert.equal(suggestCategorySlug('random thing'), null);
 });

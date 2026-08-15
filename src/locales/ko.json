@@ -87,7 +87,8 @@
     "yes": "예",
     "no": "아니요",
     "uploading": "사진 {{done}}/{{total}} 업로드 중...",
-    "locationNote": "대략적인 위치(약 1km 단위)만 저장돼요."
+    "locationNote": "대략적인 위치(약 1km 단위)만 저장돼요.",
+    "suggestedCategory": "추천 카테고리: {{name}}"
   },
   "listingDetail": {
     "chat": "판매자와 채팅",

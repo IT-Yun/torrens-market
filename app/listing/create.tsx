@@ -23,8 +23,9 @@ import {
   type FieldDef,
 } from '../../src/lib/listings';
 import { useSession } from '../../src/lib/session';
-import { Camera, MapPin, X } from 'lucide-react-native';
+import { Camera, MapPin, Sparkles, X } from 'lucide-react-native';
 import { SuburbField } from '../../src/components/SuburbField';
+import { suggestCategorySlug } from '../../src/lib/categorize';
 import { getApproxPosition } from '../../src/lib/location';
 import { colors, radius, spacing } from '../../src/theme';
 
@@ -217,6 +218,28 @@ export default function CreateListingScreen() {
         </View>
 
         <Field label={t('listingCreate.listingTitle')} value={title} onChangeText={setTitle} />
+        {(() => {
+          const slug = suggestCategorySlug(title);
+          const suggested = slug ? categories.find((c) => c.slug === slug) : null;
+          if (!suggested || suggested.id === categoryId) return null;
+          return (
+            <Pressable
+              style={styles.suggestChip}
+              onPress={() => {
+                setCategoryId(suggested.id);
+                setAttributes({});
+              }}
+              accessibilityRole="button"
+            >
+              <Sparkles size={13} color={colors.primary} />
+              <Text style={styles.suggestText}>
+                {t('listingCreate.suggestedCategory', {
+                  name: suggested.name_i18n[lang] ?? suggested.slug,
+                })}
+              </Text>
+            </Pressable>
+          );
+        })()}
         <Field
           label={t('listingCreate.price')}
           placeholder={t('listingCreate.priceFree')}
@@ -309,6 +332,18 @@ const styles = StyleSheet.create({
   sectionTitle: { fontSize: 14, fontWeight: '600', color: colors.text },
   locationNote: { flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: -6 },
   locationNoteText: { fontSize: 12, color: colors.textSecondary },
+  suggestChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    alignSelf: 'flex-start',
+    backgroundColor: '#E8F3F1',
+    borderRadius: radius.full,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginTop: -6,
+  },
+  suggestText: { fontSize: 12, fontWeight: '600', color: colors.primary },
   photoRow: { flexDirection: 'row', gap: spacing.sm },
   addPhoto: {
     width: 84,
