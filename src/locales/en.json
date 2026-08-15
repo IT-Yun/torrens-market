@@ -88,7 +88,8 @@
     "no": "No",
     "uploading": "Uploading photo {{done}}/{{total}}...",
     "locationNote": "Only your approximate location (~1 km) is saved.",
-    "suggestedCategory": "Suggested category: {{name}}"
+    "suggestedCategory": "Suggested category: {{name}}",
+    "photoTip": "Tip: shoot all angles and any flaws — honest photos sell faster."
   },
   "listingDetail": {
     "chat": "Chat with seller",

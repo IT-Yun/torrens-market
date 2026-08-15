@@ -88,7 +88,8 @@
     "no": "아니요",
     "uploading": "사진 {{done}}/{{total}} 업로드 중...",
     "locationNote": "대략적인 위치(약 1km 단위)만 저장돼요.",
-    "suggestedCategory": "추천 카테고리: {{name}}"
+    "suggestedCategory": "추천 카테고리: {{name}}",
+    "photoTip": "팁: 여러 각도로, 하자 부위까지 찍어주세요 — 정직한 사진이 더 빨리 팔려요."
   },
   "listingDetail": {
     "chat": "판매자와 채팅",

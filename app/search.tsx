@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BadgeCheck, Bell, SearchX } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { ListingRow } from '../src/components/ListingRow';
+import { getPositionIfGranted } from '../src/lib/location';
 import i18n from '../src/lib/i18n';
 import {
   fetchCategories,
@@ -33,6 +34,11 @@ export default function SearchScreen() {
   const [nationality, setNationality] = useState<string | null>(null);
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [results, setResults] = useState<ListingCard[]>([]);
+  const [pos, setPos] = useState<{ lat: number; lng: number } | null>(null);
+
+  useEffect(() => {
+    getPositionIfGranted().then((p) => p && setPos(p)).catch(() => {});
+  }, []);
   const [searched, setSearched] = useState(false);
 
   useEffect(() => {
@@ -115,7 +121,7 @@ export default function SearchScreen() {
       <FlatList
         data={results}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ListingRow item={item} />}
+        renderItem={({ item }) => <ListingRow item={item} viewerPos={pos} />}
         ListEmptyComponent={
           searched ? (
             <View style={styles.empty}>

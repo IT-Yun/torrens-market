@@ -28,3 +28,10 @@ export function travelEstimate(km: number): { mode: 'walk' | 'drive'; minutes: n
   if (km <= 2) return { mode: 'walk', minutes: Math.max(1, Math.round((km / 4.5) * 60)) };
   return { mode: 'drive', minutes: Math.max(3, Math.round((km / 30) * 60) + 2) };
 }
+
+/** Compact distance label: 850m under 1km, 1.2km under 10, then whole km. */
+export function formatDistance(km: number): string {
+  if (km < 1) return `${Math.max(50, Math.round(km * 1000 / 50) * 50)}m`;
+  if (km < 10) return `${km.toFixed(1)}km`;
+  return `${Math.round(km)}km`;
+}

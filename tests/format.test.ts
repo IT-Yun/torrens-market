@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { attributeSnippet, flagEmoji, formatPrice, timeAgo } from '../src/lib/format.ts';
-import { fuzzCoord, haversineKm, travelEstimate } from '../src/lib/geo.ts';
+import { formatDistance, fuzzCoord, haversineKm, travelEstimate } from '../src/lib/geo.ts';
 import { suggestCategorySlug } from '../src/lib/categorize.ts';
 
 test('formatPrice renders AUD with grouping', () => {
@@ -69,4 +69,10 @@ test('suggestCategorySlug: trilingual keywords, priority order', () => {
   assert.equal(suggestCategorySlug('Yamaha motorbike 2019'), 'cars_bikes');
   assert.equal(suggestCategorySlug('road bike shimano'), 'cars_bikes');
   assert.equal(suggestCategorySlug('random thing'), null);
+});
+
+test('formatDistance: m under 1km, decimals under 10km', () => {
+  assert.equal(formatDistance(0.83), '850m');
+  assert.equal(formatDistance(1.24), '1.2km');
+  assert.equal(formatDistance(12.6), '13km');
 });

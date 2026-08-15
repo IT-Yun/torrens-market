@@ -178,6 +178,7 @@ export default function CreateListingScreen() {
         <Text style={styles.sectionTitle}>
           {t('listingCreate.photos')} ({photos.length}/{MAX_PHOTOS})
         </Text>
+        <Text style={styles.photoTip}>{t('listingCreate.photoTip')}</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.photoRow}>
             <Pressable
@@ -344,6 +345,7 @@ const styles = StyleSheet.create({
     marginTop: -6,
   },
   suggestText: { fontSize: 12, fontWeight: '600', color: colors.primary },
+  photoTip: { fontSize: 12, color: colors.textSecondary, marginTop: -6 },
   photoRow: { flexDirection: 'row', gap: spacing.sm },
   addPhoto: {
     width: 84,

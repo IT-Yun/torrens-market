@@ -4,14 +4,25 @@ import { Heart, Package } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { photoUrl, type ListingCard } from '../lib/listings';
 import { attributeSnippet, formatPrice, timeAgo } from '../lib/format';
+import { formatDistance, haversineKm } from '../lib/geo';
 
 export { timeAgo };
 import { colors, radius, spacing } from '../theme';
 
-export function ListingRow({ item }: { item: ListingCard }) {
+export function ListingRow({
+  item,
+  viewerPos,
+}: {
+  item: ListingCard;
+  viewerPos?: { lat: number; lng: number } | null;
+}) {
   const { t } = useTranslation();
   const photo = [...item.listing_photos].sort((a, b) => a.sort_order - b.sort_order)[0];
   const snippet = attributeSnippet(item.attributes);
+  const distance =
+    viewerPos && item.lat != null && item.lng != null
+      ? formatDistance(haversineKm(viewerPos.lat, viewerPos.lng, item.lat, item.lng))
+      : null;
   return (
     <Pressable
       style={({ pressed }) => [styles.card, pressed && { backgroundColor: colors.surface }]}
@@ -35,7 +46,7 @@ export function ListingRow({ item }: { item: ListingCard }) {
         )}
         <View style={styles.metaRow}>
           <Text style={styles.cardMeta}>
-            {item.suburb} · {timeAgo(item.created_at)}
+            {[item.suburb, distance, timeAgo(item.created_at)].filter(Boolean).join(' · ')}
           </Text>
           {item.pickup_mode === 'pickup_only' && (
             <View style={styles.pickupBadge}>

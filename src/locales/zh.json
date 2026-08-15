@@ -88,7 +88,8 @@
     "no": "否",
     "uploading": "正在上传照片 {{done}}/{{total}}...",
     "locationNote": "只会保存你的大致位置（约1公里精度）。",
-    "suggestedCategory": "推荐分类：{{name}}"
+    "suggestedCategory": "推荐分类：{{name}}",
+    "photoTip": "提示：多角度拍摄，包括瑕疵部位——真实的照片卖得更快。"
   },
   "listingDetail": {
     "chat": "联系卖家",

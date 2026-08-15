@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ChevronDown, MapPin, Plus, Search, WifiOff } from 'lucide-react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { haversineKm } from '../../src/lib/geo';
-import { getPosition } from '../../src/lib/location';
+import { getPosition, getPositionIfGranted } from '../../src/lib/location';
 import { AdelaideHero } from '../../src/components/AdelaideHero';
 import { ListingRow } from '../../src/components/ListingRow';
 import i18n from '../../src/lib/i18n';
@@ -34,6 +34,10 @@ export default function HomeScreen() {
     AsyncStorage.getItem(SCOPE_STORAGE_KEY).then((v) => {
       if (v === 'suburb' || v === 'km5' || v === 'km10' || v === 'km20' || v === 'all') setScope(v);
     });
+  }, []);
+
+  useEffect(() => {
+    getPositionIfGranted().then((p) => p && setPos(p)).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -157,7 +161,7 @@ export default function HomeScreen() {
       <FlatList
         data={visibleListings}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ListingRow item={item} />}
+        renderItem={({ item }) => <ListingRow item={item} viewerPos={pos} />}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

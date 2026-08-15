@@ -61,3 +61,14 @@ export async function checkSuburbMatch(
     return { ok: false, detected: null };
   }
 }
+
+/** Position only if permission is already granted — never prompts. */
+export async function getPositionIfGranted(): Promise<{ lat: number; lng: number } | null> {
+  try {
+    const current = await Location.getForegroundPermissionsAsync();
+    if (!current.granted) return null;
+    return await getPosition();
+  } catch {
+    return null;
+  }
+}
