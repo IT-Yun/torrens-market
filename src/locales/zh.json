@@ -31,7 +31,9 @@
     "suburbPlaceholder": "如: Adelaide CBD, Norwood",
     "nationality": "国籍（可选）",
     "nationalityNote": "会显示在你的资料上，买家可以按国籍筛选，也可以留空。",
-    "done": "开始交易"
+    "done": "开始交易",
+    "photo": "头像",
+    "photoHint": "点按添加头像"
   },
   "tabs": {
     "home": "首页",

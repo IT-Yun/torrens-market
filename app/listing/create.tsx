@@ -24,6 +24,7 @@ import {
 } from '../../src/lib/listings';
 import { useSession } from '../../src/lib/session';
 import { Camera, X } from 'lucide-react-native';
+import { SuburbField } from '../../src/components/SuburbField';
 import { colors, radius, spacing } from '../../src/theme';
 
 const MAX_PHOTOS = 10;
@@ -269,7 +270,7 @@ export default function CreateListingScreen() {
           ))}
         </View>
 
-        <Field label={t('listingCreate.suburb')} value={suburb} onChangeText={setSuburb} />
+        <SuburbField label={t('listingCreate.suburb')} value={suburb} onChangeText={setSuburb} />
 
         {busy && uploadProgress && (
           <Text style={styles.uploadProgress}>

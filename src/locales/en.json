@@ -31,7 +31,9 @@
     "suburbPlaceholder": "e.g. Adelaide CBD, Norwood",
     "nationality": "Nationality (optional)",
     "nationalityNote": "Shown on your profile. Buyers can filter by it — or leave it empty.",
-    "done": "Start trading"
+    "done": "Start trading",
+    "photo": "Profile photo",
+    "photoHint": "Tap to add a profile photo"
   },
   "tabs": {
     "home": "Home",

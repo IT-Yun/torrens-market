@@ -28,6 +28,7 @@ import {
   type ListingDetail,
 } from '../../src/lib/listings';
 import { BadgeCheck, Heart, Package } from 'lucide-react-native';
+import { Avatar } from '../../src/components/Avatar';
 import { colors, radius, spacing } from '../../src/theme';
 
 const { width } = Dimensions.get('window');
@@ -216,11 +217,12 @@ export default function ListingDetailScreen() {
           {listing.description ? <Text style={styles.description}>{listing.description}</Text> : null}
 
           <View style={styles.sellerCard}>
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>
-                {listing.profiles.display_name.slice(0, 1).toUpperCase()}
-              </Text>
-            </View>
+            <Avatar
+              name={listing.profiles.display_name}
+              url={listing.profiles.avatar_url}
+              nationality={listing.profiles.nationality}
+              size={44}
+            />
             <View style={{ flex: 1, gap: 2 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                 <Text style={styles.sellerName}>{listing.profiles.display_name}</Text>

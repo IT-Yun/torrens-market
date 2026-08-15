@@ -31,7 +31,9 @@
     "suburbPlaceholder": "예: Adelaide CBD, Norwood",
     "nationality": "국적 (선택)",
     "nationalityNote": "프로필에 표시돼요. 구매자가 필터로 쓸 수 있고, 비워둬도 돼요.",
-    "done": "거래 시작하기"
+    "done": "거래 시작하기",
+    "photo": "프로필 사진",
+    "photoHint": "눌러서 프로필 사진을 추가하세요"
   },
   "tabs": {
     "home": "홈",

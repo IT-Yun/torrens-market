@@ -34,3 +34,17 @@ export function attributeSnippet(attributes: Record<string, unknown>): string | 
   if (a.size) parts.push(String(a.size));
   return parts.length ? parts.slice(0, 2).join(' · ') : null;
 }
+
+/**
+ * ISO 3166-1 alpha-2 → flag emoji via regional indicator symbols.
+ * Returns null for non-country codes (e.g. our 'OTHER' bucket).
+ */
+export function flagEmoji(code: string | null | undefined): string | null {
+  if (!code || !/^[A-Za-z]{2}$/.test(code)) return null;
+  const base = 0x1f1e6 - 65;
+  const upper = code.toUpperCase();
+  return (
+    String.fromCodePoint(base + upper.charCodeAt(0)) +
+    String.fromCodePoint(base + upper.charCodeAt(1))
+  );
+}

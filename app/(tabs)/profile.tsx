@@ -9,6 +9,7 @@ import { signOut } from '../../src/lib/auth';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
 import { BadgeCheck, Bell, ChevronRight, Package, Pencil } from 'lucide-react-native';
+import { Avatar } from '../../src/components/Avatar';
 import { colors, radius, spacing } from '../../src/theme';
 
 export default function ProfileScreen() {
@@ -27,11 +28,12 @@ export default function ProfileScreen() {
     <SafeAreaView style={styles.safe} edges={['top']}>
       <View style={styles.container}>
         <View style={styles.card}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>
-              {(profile?.display_name ?? '?').slice(0, 1).toUpperCase()}
-            </Text>
-          </View>
+          <Avatar
+            name={profile?.display_name}
+            url={profile?.avatar_url}
+            nationality={profile?.nationality}
+            size={56}
+          />
           <View style={{ flex: 1, gap: 2 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
               <Text style={styles.name}>{profile?.display_name ?? '—'}</Text>

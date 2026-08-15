@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { attributeSnippet, formatPrice, timeAgo } from '../src/lib/format.ts';
+import { attributeSnippet, flagEmoji, formatPrice, timeAgo } from '../src/lib/format.ts';
 
 test('formatPrice renders AUD with grouping', () => {
   assert.equal(formatPrice(125000), '$1,250');
@@ -39,4 +39,11 @@ test('attributeSnippet: brand beats brand_model, max two parts', () => {
 test('attributeSnippet: empty/no known keys -> null', () => {
   assert.equal(attributeSnippet({}), null);
   assert.equal(attributeSnippet({ unknown_key: 'v' }), null);
+});
+
+test('flagEmoji: country codes and OTHER bucket', () => {
+  assert.equal(flagEmoji('KR'), '🇰🇷');
+  assert.equal(flagEmoji('cn'), '🇨🇳');
+  assert.equal(flagEmoji('OTHER'), null);
+  assert.equal(flagEmoji(null), null);
 });

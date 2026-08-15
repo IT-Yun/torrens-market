@@ -37,6 +37,7 @@ export type ListingDetail = ListingCard & {
   seller_id: string;
   profiles: {
     display_name: string;
+    avatar_url: string | null;
     suburb: string | null;
     nationality: string | null;
     is_phone_verified: boolean;
@@ -109,7 +110,7 @@ export async function fetchListing(id: string): Promise<ListingDetail | null> {
       `id, title, description, price_cents, suburb, status, created_at, category_id, attributes,
        condition, pickup_mode, seller_id,
        listing_photos (storage_path, sort_order),
-       profiles (display_name, suburb, nationality, is_phone_verified)`,
+       profiles (display_name, avatar_url, suburb, nationality, is_phone_verified)`,
     )
     .eq('id', id)
     .single();
