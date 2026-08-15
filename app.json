@@ -27,6 +27,11 @@
       "expo-web-browser",
       "expo-secure-store"
     ],
-    "scheme": "torrensmarket"
+    "scheme": "torrensmarket",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FDF6EA"
+    }
   }
 }
