@@ -50,6 +50,37 @@
   },
   "favorites": { "empty": "Listings you ♥ will appear here." },
   "chat": { "empty": "Your conversations will appear here." },
+  "listingCreate": {
+    "title": "New listing",
+    "photos": "Photos",
+    "addPhotos": "Add photos",
+    "category": "Category",
+    "listingTitle": "Title",
+    "price": "Price (AUD)",
+    "priceFree": "0 = free",
+    "description": "Description",
+    "condition": "Condition",
+    "pickupMode": "Pickup / delivery",
+    "suburb": "Suburb",
+    "details": "Details",
+    "post": "Post listing",
+    "posted": "Your listing is live!",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "listingDetail": {
+    "chat": "Chat with seller",
+    "detailsTitle": "Item details",
+    "sellerTitle": "Seller",
+    "sold": "Sold",
+    "reserved": "Reserved"
+  },
+  "conditions": { "new": "New", "like_new": "Like new", "used": "Used" },
+  "pickupModes": {
+    "pickup_only": "Pickup only",
+    "seller_delivers": "Seller delivers",
+    "buyer_collects": "Buyer collects"
+  },
   "nationalities": {
     "CN": "China", "KR": "South Korea", "AU": "Australia", "IN": "India",
     "VN": "Vietnam", "JP": "Japan", "MY": "Malaysia", "HK": "Hong Kong",

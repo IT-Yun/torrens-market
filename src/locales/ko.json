@@ -50,6 +50,37 @@
   },
   "favorites": { "empty": "♥ 누른 매물이 여기에 모여요." },
   "chat": { "empty": "채팅이 여기에 표시돼요." },
+  "listingCreate": {
+    "title": "매물 등록",
+    "photos": "사진",
+    "addPhotos": "사진 추가",
+    "category": "카테고리",
+    "listingTitle": "제목",
+    "price": "가격 (AUD)",
+    "priceFree": "0 = 무료나눔",
+    "description": "설명",
+    "condition": "상태",
+    "pickupMode": "픽업 / 배달",
+    "suburb": "지역 (Suburb)",
+    "details": "상세 정보",
+    "post": "등록하기",
+    "posted": "매물이 등록됐어요!",
+    "yes": "예",
+    "no": "아니요"
+  },
+  "listingDetail": {
+    "chat": "판매자와 채팅",
+    "detailsTitle": "상세 정보",
+    "sellerTitle": "판매자",
+    "sold": "판매완료",
+    "reserved": "예약중"
+  },
+  "conditions": { "new": "새상품", "like_new": "거의 새것", "used": "중고" },
+  "pickupModes": {
+    "pickup_only": "픽업만 가능",
+    "seller_delivers": "판매자 배달",
+    "buyer_collects": "구매자 수령"
+  },
   "nationalities": {
     "CN": "중국", "KR": "대한민국", "AU": "호주", "IN": "인도",
     "VN": "베트남", "JP": "일본", "MY": "말레이시아", "HK": "홍콩",

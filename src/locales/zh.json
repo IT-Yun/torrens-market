@@ -50,6 +50,37 @@
   },
   "favorites": { "empty": "你收藏的商品会显示在这里。" },
   "chat": { "empty": "你的会话会显示在这里。" },
+  "listingCreate": {
+    "title": "发布商品",
+    "photos": "照片",
+    "addPhotos": "添加照片",
+    "category": "分类",
+    "listingTitle": "标题",
+    "price": "价格 (AUD)",
+    "priceFree": "0 = 免费赠送",
+    "description": "描述",
+    "condition": "成色",
+    "pickupMode": "自取 / 配送",
+    "suburb": "区域 (Suburb)",
+    "details": "详细信息",
+    "post": "发布",
+    "posted": "商品已发布！",
+    "yes": "是",
+    "no": "否"
+  },
+  "listingDetail": {
+    "chat": "联系卖家",
+    "detailsTitle": "商品详情",
+    "sellerTitle": "卖家",
+    "sold": "已售出",
+    "reserved": "已预订"
+  },
+  "conditions": { "new": "全新", "like_new": "几乎全新", "used": "二手" },
+  "pickupModes": {
+    "pickup_only": "仅自取",
+    "seller_delivers": "卖家配送",
+    "buyer_collects": "买家自提"
+  },
   "nationalities": {
     "CN": "中国", "KR": "韩国", "AU": "澳大利亚", "IN": "印度",
     "VN": "越南", "JP": "日本", "MY": "马来西亚", "HK": "香港",
