@@ -27,6 +27,9 @@ export function Button({
     <Pressable
       onPress={onPress}
       disabled={disabled || loading}
+      accessibilityRole="button"
+      accessibilityLabel={title}
+      accessibilityState={{ disabled: !!disabled || !!loading, busy: !!loading }}
       style={({ pressed }) => [
         styles.button,
         variant === 'primary' && { backgroundColor: colors.primary },
@@ -56,7 +59,12 @@ export function Field(props: TextInputProps & { label?: string }) {
   return (
     <View style={{ gap: spacing.xs }}>
       {label ? <Text style={styles.label}>{label}</Text> : null}
-      <TextInput placeholderTextColor={colors.textSecondary} {...rest} style={styles.input} />
+      <TextInput
+        placeholderTextColor={colors.textSecondary}
+        accessibilityLabel={label ?? rest.placeholder}
+        {...rest}
+        style={styles.input}
+      />
     </View>
   );
 }

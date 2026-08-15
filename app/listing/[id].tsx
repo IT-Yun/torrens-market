@@ -89,7 +89,13 @@ export default function ListingDetailScreen() {
         <Pressable onPress={() => router.back()}>
           <Text style={styles.back}>‹</Text>
         </Pressable>
-        <Pressable onPress={onToggleFavorite} hitSlop={8}>
+        <Pressable
+          onPress={onToggleFavorite}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel={t('tabs.favorites')}
+          accessibilityState={{ selected: liked }}
+        >
           <Text style={styles.heart}>{liked ? '❤️' : '🤍'}</Text>
         </Pressable>
       </View>

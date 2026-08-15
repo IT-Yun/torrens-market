@@ -17,24 +17,30 @@ export default function HomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [listings, setListings] = useState<ListingCard[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [loadError, setLoadError] = useState(false);
   const lang = i18n.language as 'ko' | 'en' | 'zh';
 
   const load = useCallback(async () => {
-    const [cats, items] = await Promise.all([
-      categories.length ? Promise.resolve(categories) : fetchCategories(),
-      fetchListings(selectedCategory),
-    ]);
-    setCategories(cats);
-    setListings(items);
+    try {
+      const [cats, items] = await Promise.all([
+        categories.length ? Promise.resolve(categories) : fetchCategories(),
+        fetchListings(selectedCategory),
+      ]);
+      setCategories(cats);
+      setListings(items);
+      setLoadError(false);
+    } catch {
+      setLoadError(true);
+    }
   }, [categories, selectedCategory]);
 
   useEffect(() => {
-    load().catch(() => {});
+    load();
   }, [selectedCategory]);
 
   useFocusEffect(
     useCallback(() => {
-      load().catch(() => {});
+      load();
     }, [load]),
   );
 
@@ -43,7 +49,12 @@ export default function HomeScreen() {
       {/* Karrot pattern: your neighbourhood first */}
       <View style={styles.header}>
         <Text style={styles.suburb}>📍 {profile?.suburb ?? t('common.appName')}</Text>
-        <Pressable onPress={() => router.push('/search')} hitSlop={8}>
+        <Pressable
+          onPress={() => router.push('/search')}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel={t('home.searchPlaceholder')}
+        >
           <Text style={{ fontSize: 20 }}>🔍</Text>
         </Pressable>
       </View>
@@ -86,15 +97,30 @@ export default function HomeScreen() {
           />
         }
         ListEmptyComponent={
-          <View style={styles.emptyState}>
-            <AdelaideHero width={220} height={124} />
-            <Text style={styles.emptyText}>{t('home.empty')}</Text>
-          </View>
+          loadError ? (
+            <View style={styles.emptyState}>
+              <Text style={{ fontSize: 40 }}>📡</Text>
+              <Text style={styles.emptyText}>{t('common.loadError')}</Text>
+              <Pressable style={styles.retryButton} onPress={load} accessibilityRole="button">
+                <Text style={styles.retryText}>{t('common.retry')}</Text>
+              </Pressable>
+            </View>
+          ) : (
+            <View style={styles.emptyState}>
+              <AdelaideHero width={220} height={124} />
+              <Text style={styles.emptyText}>{t('home.empty')}</Text>
+            </View>
+          )
         }
         contentContainerStyle={listings.length === 0 ? { flex: 1 } : undefined}
       />
 
-      <Pressable style={styles.fab} onPress={() => router.push('/listing/create')}>
+      <Pressable
+        style={styles.fab}
+        onPress={() => router.push('/listing/create')}
+        accessibilityRole="button"
+        accessibilityLabel={t('listingCreate.title')}
+      >
         <Text style={styles.fabText}>＋</Text>
       </Pressable>
     </SafeAreaView>
@@ -124,6 +150,13 @@ const styles = StyleSheet.create({
   chipText: { fontSize: 14, color: colors.text },
   emptyState: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.md },
   emptyText: { fontSize: 15, color: colors.textSecondary },
+  retryButton: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.full,
+    paddingHorizontal: 18,
+    paddingVertical: 8,
+  },
+  retryText: { fontSize: 14, fontWeight: '600', color: colors.text },
   fab: {
     position: 'absolute',
     right: spacing.lg,

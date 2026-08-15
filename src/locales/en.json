@@ -4,7 +4,9 @@
     "continue": "Continue",
     "save": "Save",
     "cancel": "Cancel",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "loadError": "Couldn't load — check your connection.",
+    "retry": "Retry"
   },
   "onboarding": {
     "chooseLanguage": "Choose your language",

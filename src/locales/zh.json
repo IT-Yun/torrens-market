@@ -4,7 +4,9 @@
     "continue": "继续",
     "save": "保存",
     "cancel": "取消",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "loadError": "加载失败 — 请检查网络连接。",
+    "retry": "重试"
   },
   "onboarding": {
     "chooseLanguage": "选择你的语言",
