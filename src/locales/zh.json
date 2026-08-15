@@ -20,7 +20,10 @@
     "codeSent": "请输入邮箱收到的6位验证码",
     "codePlaceholder": "6位验证码",
     "verifyCode": "验证",
-    "error": "登录失败，请重试。"
+    "error": "登录失败，请重试。",
+    "passwordPlaceholder": "密码（6位以上）",
+    "passwordHint": "第一次使用？将自动为你注册。",
+    "signIn": "登录 / 注册"
   },
   "profileSetup": {
     "title": "设置个人资料",

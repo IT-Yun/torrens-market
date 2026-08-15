@@ -3,14 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { Button, Field, Screen } from '../src/components/ui';
-import { sendEmailCode, signInWithProvider, verifyEmailCode } from '../src/lib/auth';
+import { signInWithEmailPassword, signInWithProvider } from '../src/lib/auth';
 import { colors, spacing } from '../src/theme';
 
 export default function AuthScreen() {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
-  const [code, setCode] = useState('');
-  const [codeSent, setCodeSent] = useState(false);
+  const [password, setPassword] = useState('');
   const [busy, setBusy] = useState<string | null>(null);
 
   async function run(key: string, fn: () => Promise<void>) {
@@ -55,50 +54,32 @@ export default function AuthScreen() {
 
           <Text style={styles.divider}>{t('auth.orEmail')}</Text>
 
-          {!codeSent ? (
-            <>
-              <Field
-                placeholder={t('auth.emailPlaceholder')}
-                autoCapitalize="none"
-                keyboardType="email-address"
-                value={email}
-                onChangeText={setEmail}
-              />
-              <Button
-                title={t('auth.sendCode')}
-                loading={busy === 'send'}
-                disabled={!email.includes('@')}
-                onPress={() =>
-                  run('send', async () => {
-                    await sendEmailCode(email.trim());
-                    setCodeSent(true);
-                  })
-                }
-              />
-            </>
-          ) : (
-            <>
-              <Text style={styles.hint}>{t('auth.codeSent')}</Text>
-              <Field
-                placeholder={t('auth.codePlaceholder')}
-                keyboardType="number-pad"
-                value={code}
-                onChangeText={setCode}
-                maxLength={6}
-              />
-              <Button
-                title={t('auth.verifyCode')}
-                loading={busy === 'verify'}
-                disabled={code.length !== 6}
-                onPress={() =>
-                  run('verify', async () => {
-                    await verifyEmailCode(email.trim(), code.trim());
-                    router.replace('/');
-                  })
-                }
-              />
-            </>
-          )}
+          <Field
+            placeholder={t('auth.emailPlaceholder')}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <Field
+            placeholder={t('auth.passwordPlaceholder')}
+            secureTextEntry
+            autoCapitalize="none"
+            value={password}
+            onChangeText={setPassword}
+          />
+          <Text style={styles.hint}>{t('auth.passwordHint')}</Text>
+          <Button
+            title={t('auth.signIn')}
+            loading={busy === 'email'}
+            disabled={!email.includes('@') || password.length < 6}
+            onPress={() =>
+              run('email', async () => {
+                await signInWithEmailPassword(email.trim(), password);
+                router.replace('/');
+              })
+            }
+          />
         </View>
       </View>
     </Screen>

@@ -20,7 +20,10 @@
     "codeSent": "Check your email for a 6-digit code",
     "codePlaceholder": "6-digit code",
     "verifyCode": "Verify",
-    "error": "Sign-in failed. Please try again."
+    "error": "Sign-in failed. Please try again.",
+    "passwordPlaceholder": "Password (6+ characters)",
+    "passwordHint": "New here? We'll create your account automatically.",
+    "signIn": "Sign in / Sign up"
   },
   "profileSetup": {
     "title": "Set up your profile",
