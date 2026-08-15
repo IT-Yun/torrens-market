@@ -15,6 +15,7 @@ export type ChatRoomSummary = {
   listing: { id: string; title: string; photo: string | null };
   other: { id: string; display_name: string };
   lastMessage: { body: string; created_at: string } | null;
+  unread: boolean;
 };
 
 export async function startChat(listingId: string): Promise<string> {
@@ -31,8 +32,8 @@ export async function fetchRooms(userId: string): Promise<ChatRoomSummary[]> {
        chat_rooms (
          id, created_at,
          listings (id, title, listing_photos (storage_path, sort_order)),
-         chat_participants (user_id, profiles (display_name)),
-         messages (body, created_at)
+         chat_participants (user_id, last_read_at, profiles (display_name)),
+         messages (body, created_at, sender_id)
        )`,
     )
     .eq('user_id', userId)
@@ -48,8 +49,8 @@ export async function fetchRooms(userId: string): Promise<ChatRoomSummary[]> {
         title: string;
         listing_photos: { storage_path: string; sort_order: number }[];
       };
-      chat_participants: { user_id: string; profiles: { display_name: string } }[];
-      messages: { body: string; created_at: string }[];
+      chat_participants: { user_id: string; last_read_at: string; profiles: { display_name: string } }[];
+      messages: { body: string; created_at: string; sender_id: string }[];
     };
   };
 
@@ -57,10 +58,15 @@ export async function fetchRooms(userId: string): Promise<ChatRoomSummary[]> {
     .map((row) => {
       const room = row.chat_rooms;
       const other = room.chat_participants.find((p) => p.user_id !== userId);
+      const me = room.chat_participants.find((p) => p.user_id === userId);
       const photo = [...(room.listings?.listing_photos ?? [])].sort(
         (a, b) => a.sort_order - b.sort_order,
       )[0];
+      const last = room.messages[0] ?? null;
+      const unread =
+        !!last && last.sender_id !== userId && (!me || last.created_at > me.last_read_at);
       return {
+        unread,
         room_id: row.room_id,
         listing: {
           id: room.listings?.id ?? '',

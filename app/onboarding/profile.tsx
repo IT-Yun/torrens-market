@@ -41,7 +41,12 @@ export default function ProfileSetupScreen() {
 
   return (
     <Screen>
-      <ScrollView contentContainerStyle={{ gap: spacing.md, paddingVertical: spacing.xl }}>
+      <ScrollView contentContainerStyle={{ gap: spacing.md, paddingVertical: spacing.lg }}>
+        {router.canGoBack() && (
+          <Pressable onPress={() => router.back()} hitSlop={8}>
+            <Text style={styles.back}>‹</Text>
+          </Pressable>
+        )}
         <Text style={styles.title}>{t('profileSetup.title')}</Text>
 
         <Field
@@ -89,6 +94,7 @@ export default function ProfileSetupScreen() {
 }
 
 const styles = StyleSheet.create({
+  back: { fontSize: 32, color: colors.text, lineHeight: 34 },
   title: { fontSize: 24, fontWeight: '700', color: colors.text },
   label: { fontSize: 14, fontWeight: '600', color: colors.text },
   note: { fontSize: 12, color: colors.textSecondary },

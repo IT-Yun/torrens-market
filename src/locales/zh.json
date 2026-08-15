@@ -49,7 +49,8 @@
     "verified": "已认证",
     "language": "语言",
     "signOut": "退出登录",
-    "myListings": "我的商品"
+    "myListings": "我的商品",
+    "editProfile": "编辑资料"
   },
   "favorites": {
     "empty": "你收藏的商品会显示在这里。"
@@ -109,7 +110,8 @@
   "search": {
     "title": "搜索",
     "verifiedOnly": "仅认证卖家",
-    "noResults": "没有结果 — 换个关键词或筛选条件试试。"
+    "noResults": "没有结果 — 换个关键词或筛选条件试试。",
+    "keywordCta": "有货时通知我"
   },
   "keywords": {
     "title": "关键词提醒",
@@ -125,6 +127,7 @@
     },
     "markSold": "标记已售",
     "markActive": "重新上架",
-    "empty": "你还没有发布商品。"
+    "empty": "你还没有发布商品。",
+    "markReserved": "标记预订"
   }
 }

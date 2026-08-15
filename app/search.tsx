@@ -119,6 +119,9 @@ export default function SearchScreen() {
             <View style={styles.empty}>
               <Text style={styles.emptyEmoji}>🔍</Text>
               <Text style={styles.emptyText}>{t('search.noResults')}</Text>
+              <Pressable style={styles.keywordCta} onPress={() => router.push('/keywords')}>
+                <Text style={styles.keywordCtaText}>🔔 {t('search.keywordCta')}</Text>
+              </Pressable>
             </View>
           ) : null
         }
@@ -159,6 +162,14 @@ const styles = StyleSheet.create({
   chipSelected: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipText: { fontSize: 14, color: colors.text },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
+  keywordCta: {
+    marginTop: spacing.sm,
+    backgroundColor: colors.primary,
+    borderRadius: radius.full,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+  },
+  keywordCtaText: { color: colors.white, fontWeight: '600', fontSize: 14 },
   emptyEmoji: { fontSize: 44 },
   emptyText: { fontSize: 15, color: colors.textSecondary },
 });

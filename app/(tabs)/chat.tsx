@@ -35,17 +35,23 @@ export default function ChatListScreen() {
               </View>
             )}
             <View style={{ flex: 1, gap: 2 }}>
-              <Text style={styles.name}>
+              <Text style={[styles.name, item.unread && styles.nameUnread]}>
                 {item.other.display_name}
                 <Text style={styles.listingTitle}>  · {item.listing.title}</Text>
               </Text>
-              <Text style={styles.preview} numberOfLines={1}>
+              <Text
+                style={[styles.preview, item.unread && styles.previewUnread]}
+                numberOfLines={1}
+              >
                 {item.lastMessage?.body ?? ''}
               </Text>
             </View>
-            {item.lastMessage && (
-              <Text style={styles.time}>{timeAgo(item.lastMessage.created_at)}</Text>
-            )}
+            <View style={{ alignItems: 'flex-end', gap: 4 }}>
+              {item.lastMessage && (
+                <Text style={styles.time}>{timeAgo(item.lastMessage.created_at)}</Text>
+              )}
+              {item.unread && <View style={styles.unreadDot} />}
+            </View>
           </Pressable>
         )}
         ListEmptyComponent={
@@ -73,6 +79,9 @@ const styles = StyleSheet.create({
   thumb: { width: 52, height: 52, borderRadius: radius.md, backgroundColor: colors.surface },
   thumbPlaceholder: { alignItems: 'center', justifyContent: 'center' },
   name: { fontSize: 15, fontWeight: '600', color: colors.text },
+  nameUnread: { fontWeight: '800' },
+  previewUnread: { color: colors.text, fontWeight: '600' },
+  unreadDot: { width: 9, height: 9, borderRadius: 5, backgroundColor: colors.primary },
   listingTitle: { fontSize: 13, fontWeight: '400', color: colors.textSecondary },
   preview: { fontSize: 13, color: colors.textSecondary },
   time: { fontSize: 12, color: colors.textSecondary },

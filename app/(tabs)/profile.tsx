@@ -60,6 +60,11 @@ export default function ProfileScreen() {
           })}
         </View>
 
+        <Pressable style={styles.menuRow} onPress={() => router.push('/onboarding/profile')}>
+          <Text style={styles.menuText}>✏️ {t('profile.editProfile')}</Text>
+          <Text style={styles.menuArrow}>›</Text>
+        </Pressable>
+
         <Pressable style={styles.menuRow} onPress={() => router.push('/my-listings')}>
           <Text style={styles.menuText}>📦 {t('profile.myListings')}</Text>
           <Text style={styles.menuArrow}>›</Text>

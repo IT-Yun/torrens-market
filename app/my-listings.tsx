@@ -13,7 +13,16 @@ import {
 import { useSession } from '../src/lib/session';
 import { colors, radius, spacing } from '../src/theme';
 
-const NEXT_STATUS: Record<string, 'sold' | 'active'> = { active: 'sold', reserved: 'sold', sold: 'active' };
+const ACTIONS: Record<string, ('reserved' | 'sold' | 'active')[]> = {
+  active: ['reserved', 'sold'],
+  reserved: ['active', 'sold'],
+  sold: ['active'],
+};
+const ACTION_LABEL: Record<string, string> = {
+  reserved: 'myListings.markReserved',
+  sold: 'myListings.markSold',
+  active: 'myListings.markActive',
+};
 
 export default function MyListingsScreen() {
   const { t } = useTranslation();
@@ -68,19 +77,22 @@ export default function MyListingsScreen() {
                   </Text>
                 </View>
               </Pressable>
-              <Pressable
-                style={[styles.actionButton, sold && styles.actionButtonSecondary]}
-                onPress={async () => {
-                  await updateListingStatus(item.id, NEXT_STATUS[item.status] ?? 'sold').catch(
-                    () => {},
-                  );
-                  load();
-                }}
-              >
-                <Text style={[styles.actionText, sold && { color: colors.text }]}>
-                  {sold ? t('myListings.markActive') : t('myListings.markSold')}
-                </Text>
-              </Pressable>
+              <View style={{ gap: 6 }}>
+                {(ACTIONS[item.status] ?? []).map((next) => (
+                  <Pressable
+                    key={next}
+                    style={[styles.actionButton, next === 'active' && styles.actionButtonSecondary]}
+                    onPress={async () => {
+                      await updateListingStatus(item.id, next).catch(() => {});
+                      load();
+                    }}
+                  >
+                    <Text style={[styles.actionText, next === 'active' && { color: colors.text }]}>
+                      {t(ACTION_LABEL[next])}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
             </View>
           );
         }}

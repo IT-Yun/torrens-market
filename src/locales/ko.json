@@ -49,7 +49,8 @@
     "verified": "인증됨",
     "language": "언어",
     "signOut": "로그아웃",
-    "myListings": "내 매물"
+    "myListings": "내 매물",
+    "editProfile": "프로필 수정"
   },
   "favorites": {
     "empty": "♥ 누른 매물이 여기에 모여요."
@@ -109,7 +110,8 @@
   "search": {
     "title": "검색",
     "verifiedOnly": "인증 판매자만",
-    "noResults": "결과가 없어요 — 다른 키워드나 필터를 써보세요."
+    "noResults": "결과가 없어요 — 다른 키워드나 필터를 써보세요.",
+    "keywordCta": "올라오면 알림 받기"
   },
   "keywords": {
     "title": "키워드 알림",
@@ -125,6 +127,7 @@
     },
     "markSold": "판매완료",
     "markActive": "판매중으로",
-    "empty": "아직 등록한 매물이 없어요."
+    "empty": "아직 등록한 매물이 없어요.",
+    "markReserved": "예약중으로"
   }
 }

@@ -49,7 +49,8 @@
     "verified": "Verified",
     "language": "Language",
     "signOut": "Sign out",
-    "myListings": "My listings"
+    "myListings": "My listings",
+    "editProfile": "Edit profile"
   },
   "favorites": {
     "empty": "Listings you ♥ will appear here."
@@ -109,7 +110,8 @@
   "search": {
     "title": "Search",
     "verifiedOnly": "Verified only",
-    "noResults": "No results — try different keywords or filters."
+    "noResults": "No results — try different keywords or filters.",
+    "keywordCta": "Get notified when it's posted"
   },
   "keywords": {
     "title": "Keyword alerts",
@@ -125,6 +127,7 @@
     },
     "markSold": "Mark sold",
     "markActive": "Relist",
-    "empty": "You haven't posted anything yet."
+    "empty": "You haven't posted anything yet.",
+    "markReserved": "Reserve"
   }
 }
