@@ -113,5 +113,15 @@
     "hint": "Get a push notification the moment a matching listing is posted.",
     "placeholder": "e.g. IKEA desk, iPhone, rice cooker",
     "empty": "No keywords yet — add one above."
+  },
+  "myListings": {
+    "status": {
+      "active": "On sale",
+      "reserved": "Reserved",
+      "sold": "Sold"
+    },
+    "markSold": "Mark sold",
+    "markActive": "Relist",
+    "empty": "You haven't posted anything yet."
   }
 }

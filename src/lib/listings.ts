@@ -181,6 +181,27 @@ export async function createListing(input: {
   return listingId;
 }
 
+export async function fetchMyListings(userId: string): Promise<ListingCard[]> {
+  const { data, error } = await supabase
+    .from('listings')
+    .select(
+      'id, title, price_cents, suburb, status, created_at, category_id, attributes, listing_photos (storage_path, sort_order)',
+    )
+    .eq('seller_id', userId)
+    .neq('status', 'deleted')
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return (data as ListingCard[]) ?? [];
+}
+
+export async function updateListingStatus(
+  listingId: string,
+  status: 'active' | 'reserved' | 'sold' | 'deleted',
+): Promise<void> {
+  const { error } = await supabase.from('listings').update({ status }).eq('id', listingId);
+  if (error) throw error;
+}
+
 export function formatPrice(priceCents: number): string {
   if (priceCents === 0) return 'Free';
   return `$${(priceCents / 100).toLocaleString('en-AU', { maximumFractionDigits: 2 })}`;

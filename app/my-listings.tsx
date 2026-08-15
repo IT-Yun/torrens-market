@@ -1,0 +1,135 @@
+import { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { router, useFocusEffect } from 'expo-router';
+import {
+  fetchMyListings,
+  formatPrice,
+  photoUrl,
+  updateListingStatus,
+  type ListingCard,
+} from '../src/lib/listings';
+import { useSession } from '../src/lib/session';
+import { colors, radius, spacing } from '../src/theme';
+
+const NEXT_STATUS: Record<string, 'sold' | 'active'> = { active: 'sold', reserved: 'sold', sold: 'active' };
+
+export default function MyListingsScreen() {
+  const { t } = useTranslation();
+  const { session } = useSession();
+  const [items, setItems] = useState<ListingCard[]>([]);
+
+  const load = useCallback(() => {
+    if (session) fetchMyListings(session.user.id).then(setItems).catch(() => {});
+  }, [session]);
+
+  useFocusEffect(load);
+
+  return (
+    <SafeAreaView style={styles.safe} edges={['top']}>
+      <View style={styles.header}>
+        <Pressable onPress={() => router.back()}>
+          <Text style={styles.back}>‹</Text>
+        </Pressable>
+        <Text style={styles.title}>{t('profile.myListings')}</Text>
+        <View style={{ width: 24 }} />
+      </View>
+
+      <FlatList
+        data={items}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => {
+          const photo = [...item.listing_photos].sort((a, b) => a.sort_order - b.sort_order)[0];
+          const sold = item.status === 'sold';
+          return (
+            <View style={styles.row}>
+              <Pressable
+                style={styles.rowMain}
+                onPress={() => router.push(`/listing/${item.id}`)}
+              >
+                {photo ? (
+                  <Image
+                    source={{ uri: photoUrl(photo.storage_path) }}
+                    style={[styles.thumb, sold && { opacity: 0.4 }]}
+                  />
+                ) : (
+                  <View style={[styles.thumb, styles.thumbPlaceholder]}>
+                    <Text>📦</Text>
+                  </View>
+                )}
+                <View style={{ flex: 1, gap: 2 }}>
+                  <Text style={[styles.itemTitle, sold && styles.soldText]} numberOfLines={1}>
+                    {item.title}
+                  </Text>
+                  <Text style={styles.price}>{formatPrice(item.price_cents)}</Text>
+                  <Text style={[styles.status, sold && { color: colors.textSecondary }]}>
+                    {t(`myListings.status.${item.status}`)}
+                  </Text>
+                </View>
+              </Pressable>
+              <Pressable
+                style={[styles.actionButton, sold && styles.actionButtonSecondary]}
+                onPress={async () => {
+                  await updateListingStatus(item.id, NEXT_STATUS[item.status] ?? 'sold').catch(
+                    () => {},
+                  );
+                  load();
+                }}
+              >
+                <Text style={[styles.actionText, sold && { color: colors.text }]}>
+                  {sold ? t('myListings.markActive') : t('myListings.markSold')}
+                </Text>
+              </Pressable>
+            </View>
+          );
+        }}
+        ListEmptyComponent={
+          <View style={styles.empty}>
+            <Text style={{ fontSize: 40 }}>📦</Text>
+            <Text style={styles.emptyText}>{t('myListings.empty')}</Text>
+          </View>
+        }
+        contentContainerStyle={items.length === 0 ? { flex: 1 } : undefined}
+      />
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: colors.background },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  back: { fontSize: 32, color: colors.text, lineHeight: 34, width: 24 },
+  title: { fontSize: 17, fontWeight: '700', color: colors.text },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    padding: spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  rowMain: { flex: 1, flexDirection: 'row', gap: spacing.md, alignItems: 'center' },
+  thumb: { width: 64, height: 64, borderRadius: radius.md, backgroundColor: colors.surface },
+  thumbPlaceholder: { alignItems: 'center', justifyContent: 'center' },
+  itemTitle: { fontSize: 15, color: colors.text },
+  soldText: { color: colors.textSecondary, textDecorationLine: 'line-through' },
+  price: { fontSize: 15, fontWeight: '700', color: colors.text },
+  status: { fontSize: 12, color: colors.primary, fontWeight: '600' },
+  actionButton: {
+    backgroundColor: colors.primary,
+    borderRadius: radius.md,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  actionButtonSecondary: { backgroundColor: colors.surface },
+  actionText: { fontSize: 13, fontWeight: '600', color: colors.white },
+  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
+  emptyText: { fontSize: 14, color: colors.textSecondary },
+});

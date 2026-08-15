@@ -113,5 +113,15 @@
     "hint": "有匹配的商品发布时，立即推送通知你。",
     "placeholder": "如: 宜家书桌, iPhone, 电饭煲",
     "empty": "还没有关键词 — 在上面添加一个吧。"
+  },
+  "myListings": {
+    "status": {
+      "active": "在售",
+      "reserved": "已预订",
+      "sold": "已售出"
+    },
+    "markSold": "标记已售",
+    "markActive": "重新上架",
+    "empty": "你还没有发布商品。"
   }
 }
