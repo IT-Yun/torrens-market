@@ -61,12 +61,12 @@ Full product/design docs: [`docs/`](docs/) — MVP spec, category field system, 
 
 - [x] Product planning — benchmarked Karrot, Bunjang, Gumtree feature-by-feature
 - [x] Design — screens, user scenarios, ERD, ADRs 001–003
-- [ ] M1: auth + profiles
-- [ ] M2: listings + category fields + photo upload
-- [ ] M3: search + filters + favorites
-- [ ] M4: chat
-- [ ] M5: keyword alerts (custom matcher service)
-- [ ] M6: store release (App Store / Play Store)
+- [x] M1: auth + profiles (social login pending provider config; email OTP live)
+- [x] M2: listings + category fields + photo upload
+- [x] M3: search + filters + favorites
+- [x] M4: realtime chat
+- [x] M5: keyword alerts (Edge Function matcher + Expo push)
+- [ ] M6: device QA, EAS builds, store release (App Store / Play Store)
 
 ## Running locally
 
