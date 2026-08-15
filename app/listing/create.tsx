@@ -100,6 +100,7 @@ export default function CreateListingScreen() {
   const [suburb, setSuburb] = useState(profile?.suburb ?? '');
   const [attributes, setAttributes] = useState<Record<string, unknown>>({});
   const [busy, setBusy] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<[number, number] | null>(null);
 
   useEffect(() => {
     fetchCategories().then(setCategories).catch(() => {});
@@ -130,24 +131,28 @@ export default function CreateListingScreen() {
     if (!session || categoryId == null) return;
     setBusy(true);
     try {
-      const id = await createListing({
-        sellerId: session.user.id,
-        categoryId,
-        title: title.trim(),
-        description: description.trim(),
-        priceCents: Math.round(parseFloat(price || '0') * 100),
-        condition,
-        pickupMode,
-        suburb: suburb.trim(),
-        attributes,
-        photos,
-      });
+      const id = await createListing(
+        {
+          sellerId: session.user.id,
+          categoryId,
+          title: title.trim(),
+          description: description.trim(),
+          priceCents: Math.round(parseFloat(price || '0') * 100),
+          condition,
+          pickupMode,
+          suburb: suburb.trim(),
+          attributes,
+          photos,
+        },
+        (uploaded, total) => setUploadProgress([uploaded, total]),
+      );
       Alert.alert(t('listingCreate.posted'));
       router.replace(`/listing/${id}`);
     } catch (e) {
       Alert.alert((e as Error).message);
     } finally {
       setBusy(false);
+      setUploadProgress(null);
     }
   }
 
@@ -265,6 +270,14 @@ export default function CreateListingScreen() {
 
         <Field label={t('listingCreate.suburb')} value={suburb} onChangeText={setSuburb} />
 
+        {busy && uploadProgress && (
+          <Text style={styles.uploadProgress}>
+            {t('listingCreate.uploading', {
+              done: Math.min(uploadProgress[0] + 1, uploadProgress[1]),
+              total: uploadProgress[1],
+            })}
+          </Text>
+        )}
         <Button title={t('listingCreate.post')} loading={busy} disabled={!canPost} onPress={post} />
       </ScrollView>
     </SafeAreaView>
@@ -314,4 +327,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   label: { fontSize: 14, fontWeight: '600', color: colors.text },
+  uploadProgress: { textAlign: 'center', fontSize: 13, color: colors.textSecondary },
 });

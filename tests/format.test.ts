@@ -1,0 +1,42 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { attributeSnippet, formatPrice, timeAgo } from '../src/lib/format.ts';
+
+test('formatPrice renders AUD with grouping', () => {
+  assert.equal(formatPrice(125000), '$1,250');
+  assert.equal(formatPrice(999), '$9.99');
+  assert.equal(formatPrice(0), 'Free');
+});
+
+test('timeAgo buckets minutes, hours, days', () => {
+  const now = Date.parse('2026-08-15T12:00:00Z');
+  assert.equal(timeAgo('2026-08-15T11:59:40Z', now), '1m');
+  assert.equal(timeAgo('2026-08-15T11:15:00Z', now), '45m');
+  assert.equal(timeAgo('2026-08-15T09:00:00Z', now), '3h');
+  assert.equal(timeAgo('2026-08-12T12:00:00Z', now), '3d');
+});
+
+test('attributeSnippet: car pattern "year · km"', () => {
+  assert.equal(attributeSnippet({ year: 2019, odometer_km: 82000 }), '2019 · 82,000km');
+});
+
+test('attributeSnippet: furniture dimensions', () => {
+  assert.equal(attributeSnippet({ dimensions: '120×80×75' }), '120×80×75cm');
+});
+
+test('attributeSnippet: cosmetics expiry', () => {
+  assert.equal(attributeSnippet({ expiry_date: '2026-12' }), 'EXP 2026-12');
+});
+
+test('attributeSnippet: brand beats brand_model, max two parts', () => {
+  assert.equal(attributeSnippet({ brand: 'Gucci', brand_model: 'x', purchase_date: '2024-01' }), 'Gucci');
+  assert.equal(
+    attributeSnippet({ year: 2020, odometer_km: 1000, dimensions: '1×1×1' }),
+    '2020 · 1,000km',
+  );
+});
+
+test('attributeSnippet: empty/no known keys -> null', () => {
+  assert.equal(attributeSnippet({}), null);
+  assert.equal(attributeSnippet({ unknown_key: 'v' }), null);
+});

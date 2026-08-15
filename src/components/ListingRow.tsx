@@ -1,15 +1,10 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
-import { attributeSnippet, formatPrice, photoUrl, type ListingCard } from '../lib/listings';
-import { colors, radius, spacing } from '../theme';
+import { photoUrl, type ListingCard } from '../lib/listings';
+import { attributeSnippet, formatPrice, timeAgo } from '../lib/format';
 
-export function timeAgo(iso: string): string {
-  const mins = Math.max(1, Math.floor((Date.now() - new Date(iso).getTime()) / 60000));
-  if (mins < 60) return `${mins}m`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h`;
-  return `${Math.floor(hours / 24)}d`;
-}
+export { timeAgo };
+import { colors, radius, spacing } from '../theme';
 
 export function ListingRow({ item }: { item: ListingCard }) {
   const photo = [...item.listing_photos].sort((a, b) => a.sort_order - b.sort_order)[0];

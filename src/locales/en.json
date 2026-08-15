@@ -76,7 +76,8 @@
     "post": "Post listing",
     "posted": "Your listing is live!",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "uploading": "Uploading photo {{done}}/{{total}}..."
   },
   "listingDetail": {
     "chat": "Chat with seller",

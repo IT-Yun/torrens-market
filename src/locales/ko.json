@@ -76,7 +76,8 @@
     "post": "등록하기",
     "posted": "매물이 등록됐어요!",
     "yes": "예",
-    "no": "아니요"
+    "no": "아니요",
+    "uploading": "사진 {{done}}/{{total}} 업로드 중..."
   },
   "listingDetail": {
     "chat": "판매자와 채팅",

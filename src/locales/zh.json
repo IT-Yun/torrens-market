@@ -76,7 +76,8 @@
     "post": "发布",
     "posted": "商品已发布！",
     "yes": "是",
-    "no": "否"
+    "no": "否",
+    "uploading": "正在上传照片 {{done}}/{{total}}..."
   },
   "listingDetail": {
     "chat": "联系卖家",

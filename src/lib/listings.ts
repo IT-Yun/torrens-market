@@ -1,4 +1,5 @@
 import * as ImagePicker from 'expo-image-picker';
+export { attributeSnippet, formatPrice, timeAgo } from './format';
 import { supabase } from './supabase';
 
 export type FieldDef = {
@@ -152,7 +153,7 @@ export async function createListing(input: {
   suburb: string;
   attributes: Record<string, unknown>;
   photos: ImagePicker.ImagePickerAsset[];
-}): Promise<string> {
+}, onProgress?: (uploaded: number, total: number) => void): Promise<string> {
   const { data, error } = await supabase
     .from('listings')
     .insert({
@@ -172,12 +173,14 @@ export async function createListing(input: {
   const listingId = (data as { id: string }).id;
 
   for (let i = 0; i < input.photos.length; i++) {
+    onProgress?.(i, input.photos.length);
     const path = await uploadPhoto(input.sellerId, input.photos[i]);
     const { error: photoError } = await supabase
       .from('listing_photos')
       .insert({ listing_id: listingId, storage_path: path, sort_order: i });
     if (photoError) throw photoError;
   }
+  onProgress?.(input.photos.length, input.photos.length);
   return listingId;
 }
 
@@ -202,26 +205,3 @@ export async function updateListingStatus(
   if (error) throw error;
 }
 
-/**
- * One-line category-specific snippet for feed cards — the Karrot
- * used-car-card pattern ("2019 · 82,000km") generalized to our categories.
- * Values are language-neutral (numbers, units, dates).
- */
-export function attributeSnippet(attributes: Record<string, unknown>): string | null {
-  const parts: string[] = [];
-  const a = attributes ?? {};
-  if (a.year) parts.push(String(a.year));
-  if (a.odometer_km) parts.push(`${Number(a.odometer_km).toLocaleString('en-AU')}km`);
-  if (a.dimensions) parts.push(`${a.dimensions}cm`);
-  if (a.brand) parts.push(String(a.brand));
-  else if (a.brand_model) parts.push(String(a.brand_model));
-  if (a.expiry_date) parts.push(`EXP ${a.expiry_date}`);
-  if (a.best_before) parts.push(`BB ${a.best_before}`);
-  if (a.size) parts.push(String(a.size));
-  return parts.length ? parts.slice(0, 2).join(' · ') : null;
-}
-
-export function formatPrice(priceCents: number): string {
-  if (priceCents === 0) return 'Free';
-  return `$${(priceCents / 100).toLocaleString('en-AU', { maximumFractionDigits: 2 })}`;
-}
