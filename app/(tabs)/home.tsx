@@ -1,29 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Image, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useFocusEffect } from 'expo-router';
+import { AdelaideHero } from '../../src/components/AdelaideHero';
+import { ListingRow } from '../../src/components/ListingRow';
 import i18n from '../../src/lib/i18n';
-import {
-  fetchCategories,
-  fetchListings,
-  formatPrice,
-  photoUrl,
-  type Category,
-  type ListingCard,
-} from '../../src/lib/listings';
+import { fetchCategories, fetchListings, type Category, type ListingCard } from '../../src/lib/listings';
+import { useSession } from '../../src/lib/session';
 import { colors, radius, spacing } from '../../src/theme';
-
-function timeAgo(iso: string): string {
-  const mins = Math.max(1, Math.floor((Date.now() - new Date(iso).getTime()) / 60000));
-  if (mins < 60) return `${mins}m`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h`;
-  return `${Math.floor(hours / 24)}d`;
-}
 
 export default function HomeScreen() {
   const { t } = useTranslation();
+  const { profile } = useSession();
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [listings, setListings] = useState<ListingCard[]>([]);
@@ -51,10 +40,11 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
+      {/* Karrot pattern: your neighbourhood first */}
       <View style={styles.header}>
-        <Text style={styles.brand}>{t('common.appName')}</Text>
+        <Text style={styles.suburb}>📍 {profile?.suburb ?? t('common.appName')}</Text>
         <Pressable onPress={() => router.push('/search')} hitSlop={8}>
-          <Text style={{ fontSize: 22 }}>🔍</Text>
+          <Text style={{ fontSize: 20 }}>🔍</Text>
         </Pressable>
       </View>
 
@@ -84,6 +74,7 @@ export default function HomeScreen() {
       <FlatList
         data={listings}
         keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <ListingRow item={item} />}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -96,34 +87,11 @@ export default function HomeScreen() {
         }
         ListEmptyComponent={
           <View style={styles.emptyState}>
-            <Text style={styles.emptyEmoji}>📦</Text>
+            <AdelaideHero width={220} height={124} />
             <Text style={styles.emptyText}>{t('home.empty')}</Text>
           </View>
         }
         contentContainerStyle={listings.length === 0 ? { flex: 1 } : undefined}
-        renderItem={({ item }) => {
-          const photo = [...item.listing_photos].sort((a, b) => a.sort_order - b.sort_order)[0];
-          return (
-            <Pressable style={styles.card} onPress={() => router.push(`/listing/${item.id}`)}>
-              {photo ? (
-                <Image source={{ uri: photoUrl(photo.storage_path) }} style={styles.cardImage} />
-              ) : (
-                <View style={[styles.cardImage, styles.cardImagePlaceholder]}>
-                  <Text style={{ fontSize: 24 }}>📦</Text>
-                </View>
-              )}
-              <View style={styles.cardBody}>
-                <Text style={styles.cardTitle} numberOfLines={2}>
-                  {item.title}
-                </Text>
-                <Text style={styles.cardMeta}>
-                  {item.suburb} · {timeAgo(item.created_at)}
-                </Text>
-                <Text style={styles.cardPrice}>{formatPrice(item.price_cents)}</Text>
-              </View>
-            </Pressable>
-          );
-        }}
       />
 
       <Pressable style={styles.fab} onPress={() => router.push('/listing/create')}>
@@ -142,7 +110,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  brand: { fontSize: 22, fontWeight: '800', color: colors.primary },
+  suburb: { fontSize: 18, fontWeight: '800', color: colors.text },
   chipRow: { paddingHorizontal: spacing.md, gap: spacing.sm, paddingVertical: spacing.xs },
   chip: {
     borderWidth: 1,
@@ -154,22 +122,8 @@ const styles = StyleSheet.create({
   },
   chipSelected: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipText: { fontSize: 14, color: colors.text },
-  emptyState: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
-  emptyEmoji: { fontSize: 44 },
+  emptyState: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.md },
   emptyText: { fontSize: 15, color: colors.textSecondary },
-  card: {
-    flexDirection: 'row',
-    gap: spacing.md,
-    padding: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  cardImage: { width: 96, height: 96, borderRadius: radius.md, backgroundColor: colors.surface },
-  cardImagePlaceholder: { alignItems: 'center', justifyContent: 'center' },
-  cardBody: { flex: 1, gap: 2 },
-  cardTitle: { fontSize: 15, color: colors.text },
-  cardMeta: { fontSize: 12, color: colors.textSecondary },
-  cardPrice: { fontSize: 16, fontWeight: '700', color: colors.text, marginTop: 2 },
   fab: {
     position: 'absolute',
     right: spacing.lg,
