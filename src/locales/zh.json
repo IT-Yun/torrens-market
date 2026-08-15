@@ -107,5 +107,11 @@
     "title": "搜索",
     "verifiedOnly": "仅认证卖家",
     "noResults": "没有结果 — 换个关键词或筛选条件试试。"
+  },
+  "keywords": {
+    "title": "关键词提醒",
+    "hint": "有匹配的商品发布时，立即推送通知你。",
+    "placeholder": "如: 宜家书桌, iPhone, 电饭煲",
+    "empty": "还没有关键词 — 在上面添加一个吧。"
   }
 }

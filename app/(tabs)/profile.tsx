@@ -53,6 +53,11 @@ export default function ProfileScreen() {
           })}
         </View>
 
+        <Pressable style={styles.menuRow} onPress={() => router.push('/keywords')}>
+          <Text style={styles.menuText}>🔔 {t('keywords.title')}</Text>
+          <Text style={styles.menuArrow}>›</Text>
+        </Pressable>
+
         <View style={{ flex: 1 }} />
         <Button
           title={t('profile.signOut')}
@@ -90,4 +95,16 @@ const styles = StyleSheet.create({
   },
   chipSelected: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipText: { fontSize: 14, color: colors.text },
+  menuRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: 14,
+  },
+  menuText: { fontSize: 15, fontWeight: '600', color: colors.text },
+  menuArrow: { fontSize: 18, color: colors.textSecondary },
 });

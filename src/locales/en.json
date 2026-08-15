@@ -107,5 +107,11 @@
     "title": "Search",
     "verifiedOnly": "Verified only",
     "noResults": "No results — try different keywords or filters."
+  },
+  "keywords": {
+    "title": "Keyword alerts",
+    "hint": "Get a push notification the moment a matching listing is posted.",
+    "placeholder": "e.g. IKEA desk, iPhone, rice cooker",
+    "empty": "No keywords yet — add one above."
   }
 }
