@@ -33,7 +33,11 @@
     "nationalityNote": "会显示在你的资料上，买家可以按国籍筛选，也可以留空。",
     "done": "开始交易",
     "photo": "头像",
-    "photoHint": "点按添加头像"
+    "photoHint": "点按添加头像",
+    "verifyLocation": "用我的位置验证区域",
+    "suburbVerified": "区域已验证",
+    "locationMismatch": "你现在似乎在 {{suburb}} — 点按使用",
+    "locationUnavailable": "无法获取位置"
   },
   "tabs": {
     "home": "首页",
@@ -78,14 +82,18 @@
     "posted": "商品已发布！",
     "yes": "是",
     "no": "否",
-    "uploading": "正在上传照片 {{done}}/{{total}}..."
+    "uploading": "正在上传照片 {{done}}/{{total}}...",
+    "locationNote": "只会保存你的大致位置（约1公里精度）。"
   },
   "listingDetail": {
     "chat": "联系卖家",
     "detailsTitle": "商品详情",
     "sellerTitle": "卖家",
     "sold": "已售出",
-    "reserved": "已预订"
+    "reserved": "已预订",
+    "distance": "约{{km}}公里",
+    "walkTime": "步行约{{min}}分钟",
+    "driveTime": "开车约{{min}}分钟"
   },
   "conditions": {
     "new": "全新",

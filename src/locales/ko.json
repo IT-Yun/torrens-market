@@ -33,7 +33,11 @@
     "nationalityNote": "프로필에 표시돼요. 구매자가 필터로 쓸 수 있고, 비워둬도 돼요.",
     "done": "거래 시작하기",
     "photo": "프로필 사진",
-    "photoHint": "눌러서 프로필 사진을 추가하세요"
+    "photoHint": "눌러서 프로필 사진을 추가하세요",
+    "verifyLocation": "내 위치로 동네 인증하기",
+    "suburbVerified": "동네 인증됨",
+    "locationMismatch": "지금 위치는 {{suburb}} 같아요 — 눌러서 사용하기",
+    "locationUnavailable": "위치를 확인하지 못했어요"
   },
   "tabs": {
     "home": "홈",
@@ -78,14 +82,18 @@
     "posted": "매물이 등록됐어요!",
     "yes": "예",
     "no": "아니요",
-    "uploading": "사진 {{done}}/{{total}} 업로드 중..."
+    "uploading": "사진 {{done}}/{{total}} 업로드 중...",
+    "locationNote": "대략적인 위치(약 1km 단위)만 저장돼요."
   },
   "listingDetail": {
     "chat": "판매자와 채팅",
     "detailsTitle": "상세 정보",
     "sellerTitle": "판매자",
     "sold": "판매완료",
-    "reserved": "예약중"
+    "reserved": "예약중",
+    "distance": "약 {{km}}km",
+    "walkTime": "도보 약 {{min}}분",
+    "driveTime": "차로 약 {{min}}분"
   },
   "conditions": {
     "new": "새상품",

@@ -12,11 +12,12 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import type { ImagePickerAsset } from 'expo-image-picker';
-import { Camera, ChevronLeft } from 'lucide-react-native';
+import { BadgeCheck, Camera, ChevronLeft, MapPin } from 'lucide-react-native';
 import { Avatar } from '../../src/components/Avatar';
 import { SuburbField } from '../../src/components/SuburbField';
 import { Button, Field, Screen } from '../../src/components/ui';
 import i18n from '../../src/lib/i18n';
+import { checkSuburbMatch } from '../../src/lib/location';
 import { pickAvatar, uploadAvatar } from '../../src/lib/profile';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
@@ -32,6 +33,17 @@ export default function ProfileSetupScreen() {
   const [nationality, setNationality] = useState<string | null>(profile?.nationality ?? null);
   const [avatarAsset, setAvatarAsset] = useState<ImagePickerAsset | null>(null);
   const [busy, setBusy] = useState(false);
+  const [suburbCheck, setSuburbCheck] = useState<'idle' | 'checking' | 'ok' | 'mismatch'>(
+    profile?.suburb_verified_at && profile?.suburb ? 'ok' : 'idle',
+  );
+  const [detected, setDetected] = useState<string | null>(null);
+
+  async function verifySuburb() {
+    setSuburbCheck('checking');
+    const result = await checkSuburbMatch(suburb.trim());
+    setDetected(result.detected);
+    setSuburbCheck(result.ok ? 'ok' : 'mismatch');
+  }
 
   async function save() {
     if (!session) return;
@@ -44,6 +56,7 @@ export default function ProfileSetupScreen() {
         .update({
           display_name: displayName.trim(),
           suburb: suburb.trim(),
+          suburb_verified_at: suburbCheck === 'ok' ? new Date().toISOString() : null,
           nationality,
           avatar_url: avatarUrl,
           preferred_language: i18n.language,
@@ -107,8 +120,48 @@ export default function ProfileSetupScreen() {
             label={t('profileSetup.suburb')}
             placeholder={t('profileSetup.suburbPlaceholder')}
             value={suburb}
-            onChangeText={setSuburb}
+            onChangeText={(text) => {
+              setSuburb(text);
+              setSuburbCheck('idle');
+            }}
           />
+          {suburb.trim() !== '' &&
+            (suburbCheck === 'ok' ? (
+              <View style={styles.verifyRow}>
+                <BadgeCheck size={15} color={colors.primary} />
+                <Text style={styles.verifiedText}>{t('profileSetup.suburbVerified')}</Text>
+              </View>
+            ) : (
+              <View style={{ gap: spacing.xs }}>
+                <Pressable
+                  style={styles.verifyRow}
+                  onPress={verifySuburb}
+                  disabled={suburbCheck === 'checking'}
+                  accessibilityRole="button"
+                >
+                  <MapPin size={15} color={colors.primary} />
+                  <Text style={styles.verifyText}>
+                    {suburbCheck === 'checking' ? '…' : t('profileSetup.verifyLocation')}
+                  </Text>
+                </Pressable>
+                {suburbCheck === 'mismatch' &&
+                  (detected ? (
+                    <Pressable
+                      onPress={() => {
+                        setSuburb(detected);
+                        setSuburbCheck('idle');
+                      }}
+                      accessibilityRole="button"
+                    >
+                      <Text style={styles.mismatchText}>
+                        {t('profileSetup.locationMismatch', { suburb: detected })}
+                      </Text>
+                    </Pressable>
+                  ) : (
+                    <Text style={styles.mismatchText}>{t('profileSetup.locationUnavailable')}</Text>
+                  ))}
+              </View>
+            ))}
 
           <View style={{ gap: spacing.xs }}>
             <Text style={styles.label}>{t('profileSetup.nationality')}</Text>
@@ -157,6 +210,10 @@ const styles = StyleSheet.create({
     borderColor: colors.white,
   },
   photoHint: { fontSize: 12, color: colors.textSecondary },
+  verifyRow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: -4 },
+  verifyText: { fontSize: 13, fontWeight: '600', color: colors.primary },
+  verifiedText: { fontSize: 13, fontWeight: '600', color: colors.primary },
+  mismatchText: { fontSize: 12, color: colors.textSecondary, textDecorationLine: 'underline' },
   label: { fontSize: 14, fontWeight: '600', color: colors.text },
   note: { fontSize: 12, color: colors.textSecondary },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.xs },

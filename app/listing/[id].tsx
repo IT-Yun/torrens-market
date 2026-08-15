@@ -27,8 +27,10 @@ import {
   type Category,
   type ListingDetail,
 } from '../../src/lib/listings';
-import { BadgeCheck, Heart, Package } from 'lucide-react-native';
+import { BadgeCheck, Car, Footprints, Heart, MapPin, Package } from 'lucide-react-native';
 import { Avatar } from '../../src/components/Avatar';
+import { haversineKm, travelEstimate } from '../../src/lib/geo';
+import { getPosition } from '../../src/lib/location';
 import { colors, radius, spacing } from '../../src/theme';
 
 const { width } = Dimensions.get('window');
@@ -41,6 +43,7 @@ export default function ListingDetailScreen() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [liked, setLiked] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
+  const [distanceKm, setDistanceKm] = useState<number | null>(null);
   const lang = i18n.language;
 
   useEffect(() => {
@@ -50,6 +53,15 @@ export default function ListingDetailScreen() {
     }
     fetchCategories().then(setCategories).catch(() => {});
   }, [id, session]);
+
+  useEffect(() => {
+    if (listing?.lat == null || listing?.lng == null) return;
+    getPosition()
+      .then((pos) => {
+        if (pos) setDistanceKm(haversineKm(pos.lat, pos.lng, listing.lat!, listing.lng!));
+      })
+      .catch(() => {});
+  }, [listing?.lat, listing?.lng]);
 
   function openModeration() {
     if (!session || !listing) return;
@@ -201,6 +213,27 @@ export default function ListingDetailScreen() {
           <Text style={styles.meta}>
             {[listing.suburb, t(`conditions.${listing.condition}`), t(`pickupModes.${listing.pickup_mode}`)].join(' · ')}
           </Text>
+          {distanceKm != null &&
+            (() => {
+              const est = travelEstimate(distanceKm);
+              const km = distanceKm < 10 ? distanceKm.toFixed(1) : String(Math.round(distanceKm));
+              return (
+                <View style={styles.distanceRow}>
+                  <MapPin size={14} color={colors.primary} />
+                  <Text style={styles.distanceText}>{t('listingDetail.distance', { km })}</Text>
+                  {est.mode === 'walk' ? (
+                    <Footprints size={14} color={colors.textSecondary} />
+                  ) : (
+                    <Car size={14} color={colors.textSecondary} />
+                  )}
+                  <Text style={styles.distanceText}>
+                    {t(est.mode === 'walk' ? 'listingDetail.walkTime' : 'listingDetail.driveTime', {
+                      min: est.minutes,
+                    })}
+                  </Text>
+                </View>
+              );
+            })()}
 
           {attributeRows.length > 0 && (
             <View style={styles.attrCard}>
@@ -332,6 +365,8 @@ const styles = StyleSheet.create({
   avatarText: { color: colors.white, fontSize: 18, fontWeight: '700' },
   sellerName: { fontSize: 16, fontWeight: '600', color: colors.text },
   verifiedText: { fontSize: 13, fontWeight: '600', color: colors.primary },
+  distanceRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
+  distanceText: { fontSize: 13, color: colors.textSecondary },
   dots: {
     position: 'absolute',
     bottom: 10,

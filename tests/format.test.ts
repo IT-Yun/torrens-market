@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { attributeSnippet, flagEmoji, formatPrice, timeAgo } from '../src/lib/format.ts';
+import { fuzzCoord, haversineKm, travelEstimate } from '../src/lib/geo.ts';
 
 test('formatPrice renders AUD with grouping', () => {
   assert.equal(formatPrice(125000), '$1,250');
@@ -46,4 +47,16 @@ test('flagEmoji: country codes and OTHER bucket', () => {
   assert.equal(flagEmoji('cn'), '🇨🇳');
   assert.equal(flagEmoji('OTHER'), null);
   assert.equal(flagEmoji(null), null);
+});
+
+test('geo: fuzzCoord snaps to ~1.1km grid', () => {
+  assert.equal(fuzzCoord(-34.928497), -34.93);
+  assert.equal(fuzzCoord(138.600739), 138.6);
+});
+
+test('geo: haversineKm and travelEstimate', () => {
+  const km = haversineKm(-34.93, 138.6, -34.93, 138.65); // ~4.6km east
+  assert.ok(km > 4 && km < 5);
+  assert.deepEqual(travelEstimate(1.5), { mode: 'walk', minutes: 20 });
+  assert.equal(travelEstimate(4.6).mode, 'drive');
 });

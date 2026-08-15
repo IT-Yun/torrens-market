@@ -27,6 +27,8 @@ export type ListingCard = {
   created_at: string;
   category_id: number;
   attributes: Record<string, unknown>;
+  lat: number | null;
+  lng: number | null;
   listing_photos: { storage_path: string; sort_order: number }[];
 };
 
@@ -57,7 +59,7 @@ export async function fetchListings(categoryId?: number | null): Promise<Listing
   let query = supabase
     .from('listings')
     .select(
-      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, listing_photos (storage_path, sort_order)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, listing_photos (storage_path, sort_order)',
     )
     .eq('status', 'active')
     .order('created_at', { ascending: false })
@@ -108,7 +110,7 @@ export async function fetchListing(id: string): Promise<ListingDetail | null> {
     .from('listings')
     .select(
       `id, title, description, price_cents, suburb, status, created_at, category_id, attributes,
-       condition, pickup_mode, seller_id,
+       lat, lng, condition, pickup_mode, seller_id,
        listing_photos (storage_path, sort_order),
        profiles (display_name, avatar_url, suburb, nationality, is_phone_verified)`,
     )
@@ -153,6 +155,8 @@ export async function createListing(input: {
   condition: string;
   pickupMode: string;
   suburb: string;
+  lat?: number | null;
+  lng?: number | null;
   attributes: Record<string, unknown>;
   photos: ImagePicker.ImagePickerAsset[];
 }, onProgress?: (uploaded: number, total: number) => void): Promise<string> {
@@ -167,6 +171,8 @@ export async function createListing(input: {
       condition: input.condition,
       pickup_mode: input.pickupMode,
       suburb: input.suburb,
+      lat: input.lat ?? null,
+      lng: input.lng ?? null,
       attributes: input.attributes,
     })
     .select('id')
@@ -190,7 +196,7 @@ export async function fetchMyListings(userId: string): Promise<ListingCard[]> {
   const { data, error } = await supabase
     .from('listings')
     .select(
-      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, listing_photos (storage_path, sort_order)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, listing_photos (storage_path, sort_order)',
     )
     .eq('seller_id', userId)
     .neq('status', 'deleted')

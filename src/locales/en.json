@@ -33,7 +33,11 @@
     "nationalityNote": "Shown on your profile. Buyers can filter by it — or leave it empty.",
     "done": "Start trading",
     "photo": "Profile photo",
-    "photoHint": "Tap to add a profile photo"
+    "photoHint": "Tap to add a profile photo",
+    "verifyLocation": "Verify suburb with my location",
+    "suburbVerified": "Suburb verified",
+    "locationMismatch": "You seem to be in {{suburb}} — tap to use it",
+    "locationUnavailable": "Couldn't check your location"
   },
   "tabs": {
     "home": "Home",
@@ -78,14 +82,18 @@
     "posted": "Your listing is live!",
     "yes": "Yes",
     "no": "No",
-    "uploading": "Uploading photo {{done}}/{{total}}..."
+    "uploading": "Uploading photo {{done}}/{{total}}...",
+    "locationNote": "Only your approximate location (~1 km) is saved."
   },
   "listingDetail": {
     "chat": "Chat with seller",
     "detailsTitle": "Item details",
     "sellerTitle": "Seller",
     "sold": "Sold",
-    "reserved": "Reserved"
+    "reserved": "Reserved",
+    "distance": "~{{km}} km",
+    "walkTime": "walk ~{{min}} min",
+    "driveTime": "drive ~{{min}} min"
   },
   "conditions": {
     "new": "New",

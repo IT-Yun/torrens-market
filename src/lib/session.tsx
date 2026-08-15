@@ -7,6 +7,7 @@ export type Profile = {
   display_name: string;
   avatar_url: string | null;
   suburb: string | null;
+  suburb_verified_at: string | null;
   nationality: string | null;
   preferred_language: 'ko' | 'en' | 'zh';
   is_phone_verified: boolean;

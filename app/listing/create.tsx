@@ -23,8 +23,9 @@ import {
   type FieldDef,
 } from '../../src/lib/listings';
 import { useSession } from '../../src/lib/session';
-import { Camera, X } from 'lucide-react-native';
+import { Camera, MapPin, X } from 'lucide-react-native';
 import { SuburbField } from '../../src/components/SuburbField';
+import { getApproxPosition } from '../../src/lib/location';
 import { colors, radius, spacing } from '../../src/theme';
 
 const MAX_PHOTOS = 10;
@@ -133,6 +134,7 @@ export default function CreateListingScreen() {
     if (!session || categoryId == null) return;
     setBusy(true);
     try {
+      const approx = await getApproxPosition();
       const id = await createListing(
         {
           sellerId: session.user.id,
@@ -143,6 +145,8 @@ export default function CreateListingScreen() {
           condition,
           pickupMode,
           suburb: suburb.trim(),
+          lat: approx?.lat,
+          lng: approx?.lng,
           attributes,
           photos,
         },
@@ -271,6 +275,10 @@ export default function CreateListingScreen() {
         </View>
 
         <SuburbField label={t('listingCreate.suburb')} value={suburb} onChangeText={setSuburb} />
+        <View style={styles.locationNote}>
+          <MapPin size={13} color={colors.textSecondary} />
+          <Text style={styles.locationNoteText}>{t('listingCreate.locationNote')}</Text>
+        </View>
 
         {busy && uploadProgress && (
           <Text style={styles.uploadProgress}>
@@ -299,6 +307,8 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 17, fontWeight: '700', color: colors.text },
   content: { padding: spacing.md, gap: spacing.md, paddingBottom: spacing.xl },
   sectionTitle: { fontSize: 14, fontWeight: '600', color: colors.text },
+  locationNote: { flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: -6 },
+  locationNoteText: { fontSize: 12, color: colors.textSecondary },
   photoRow: { flexDirection: 'row', gap: spacing.sm },
   addPhoto: {
     width: 84,

@@ -8,7 +8,7 @@ import i18n from '../../src/lib/i18n';
 import { signOut } from '../../src/lib/auth';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
-import { BadgeCheck, Bell, ChevronRight, Package, Pencil } from 'lucide-react-native';
+import { BadgeCheck, Bell, ChevronRight, MapPin, Package, Pencil } from 'lucide-react-native';
 import { Avatar } from '../../src/components/Avatar';
 import { colors, radius, spacing } from '../../src/theme';
 
@@ -40,6 +40,11 @@ export default function ProfileScreen() {
               {profile?.is_phone_verified && <BadgeCheck size={16} color={colors.primary} />}
             </View>
             <Text style={styles.meta}>
+              {profile?.suburb_verified_at && (
+                <>
+                  <MapPin size={12} color={colors.primary} />{' '}
+                </>
+              )}
               {[profile?.suburb, profile?.nationality ? t(`nationalities.${profile.nationality}`) : null]
                 .filter(Boolean)
                 .join(' · ') || ' '}
