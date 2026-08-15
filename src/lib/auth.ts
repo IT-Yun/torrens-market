@@ -25,21 +25,15 @@ export async function signInWithProvider(provider: 'google' | 'apple'): Promise<
   if (exchangeError) throw exchangeError;
 }
 
-/**
- * Email + password fallback. Tries sign-in first; if the account doesn't
- * exist, signs up (auto-confirmed — no email round-trip on this project).
- */
-export async function signInWithEmailPassword(email: string, password: string): Promise<void> {
-  const signIn = await supabase.auth.signInWithPassword({ email, password });
-  if (!signIn.error) return;
+/** Email OTP fallback: sends a 6-digit code to the address. */
+export async function sendEmailCode(email: string): Promise<void> {
+  const { error } = await supabase.auth.signInWithOtp({ email });
+  if (error) throw error;
+}
 
-  if (signIn.error.message.includes('Invalid login credentials')) {
-    const signUp = await supabase.auth.signUp({ email, password });
-    if (signUp.error) throw signUp.error;
-    if (!signUp.data.session) throw new Error('auth_needs_confirmation');
-    return;
-  }
-  throw signIn.error;
+export async function verifyEmailCode(email: string, token: string): Promise<void> {
+  const { error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
+  if (error) throw error;
 }
 
 export async function signOut(): Promise<void> {
