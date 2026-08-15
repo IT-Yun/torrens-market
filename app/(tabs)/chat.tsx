@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { MessageCircle, Package } from 'lucide-react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { timeAgo } from '../../src/components/ListingRow';
 import { fetchRooms, type ChatRoomSummary } from '../../src/lib/chat';
@@ -31,7 +32,7 @@ export default function ChatListScreen() {
               <Image source={{ uri: photoUrl(item.listing.photo) }} style={styles.thumb} />
             ) : (
               <View style={[styles.thumb, styles.thumbPlaceholder]}>
-                <Text>📦</Text>
+                <Package size={20} color={colors.textSecondary} />
               </View>
             )}
             <View style={{ flex: 1, gap: 2 }}>
@@ -56,7 +57,7 @@ export default function ChatListScreen() {
         )}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={styles.emoji}>💬</Text>
+            <MessageCircle size={44} color={colors.textSecondary} strokeWidth={1.5} />
             <Text style={styles.text}>{t('chat.empty')}</Text>
           </View>
         }

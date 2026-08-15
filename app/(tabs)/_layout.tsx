@@ -1,11 +1,7 @@
 import { Tabs } from 'expo-router';
-import { Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Heart, Home, MessageCircle, User } from 'lucide-react-native';
 import { colors } from '../../src/theme';
-
-function TabIcon({ emoji, focused }: { emoji: string; focused: boolean }) {
-  return <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.45 }}>{emoji}</Text>;
-}
 
 export default function TabsLayout() {
   const { t } = useTranslation();
@@ -21,28 +17,30 @@ export default function TabsLayout() {
         name="home"
         options={{
           title: t('tabs.home'),
-          tabBarIcon: ({ focused }) => <TabIcon emoji="🏠" focused={focused} />,
+          tabBarIcon: ({ color }) => <Home size={24} color={color} strokeWidth={2} />,
         }}
       />
       <Tabs.Screen
         name="favorites"
         options={{
           title: t('tabs.favorites'),
-          tabBarIcon: ({ focused }) => <TabIcon emoji="❤️" focused={focused} />,
+          tabBarIcon: ({ color, focused }) => (
+            <Heart size={24} color={color} strokeWidth={2} fill={focused ? color : 'none'} />
+          ),
         }}
       />
       <Tabs.Screen
         name="chat"
         options={{
           title: t('tabs.chat'),
-          tabBarIcon: ({ focused }) => <TabIcon emoji="💬" focused={focused} />,
+          tabBarIcon: ({ color }) => <MessageCircle size={24} color={color} strokeWidth={2} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: t('tabs.profile'),
-          tabBarIcon: ({ focused }) => <TabIcon emoji="👤" focused={focused} />,
+          tabBarIcon: ({ color }) => <User size={24} color={color} strokeWidth={2} />,
         }}
       />
     </Tabs>

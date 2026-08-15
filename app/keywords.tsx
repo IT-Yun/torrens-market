@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Bell, X } from 'lucide-react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { addAlert, fetchAlerts, removeAlert, type KeywordAlert } from '../src/lib/alerts';
 import { registerPushToken } from '../src/lib/notifications';
@@ -69,7 +70,10 @@ export default function KeywordsScreen() {
         contentContainerStyle={{ padding: spacing.md, gap: spacing.sm }}
         renderItem={({ item }) => (
           <View style={styles.row}>
-            <Text style={styles.keyword}>🔔 {item.keyword}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flex: 1 }}>
+              <Bell size={16} color={colors.primary} />
+              <Text style={styles.keyword}>{item.keyword}</Text>
+            </View>
             <Pressable
               onPress={async () => {
                 await removeAlert(item.id).catch(() => {});
@@ -77,13 +81,13 @@ export default function KeywordsScreen() {
               }}
               hitSlop={8}
             >
-              <Text style={styles.remove}>✕</Text>
+              <X size={18} color={colors.textSecondary} />
             </Pressable>
           </View>
         )}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={{ fontSize: 40 }}>🔔</Text>
+            <Bell size={40} color={colors.textSecondary} strokeWidth={1.5} />
             <Text style={styles.emptyText}>{t('keywords.empty')}</Text>
           </View>
         }

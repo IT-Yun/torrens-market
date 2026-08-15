@@ -1,4 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Package } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { photoUrl, type ListingCard } from '../lib/listings';
 import { attributeSnippet, formatPrice, timeAgo } from '../lib/format';
@@ -18,7 +19,7 @@ export function ListingRow({ item }: { item: ListingCard }) {
         <Image source={{ uri: photoUrl(photo.storage_path) }} style={styles.cardImage} />
       ) : (
         <View style={[styles.cardImage, styles.cardImagePlaceholder]}>
-          <Text style={{ fontSize: 24 }}>📦</Text>
+          <Package size={24} color={colors.textSecondary} strokeWidth={1.5} />
         </View>
       )}
       <View style={styles.cardBody}>

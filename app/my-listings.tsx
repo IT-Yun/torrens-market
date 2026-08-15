@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Package } from 'lucide-react-native';
 import { router, useFocusEffect } from 'expo-router';
 import {
   fetchMyListings,
@@ -64,7 +65,7 @@ export default function MyListingsScreen() {
                   />
                 ) : (
                   <View style={[styles.thumb, styles.thumbPlaceholder]}>
-                    <Text>📦</Text>
+                    <Package size={20} color={colors.textSecondary} />
                   </View>
                 )}
                 <View style={{ flex: 1, gap: 2 }}>
@@ -98,7 +99,7 @@ export default function MyListingsScreen() {
         }}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={{ fontSize: 40 }}>📦</Text>
+            <Package size={40} color={colors.textSecondary} strokeWidth={1.5} />
             <Text style={styles.emptyText}>{t('myListings.empty')}</Text>
           </View>
         }

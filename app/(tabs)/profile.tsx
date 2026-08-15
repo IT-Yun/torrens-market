@@ -8,6 +8,7 @@ import i18n from '../../src/lib/i18n';
 import { signOut } from '../../src/lib/auth';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
+import { BadgeCheck, Bell, ChevronRight, Package, Pencil } from 'lucide-react-native';
 import { colors, radius, spacing } from '../../src/theme';
 
 export default function ProfileScreen() {
@@ -32,10 +33,10 @@ export default function ProfileScreen() {
             </Text>
           </View>
           <View style={{ flex: 1, gap: 2 }}>
-            <Text style={styles.name}>
-              {profile?.display_name ?? '—'}
-              {profile?.is_phone_verified ? `  ✓ ${t('profile.verified')}` : ''}
-            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <Text style={styles.name}>{profile?.display_name ?? '—'}</Text>
+              {profile?.is_phone_verified && <BadgeCheck size={16} color={colors.primary} />}
+            </View>
             <Text style={styles.meta}>
               {[profile?.suburb, profile?.nationality ? t(`nationalities.${profile.nationality}`) : null]
                 .filter(Boolean)
@@ -61,18 +62,27 @@ export default function ProfileScreen() {
         </View>
 
         <Pressable style={styles.menuRow} onPress={() => router.push('/onboarding/profile')}>
-          <Text style={styles.menuText}>✏️ {t('profile.editProfile')}</Text>
-          <Text style={styles.menuArrow}>›</Text>
+          <View style={styles.menuLeft}>
+            <Pencil size={18} color={colors.textSecondary} />
+            <Text style={styles.menuText}>{t('profile.editProfile')}</Text>
+          </View>
+          <ChevronRight size={18} color={colors.textSecondary} />
         </Pressable>
 
         <Pressable style={styles.menuRow} onPress={() => router.push('/my-listings')}>
-          <Text style={styles.menuText}>📦 {t('profile.myListings')}</Text>
-          <Text style={styles.menuArrow}>›</Text>
+          <View style={styles.menuLeft}>
+            <Package size={18} color={colors.textSecondary} />
+            <Text style={styles.menuText}>{t('profile.myListings')}</Text>
+          </View>
+          <ChevronRight size={18} color={colors.textSecondary} />
         </Pressable>
 
         <Pressable style={styles.menuRow} onPress={() => router.push('/keywords')}>
-          <Text style={styles.menuText}>🔔 {t('keywords.title')}</Text>
-          <Text style={styles.menuArrow}>›</Text>
+          <View style={styles.menuLeft}>
+            <Bell size={18} color={colors.textSecondary} />
+            <Text style={styles.menuText}>{t('keywords.title')}</Text>
+          </View>
+          <ChevronRight size={18} color={colors.textSecondary} />
         </Pressable>
 
         <View style={{ flex: 1 }} />
@@ -134,5 +144,5 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   menuText: { fontSize: 15, fontWeight: '600', color: colors.text },
-  menuArrow: { fontSize: 18, color: colors.textSecondary },
+  menuLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
 });

@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Heart } from 'lucide-react-native';
 import { useFocusEffect } from 'expo-router';
 import { ListingRow } from '../../src/components/ListingRow';
 import { fetchFavorites } from '../../src/lib/favorites';
@@ -28,7 +29,7 @@ export default function FavoritesScreen() {
         renderItem={({ item }) => <ListingRow item={item} />}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={styles.emoji}>❤️</Text>
+            <Heart size={44} color={colors.textSecondary} strokeWidth={1.5} />
             <Text style={styles.text}>{t('favorites.empty')}</Text>
           </View>
         }

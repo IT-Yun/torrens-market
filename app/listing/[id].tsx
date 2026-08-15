@@ -27,6 +27,7 @@ import {
   type Category,
   type ListingDetail,
 } from '../../src/lib/listings';
+import { BadgeCheck, Heart, Package } from 'lucide-react-native';
 import { colors, radius, spacing } from '../../src/theme';
 
 const { width } = Dimensions.get('window');
@@ -139,7 +140,11 @@ export default function ListingDetailScreen() {
             accessibilityLabel={t('tabs.favorites')}
             accessibilityState={{ selected: liked }}
           >
-            <Text style={styles.heart}>{liked ? '❤️' : '🤍'}</Text>
+            <Heart
+              size={24}
+              color={liked ? colors.primary : colors.textSecondary}
+              fill={liked ? colors.primary : 'none'}
+            />
           </Pressable>
           {session?.user.id !== listing.seller_id && (
             <Pressable
@@ -169,7 +174,7 @@ export default function ListingDetailScreen() {
               ))
             ) : (
               <View style={[styles.photo, styles.photoPlaceholder]}>
-                <Text style={{ fontSize: 40 }}>📦</Text>
+                <Package size={40} color={colors.textSecondary} strokeWidth={1.5} />
               </View>
             )}
           </ScrollView>
@@ -217,10 +222,15 @@ export default function ListingDetailScreen() {
               </Text>
             </View>
             <View style={{ flex: 1, gap: 2 }}>
-              <Text style={styles.sellerName}>
-                {listing.profiles.display_name}
-                {listing.profiles.is_phone_verified ? `  ✓ ${t('profile.verified')}` : ''}
-              </Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <Text style={styles.sellerName}>{listing.profiles.display_name}</Text>
+                {listing.profiles.is_phone_verified && (
+                  <>
+                    <BadgeCheck size={15} color={colors.primary} />
+                    <Text style={styles.verifiedText}>{t('profile.verified')}</Text>
+                  </>
+                )}
+              </View>
               <Text style={styles.meta}>
                 {[
                   listing.profiles.suburb,
@@ -239,7 +249,11 @@ export default function ListingDetailScreen() {
       {session?.user.id !== listing.seller_id && (
         <View style={styles.footer}>
           <Pressable onPress={onToggleFavorite} hitSlop={8} style={styles.footerHeart}>
-            <Text style={{ fontSize: 22 }}>{liked ? '❤️' : '🤍'}</Text>
+            <Heart
+              size={24}
+              color={liked ? colors.primary : colors.textSecondary}
+              fill={liked ? colors.primary : 'none'}
+            />
           </Pressable>
           <View style={{ flex: 1 }}>
             <Text style={styles.footerPrice}>{formatPrice(listing.price_cents)}</Text>
@@ -315,6 +329,7 @@ const styles = StyleSheet.create({
   },
   avatarText: { color: colors.white, fontSize: 18, fontWeight: '700' },
   sellerName: { fontSize: 16, fontWeight: '600', color: colors.text },
+  verifiedText: { fontSize: 13, fontWeight: '600', color: colors.primary },
   dots: {
     position: 'absolute',
     bottom: 10,

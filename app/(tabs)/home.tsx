@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { MapPin, Search, WifiOff } from 'lucide-react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { AdelaideHero } from '../../src/components/AdelaideHero';
 import { ListingRow } from '../../src/components/ListingRow';
@@ -50,14 +51,17 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.safe} edges={['top']}>
       {/* Karrot pattern: your neighbourhood first */}
       <View style={styles.header}>
-        <Text style={styles.suburb}>📍 {profile?.suburb ?? t('common.appName')}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+          <MapPin size={18} color={colors.primary} strokeWidth={2.2} />
+          <Text style={styles.suburb}>{profile?.suburb ?? t('common.appName')}</Text>
+        </View>
         <Pressable
           onPress={() => router.push('/search')}
           hitSlop={8}
           accessibilityRole="button"
           accessibilityLabel={t('home.searchPlaceholder')}
         >
-          <Text style={{ fontSize: 20 }}>🔍</Text>
+          <Search size={22} color={colors.text} strokeWidth={2.2} />
         </Pressable>
       </View>
 
@@ -101,7 +105,7 @@ export default function HomeScreen() {
         ListEmptyComponent={
           loadError ? (
             <View style={styles.emptyState}>
-              <Text style={{ fontSize: 40 }}>📡</Text>
+              <WifiOff size={40} color={colors.textSecondary} strokeWidth={1.5} />
               <Text style={styles.emptyText}>{t('common.loadError')}</Text>
               <Pressable style={styles.retryButton} onPress={load} accessibilityRole="button">
                 <Text style={styles.retryText}>{t('common.retry')}</Text>

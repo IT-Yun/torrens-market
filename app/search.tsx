@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { BadgeCheck, Bell, SearchX } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { ListingRow } from '../src/components/ListingRow';
 import i18n from '../src/lib/i18n';
@@ -70,11 +71,12 @@ export default function SearchScreen() {
       <View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
           <Pressable
-            style={[styles.chip, verifiedOnly && styles.chipSelected]}
+            style={[styles.chip, styles.iconChip, verifiedOnly && styles.chipSelected]}
             onPress={() => setVerifiedOnly((v) => !v)}
           >
+            <BadgeCheck size={14} color={verifiedOnly ? colors.white : colors.textSecondary} />
             <Text style={[styles.chipText, verifiedOnly && { color: colors.white }]}>
-              ✓ {t('search.verifiedOnly')}
+              {t('search.verifiedOnly')}
             </Text>
           </Pressable>
           {categories.map((c) => {
@@ -117,10 +119,11 @@ export default function SearchScreen() {
         ListEmptyComponent={
           searched ? (
             <View style={styles.empty}>
-              <Text style={styles.emptyEmoji}>🔍</Text>
+              <SearchX size={44} color={colors.textSecondary} strokeWidth={1.5} />
               <Text style={styles.emptyText}>{t('search.noResults')}</Text>
-              <Pressable style={styles.keywordCta} onPress={() => router.push('/keywords')}>
-                <Text style={styles.keywordCtaText}>🔔 {t('search.keywordCta')}</Text>
+              <Pressable style={[styles.keywordCta, styles.iconChip]} onPress={() => router.push('/keywords')}>
+                <Bell size={15} color={colors.white} />
+                <Text style={styles.keywordCtaText}>{t('search.keywordCta')}</Text>
               </Pressable>
             </View>
           ) : null
@@ -161,6 +164,7 @@ const styles = StyleSheet.create({
   },
   chipSelected: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipText: { fontSize: 14, color: colors.text },
+  iconChip: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
   keywordCta: {
     marginTop: spacing.sm,
@@ -170,6 +174,5 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   keywordCtaText: { color: colors.white, fontWeight: '600', fontSize: 14 },
-  emptyEmoji: { fontSize: 44 },
   emptyText: { fontSize: 15, color: colors.textSecondary },
 });

@@ -23,6 +23,7 @@ import {
   type FieldDef,
 } from '../../src/lib/listings';
 import { useSession } from '../../src/lib/session';
+import { Camera, X } from 'lucide-react-native';
 import { colors, radius, spacing } from '../../src/theme';
 
 const MAX_PHOTOS = 10;
@@ -160,7 +161,7 @@ export default function CreateListingScreen() {
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <Pressable onPress={() => router.back()}>
-          <Text style={styles.close}>✕</Text>
+          <X size={24} color={colors.text} />
         </Pressable>
         <Text style={styles.headerTitle}>{t('listingCreate.title')}</Text>
         <View style={{ width: 24 }} />
@@ -180,7 +181,7 @@ export default function CreateListingScreen() {
                 setPhotos((prev) => [...prev, ...assets].slice(0, MAX_PHOTOS));
               }}
             >
-              <Text style={{ fontSize: 24 }}>📷</Text>
+              <Camera size={24} color={colors.textSecondary} strokeWidth={1.8} />
               <Text style={styles.addPhotoText}>{t('listingCreate.addPhotos')}</Text>
             </Pressable>
             {photos.map((p, idx) => (
