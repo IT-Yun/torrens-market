@@ -1,9 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MapPin, Search, WifiOff } from 'lucide-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ChevronDown, MapPin, Search, WifiOff } from 'lucide-react-native';
 import { router, useFocusEffect } from 'expo-router';
+import { haversineKm } from '../../src/lib/geo';
+import { getPosition } from '../../src/lib/location';
 import { AdelaideHero } from '../../src/components/AdelaideHero';
 import { ListingRow } from '../../src/components/ListingRow';
 import i18n from '../../src/lib/i18n';
@@ -11,6 +14,9 @@ import { fetchCategories, fetchListings, type Category, type ListingCard } from 
 import { fetchBlockedIds } from '../../src/lib/moderation';
 import { useSession } from '../../src/lib/session';
 import { colors, radius, spacing } from '../../src/theme';
+
+type FeedScope = 'suburb' | 'km5' | 'km10' | 'km20' | 'all';
+const SCOPE_STORAGE_KEY = 'feed_scope';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -20,7 +26,61 @@ export default function HomeScreen() {
   const [listings, setListings] = useState<ListingCard[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loadError, setLoadError] = useState(false);
+  const [scope, setScope] = useState<FeedScope>('all');
+  const [pos, setPos] = useState<{ lat: number; lng: number } | null>(null);
   const lang = i18n.language as 'ko' | 'en' | 'zh';
+
+  useEffect(() => {
+    AsyncStorage.getItem(SCOPE_STORAGE_KEY).then((v) => {
+      if (v === 'suburb' || v === 'km5' || v === 'km10' || v === 'km20' || v === 'all') setScope(v);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (scope.startsWith('km')) getPosition().then(setPos).catch(() => {});
+  }, [scope]);
+
+  function chooseScope(next: FeedScope) {
+    setScope(next);
+    AsyncStorage.setItem(SCOPE_STORAGE_KEY, next).catch(() => {});
+  }
+
+  function openScopePicker() {
+    Alert.alert(t('home.scopeTitle'), undefined, [
+      { text: `${t('home.scopeSuburb')}${profile?.suburb ? ` (${profile.suburb})` : ''}`, onPress: () => chooseScope('suburb') },
+      { text: t('home.withinKm', { km: 5 }), onPress: () => chooseScope('km5') },
+      { text: t('home.withinKm', { km: 10 }), onPress: () => chooseScope('km10') },
+      { text: t('home.withinKm', { km: 20 }), onPress: () => chooseScope('km20') },
+      { text: t('home.scopeAll'), onPress: () => chooseScope('all') },
+      { text: t('common.cancel'), style: 'cancel' },
+    ]);
+  }
+
+  const visibleListings = useMemo(() => {
+    if (scope === 'suburb') {
+      const mine = (profile?.suburb ?? '').trim().toLowerCase();
+      if (!mine) return listings;
+      return listings.filter((item) => item.suburb.trim().toLowerCase() === mine);
+    }
+    if (scope.startsWith('km')) {
+      if (!pos) return listings; // permission denied/pending → graceful fallback to all
+      const maxKm = Number(scope.slice(2));
+      return listings.filter(
+        (item) =>
+          item.lat != null &&
+          item.lng != null &&
+          haversineKm(pos.lat, pos.lng, item.lat, item.lng) <= maxKm,
+      );
+    }
+    return listings;
+  }, [listings, scope, pos, profile?.suburb]);
+
+  const scopeLabel =
+    scope === 'suburb'
+      ? profile?.suburb ?? t('home.scopeAll')
+      : scope === 'all'
+        ? t('home.scopeAll')
+        : t('home.withinKm', { km: Number(scope.slice(2)) });
 
   const load = useCallback(async () => {
     try {
@@ -51,10 +111,16 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.safe} edges={['top']}>
       {/* Karrot pattern: your neighbourhood first */}
       <View style={styles.header}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+        <Pressable
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}
+          onPress={openScopePicker}
+          accessibilityRole="button"
+          accessibilityLabel={t('home.scopeTitle')}
+        >
           <MapPin size={18} color={colors.primary} strokeWidth={2.2} />
-          <Text style={styles.suburb}>{profile?.suburb ?? t('common.appName')}</Text>
-        </View>
+          <Text style={styles.suburb}>{scopeLabel}</Text>
+          <ChevronDown size={16} color={colors.textSecondary} />
+        </Pressable>
         <Pressable
           onPress={() => router.push('/search')}
           hitSlop={8}
@@ -89,7 +155,7 @@ export default function HomeScreen() {
       </View>
 
       <FlatList
-        data={listings}
+        data={visibleListings}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ListingRow item={item} />}
         refreshControl={

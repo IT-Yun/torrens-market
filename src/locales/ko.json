@@ -48,7 +48,11 @@
   "home": {
     "searchPlaceholder": "토렌스 마켓 검색",
     "empty": "아직 매물이 없어요 — 첫 매물을 올려보세요!",
-    "all": "전체"
+    "all": "전체",
+    "scopeTitle": "어디 매물을 볼까요?",
+    "scopeSuburb": "내 지역",
+    "scopeAll": "애들레이드 전체",
+    "withinKm": "{{km}}km 이내"
   },
   "profile": {
     "verified": "인증됨",

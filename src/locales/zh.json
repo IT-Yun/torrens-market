@@ -48,7 +48,11 @@
   "home": {
     "searchPlaceholder": "搜索 Torrens 市集",
     "empty": "还没有商品 — 来发布第一个吧！",
-    "all": "全部"
+    "all": "全部",
+    "scopeTitle": "查看哪里的商品？",
+    "scopeSuburb": "我的区域",
+    "scopeAll": "全阿德莱德",
+    "withinKm": "{{km}}公里内"
   },
   "profile": {
     "verified": "已认证",

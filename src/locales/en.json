@@ -48,7 +48,11 @@
   "home": {
     "searchPlaceholder": "Search Torrens Market",
     "empty": "No listings yet — be the first to post!",
-    "all": "All"
+    "all": "All",
+    "scopeTitle": "Show listings from…",
+    "scopeSuburb": "My suburb",
+    "scopeAll": "All Adelaide",
+    "withinKm": "Within {{km}} km"
   },
   "profile": {
     "verified": "Verified",

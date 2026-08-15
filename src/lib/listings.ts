@@ -29,13 +29,13 @@ export type ListingCard = {
   attributes: Record<string, unknown>;
   lat: number | null;
   lng: number | null;
+  pickup_mode: string;
   listing_photos: { storage_path: string; sort_order: number }[];
 };
 
 export type ListingDetail = ListingCard & {
   description: string;
   condition: string;
-  pickup_mode: string;
   seller_id: string;
   profiles: {
     display_name: string;
@@ -59,7 +59,7 @@ export async function fetchListings(categoryId?: number | null): Promise<Listing
   let query = supabase
     .from('listings')
     .select(
-      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, listing_photos (storage_path, sort_order)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, listing_photos (storage_path, sort_order)',
     )
     .eq('status', 'active')
     .order('created_at', { ascending: false })
@@ -196,7 +196,7 @@ export async function fetchMyListings(userId: string): Promise<ListingCard[]> {
   const { data, error } = await supabase
     .from('listings')
     .select(
-      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, listing_photos (storage_path, sort_order)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, listing_photos (storage_path, sort_order)',
     )
     .eq('seller_id', userId)
     .neq('status', 'deleted')
