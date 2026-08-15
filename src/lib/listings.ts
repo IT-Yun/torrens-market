@@ -30,8 +30,25 @@ export type ListingCard = {
   lat: number | null;
   lng: number | null;
   pickup_mode: string;
+  favorites_count?: number;
   listing_photos: { storage_path: string; sort_order: number }[];
 };
+
+/** Merge public favorite counts (owner-rights view) into listing cards. */
+async function withFavoriteCounts<T extends { id: string }>(items: T[]): Promise<T[]> {
+  if (items.length === 0) return items;
+  const { data } = await supabase
+    .from('listing_favorite_counts')
+    .select('listing_id, favorites_count')
+    .in('listing_id', items.map((i) => i.id));
+  const counts = new Map(
+    ((data ?? []) as { listing_id: string; favorites_count: number }[]).map((r) => [
+      r.listing_id,
+      r.favorites_count,
+    ]),
+  );
+  return items.map((i) => ({ ...i, favorites_count: counts.get(i.id) ?? 0 }));
+}
 
 export type ListingDetail = ListingCard & {
   description: string;
@@ -67,7 +84,7 @@ export async function fetchListings(categoryId?: number | null): Promise<Listing
   if (categoryId != null) query = query.eq('category_id', categoryId);
   const { data, error } = await query;
   if (error) throw error;
-  return (data as ListingCard[]) ?? [];
+  return withFavoriteCounts((data as ListingCard[]) ?? []);
 }
 
 export type SearchFilters = {
@@ -202,7 +219,7 @@ export async function fetchMyListings(userId: string): Promise<ListingCard[]> {
     .neq('status', 'deleted')
     .order('created_at', { ascending: false });
   if (error) throw error;
-  return (data as ListingCard[]) ?? [];
+  return withFavoriteCounts((data as ListingCard[]) ?? []);
 }
 
 export async function updateListingStatus(

@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Package } from 'lucide-react-native';
+import { Heart, Package } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { photoUrl, type ListingCard } from '../lib/listings';
 import { attributeSnippet, formatPrice, timeAgo } from '../lib/format';
@@ -43,7 +43,15 @@ export function ListingRow({ item }: { item: ListingCard }) {
             </View>
           )}
         </View>
-        <Text style={styles.cardPrice}>{formatPrice(item.price_cents)}</Text>
+        <View style={styles.priceRow}>
+          <Text style={styles.cardPrice}>{formatPrice(item.price_cents)}</Text>
+          {(item.favorites_count ?? 0) > 0 && (
+            <View style={styles.likes}>
+              <Heart size={12} color={colors.textSecondary} />
+              <Text style={styles.likesText}>{item.favorites_count}</Text>
+            </View>
+          )}
+        </View>
       </View>
     </Pressable>
   );
@@ -82,5 +90,13 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
   },
   pickupBadgeText: { fontSize: 10, color: colors.textSecondary, fontWeight: '600' },
-  cardPrice: { fontSize: 16, fontWeight: '700', color: colors.text, marginTop: 2 },
+  cardPrice: { fontSize: 16, fontWeight: '700', color: colors.text },
+  priceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 2,
+  },
+  likes: { flexDirection: 'row', alignItems: 'center', gap: 3 },
+  likesText: { fontSize: 12, color: colors.textSecondary },
 });

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ChevronDown, MapPin, Search, WifiOff } from 'lucide-react-native';
+import { ChevronDown, MapPin, Plus, Search, WifiOff } from 'lucide-react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { haversineKm } from '../../src/lib/geo';
 import { getPosition } from '../../src/lib/location';
@@ -184,7 +184,7 @@ export default function HomeScreen() {
             </View>
           )
         }
-        contentContainerStyle={listings.length === 0 ? { flex: 1 } : undefined}
+        contentContainerStyle={visibleListings.length === 0 ? { flex: 1 } : undefined}
       />
 
       <Pressable
@@ -193,7 +193,7 @@ export default function HomeScreen() {
         accessibilityRole="button"
         accessibilityLabel={t('listingCreate.title')}
       >
-        <Text style={styles.fabText}>＋</Text>
+        <Plus size={26} color={colors.white} strokeWidth={2.4} />
       </Pressable>
     </SafeAreaView>
   );
@@ -245,5 +245,4 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 3 },
   },
-  fabText: { color: colors.white, fontSize: 28, lineHeight: 30 },
 });
