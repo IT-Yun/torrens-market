@@ -197,7 +197,8 @@
     "wombat": "袋熊",
     "wallaby": "小袋鼠",
     "kangaroo": "袋鼠",
-    "nextTier": "还差{{count}}分升级到{{name}}"
+    "nextTier": "还差{{count}}分升级到{{name}}",
+    "tierLabel": "信用等级"
   },
   "review": {
     "leaveReview": "写交易评价",

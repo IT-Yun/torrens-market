@@ -197,7 +197,8 @@
     "wombat": "웜뱃",
     "wallaby": "왈라비",
     "kangaroo": "캥거루",
-    "nextTier": "{{name}}까지 {{count}}포인트 남았어요"
+    "nextTier": "{{name}}까지 {{count}}포인트 남았어요",
+    "tierLabel": "신뢰 등급"
   },
   "review": {
     "leaveReview": "거래 후기 남기기",

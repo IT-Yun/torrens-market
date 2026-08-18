@@ -197,7 +197,8 @@
     "wombat": "Wombat",
     "wallaby": "Wallaby",
     "kangaroo": "Kangaroo",
-    "nextTier": "{{count}} more points to {{name}}"
+    "nextTier": "{{count}} more points to {{name}}",
+    "tierLabel": "Trust tier"
   },
   "review": {
     "leaveReview": "Leave a review",

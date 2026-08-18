@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { BadgeCheck, ChevronLeft, ChevronRight, MapPin } from 'lucide-react-native';
+import { BadgeCheck, ChevronLeft, MapPin } from 'lucide-react-native';
 import { Avatar } from '../../src/components/Avatar';
 import { ListingRow } from '../../src/components/ListingRow';
 import { TrustBadge } from '../../src/components/TrustBadge';
@@ -63,18 +63,44 @@ export default function PublicProfileScreen() {
         ListHeaderComponent={
           profile && (
             <View style={styles.card}>
-              <Avatar
-                name={profile.display_name}
-                url={profile.avatar_url}
-                nationality={profile.nationality}
-                size={64}
-              />
-              <View style={{ flex: 1, gap: 4 }}>
-                <View style={styles.nameRow}>
-                  <Text style={styles.name}>{profile.display_name}</Text>
-                  {profile.is_phone_verified && <BadgeCheck size={16} color={colors.primary} />}
+              <View style={styles.cardTop}>
+                <Avatar
+                  name={profile.display_name}
+                  url={profile.avatar_url}
+                  nationality={profile.nationality}
+                  size={64}
+                />
+                <View style={{ flex: 1, gap: 4 }}>
+                  <View style={styles.nameRow}>
+                    <Text style={styles.name}>{profile.display_name}</Text>
+                    {profile.is_phone_verified && <BadgeCheck size={17} color={colors.primary} />}
+                  </View>
+                  <View style={styles.nameRow}>
+                    {profile.suburb_verified_at && <MapPin size={13} color={colors.primary} />}
+                    <Text style={styles.meta}>
+                      {[
+                        profile.suburb,
+                        profile.nationality ? t(`nationalities.${profile.nationality}`) : null,
+                      ]
+                        .filter(Boolean)
+                        .join(' · ')}
+                    </Text>
+                  </View>
                 </View>
+              </View>
+              <View style={styles.statStrip}>
+                <View style={styles.statCol}>
+                  <Text style={styles.statValue}>{stats?.active ?? '–'}</Text>
+                  <Text style={styles.statLabel}>{t('myListings.status.active')}</Text>
+                </View>
+                <View style={styles.statDivider} />
+                <View style={styles.statCol}>
+                  <Text style={styles.statValue}>{stats?.sold ?? '–'}</Text>
+                  <Text style={styles.statLabel}>{t('myListings.status.sold')}</Text>
+                </View>
+                <View style={styles.statDivider} />
                 <Pressable
+                  style={styles.statCol}
                   onPress={() =>
                     router.push({
                       pathname: '/my-reviews',
@@ -82,23 +108,10 @@ export default function PublicProfileScreen() {
                     })
                   }
                   accessibilityRole="button"
-                  style={styles.nameRow}
                 >
-                  <TrustBadge trust={trust} />
-                  <ChevronRight size={14} color={colors.textSecondary} />
+                  <TrustBadge trust={trust} compact />
+                  <Text style={styles.statLabel}>{t('trust.tierLabel')}</Text>
                 </Pressable>
-                <View style={styles.nameRow}>
-                  {profile.suburb_verified_at && <MapPin size={13} color={colors.primary} />}
-                  <Text style={styles.meta}>
-                    {[
-                      profile.suburb,
-                      profile.nationality ? t(`nationalities.${profile.nationality}`) : null,
-                      stats ? t('profile.stats', { active: stats.active, sold: stats.sold }) : null,
-                    ]
-                      .filter(Boolean)
-                      .join(' · ')}
-                  </Text>
-                </View>
               </View>
             </View>
           )
@@ -122,14 +135,24 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 17, fontWeight: '700', color: colors.text },
   card: {
-    flexDirection: 'row',
-    alignItems: 'center',
     gap: spacing.md,
     margin: spacing.md,
     padding: spacing.lg,
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
   },
+  cardTop: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  statStrip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    paddingTop: spacing.md,
+  },
+  statCol: { flex: 1, alignItems: 'center', gap: 4 },
+  statDivider: { width: 1, height: 28, backgroundColor: colors.border },
+  statValue: { fontSize: 18, fontWeight: '800', color: colors.text },
+  statLabel: { fontSize: 12, color: colors.textSecondary },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   name: { fontSize: 18, fontWeight: '700', color: colors.text },
   meta: { fontSize: 13, color: colors.textSecondary },

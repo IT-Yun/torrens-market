@@ -52,31 +52,43 @@ export default function ProfileScreen() {
     <SafeAreaView style={styles.safe} edges={['top']}>
       <View style={styles.container}>
         <View style={styles.card}>
-          <Avatar
-            name={profile?.display_name}
-            url={profile?.avatar_url}
-            nationality={profile?.nationality}
-            size={56}
-          />
-          <View style={{ flex: 1, gap: 2 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              <Text style={styles.name}>{profile?.display_name ?? '—'}</Text>
-              {profile?.is_phone_verified && <BadgeCheck size={16} color={colors.primary} />}
+          <View style={styles.cardTop}>
+            <Avatar
+              name={profile?.display_name}
+              url={profile?.avatar_url}
+              nationality={profile?.nationality}
+              size={64}
+            />
+            <View style={{ flex: 1, gap: 4 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <Text style={styles.name}>{profile?.display_name ?? '—'}</Text>
+                {profile?.is_phone_verified && <BadgeCheck size={17} color={colors.primary} />}
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                {profile?.suburb_verified_at && <MapPin size={13} color={colors.primary} />}
+                <Text style={styles.meta}>
+                  {[profile?.suburb, profile?.nationality ? t(`nationalities.${profile.nationality}`) : null]
+                    .filter(Boolean)
+                    .join(' · ') || ' '}
+                </Text>
+              </View>
             </View>
-            <TrustBadge trust={trust} />
-            {stats && (
-              <Text style={styles.meta}>
-                {t('profile.stats', { active: stats.active, sold: stats.sold })}
-              </Text>
-            )}
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-              {profile?.suburb_verified_at && <MapPin size={13} color={colors.primary} />}
-              <Text style={styles.meta}>
-                {[profile?.suburb, profile?.nationality ? t(`nationalities.${profile.nationality}`) : null]
-                  .filter(Boolean)
-                  .join(' · ') || ' '}
-              </Text>
+          </View>
+          <View style={styles.statStrip}>
+            <View style={styles.statCol}>
+              <Text style={styles.statValue}>{stats?.active ?? '–'}</Text>
+              <Text style={styles.statLabel}>{t('myListings.status.active')}</Text>
             </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statCol}>
+              <Text style={styles.statValue}>{stats?.sold ?? '–'}</Text>
+              <Text style={styles.statLabel}>{t('myListings.status.sold')}</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <Pressable style={styles.statCol} onPress={() => router.push('/my-reviews')}>
+              <TrustBadge trust={trust} compact />
+              <Text style={styles.statLabel}>{t('trust.tierLabel')}</Text>
+            </Pressable>
           </View>
         </View>
 
@@ -206,9 +218,19 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     padding: spacing.lg,
     gap: spacing.md,
+  },
+  cardTop: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  statStrip: {
     flexDirection: 'row',
     alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    paddingTop: spacing.md,
   },
+  statCol: { flex: 1, alignItems: 'center', gap: 4 },
+  statDivider: { width: 1, height: 28, backgroundColor: colors.border },
+  statValue: { fontSize: 18, fontWeight: '800', color: colors.text },
+  statLabel: { fontSize: 12, color: colors.textSecondary },
   name: { fontSize: 20, fontWeight: '700', color: colors.text },
   meta: { fontSize: 14, color: colors.textSecondary },
   sectionTitle: { fontSize: 14, fontWeight: '600', color: colors.textSecondary },
