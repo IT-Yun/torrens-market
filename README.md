@@ -15,16 +15,28 @@ Named after Adelaide's River Torrens. Built with React Native + Expo + TypeScrip
 | No trust signals, scam-prone | Phone-verification badge + verified-only filter |
 | Free-text listings hide key details | **Category-specific structured fields** — furniture dimensions, cosmetics expiry, car rego & service history |
 
-## MVP features
+## Features
 
-1. Social sign-in (Google/Apple) + optional phone verification badge
-2. Listing creation with frictionless multi-photo upload
-3. **Category-specific fields** — picking a category reveals tailored inputs (10 categories, 5 with custom field sets)
-4. Browse & search — category / distance (PostGIS) / nationality / verified filters
-5. Favorites
-6. **Keyword alerts** — push notification when a matching listing is posted
-7. 1:1 realtime chat with pickup-mode context
-8. Trilingual UI (i18next)
+**Trading**
+1. Listing creation with multi-photo upload, **category-specific fields** (12 categories) and title-based category suggestion
+2. Feed with location scope (my suburb / within 5–20 km / all), distance on cards, pickup-only badges, favorite counts
+3. Search — FTS + category / nationality / verified / max-price filters, recent-search memory
+4. Favorites, **keyword alerts** (push when a matching listing is posted), listing **bump** (once a day, DB-enforced), edit & soft delete
+
+**Trust & safety**
+5. Email OTP sign-in (social login wired, pending provider config) + phone-verification badge
+6. **Aussie-animal trust tiers** — quokka → bilby → koala → wombat → wallaby → kangaroo, computed in-DB from post-trade reviews (1 per side per listing, RLS-gated)
+7. GPS **suburb verification** badge; listings store only ~1.1 km-fuzzed coordinates (privacy by construction)
+8. Report / block — blocking hides listings and refuses new chats
+
+**Deal-making (all in chat)**
+9. 1:1 realtime chat with unread badges and message push (recipient's language)
+10. **Meetup scheduling** — propose time+place, accept/decline, push + 1-hour pg_cron reminder; accepting reserves the listing, cancelling releases it
+11. **Price offers** — one open offer per room, accept/decline/withdraw, push notified
+
+**Platform**
+12. Trilingual UI — 170+ keys × KO/EN/ZH, per-recipient push language
+13. 40-step live E2E journey suite (`scripts/e2e-journey.mjs`) covering flows *and* RLS negative cases
 
 ## Architecture
 
@@ -37,8 +49,9 @@ flowchart LR
         AUTH[Auth<br/>Google · Apple]
         DB[(Postgres<br/>PostGIS · JSONB · FTS · RLS)]
         ST[Storage<br/>listing photos]
-        RT[Realtime<br/>chat]
-        EF[Edge Function<br/>keyword-alert matcher]
+        RT[Realtime<br/>chat · meetups · offers]
+        EF[Edge Functions<br/>keyword-alerts · chat · meetups · offers]
+        CRON[pg_cron<br/>meetup reminders]
     end
     PUSH[Expo Push]
 
@@ -46,7 +59,8 @@ flowchart LR
     UI --> DB
     UI --> ST
     UI <--> RT
-    DB -- listing INSERT --> EF --> PUSH --> UI
+    DB -- triggers pg_net --> EF --> PUSH --> UI
+    CRON --> EF
 ```
 
 Key design choices (each recorded as an ADR in [`docs/adr/`](docs/adr/)):
@@ -54,6 +68,10 @@ Key design choices (each recorded as an ADR in [`docs/adr/`](docs/adr/)):
 - **[ADR 001](docs/adr/001-cross-platform-framework.md)** — React Native + Expo + TypeScript: one codebase for Android/iOS with a real path to a SEO-capable web version
 - **[ADR 002](docs/adr/002-auth-strategy.md)** — trust as a *badge + filter*, not a sign-up gate
 - **[ADR 003](docs/adr/003-backend-supabase.md)** — Supabase now, extraction path later; keyword-alert matching is a custom-built service
+- **[ADR 006](docs/adr/006-approximate-location-distance.md)** — coordinates fuzzed at capture; distance computed on-device
+- **[ADR 008](docs/adr/008-trust-tiers.md)** — the quokka→kangaroo trust ladder, tamper-proof in the DB
+- **[ADR 009](docs/adr/009-meetup-scheduling.md)** / **[ADR 011](docs/adr/011-price-offers.md)** — deal-making state machines in chat
+- **[ADR 010](docs/adr/010-listing-bump.md)** — once-a-day bump with a server-time RPC (an E2E-caught clock-skew fix)
 
 Full product/design docs: [`docs/`](docs/) — MVP spec, category field system, user scenarios, 9-table ERD.
 
@@ -66,6 +84,8 @@ Full product/design docs: [`docs/`](docs/) — MVP spec, category field system, 
 - [x] M3: search + filters + favorites
 - [x] M4: realtime chat
 - [x] M5: keyword alerts (Edge Function matcher + Expo push)
+- [x] Reviews + trust tiers, meetups, price offers, bump, edit/delete, message push
+- [x] Live E2E journey suite (41 steps incl. RLS negative tests) — ALL PASS
 - [ ] M6: device QA, EAS builds, store release (App Store / Play Store)
 
 ## Running locally
