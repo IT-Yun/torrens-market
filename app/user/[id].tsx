@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { BadgeCheck, ChevronLeft, MapPin } from 'lucide-react-native';
+import { BadgeCheck, ChevronLeft, ChevronRight, MapPin } from 'lucide-react-native';
 import { Avatar } from '../../src/components/Avatar';
 import { ListingRow } from '../../src/components/ListingRow';
 import { TrustBadge } from '../../src/components/TrustBadge';
@@ -111,7 +111,12 @@ export default function PublicProfileScreen() {
                   accessibilityRole="button"
                 >
                   <TrustBadge trust={trust} compact />
-                  <Text style={styles.statLabel}>{t('trust.tierLabel')}</Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+                    <Text style={styles.statLabel}>
+                      {t('review.viewCount', { count: trust?.review_count ?? 0 })}
+                    </Text>
+                    <ChevronRight size={12} color={colors.textSecondary} />
+                  </View>
                 </Pressable>
               </View>
             </View>

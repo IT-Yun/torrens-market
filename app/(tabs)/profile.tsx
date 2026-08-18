@@ -87,7 +87,12 @@ export default function ProfileScreen() {
             <View style={styles.statDivider} />
             <Pressable style={styles.statCol} onPress={() => router.push('/my-reviews')}>
               <TrustBadge trust={trust} compact />
-              <Text style={styles.statLabel}>{t('trust.tierLabel')}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+                <Text style={styles.statLabel}>
+                  {t('review.viewCount', { count: trust?.review_count ?? 0 })}
+                </Text>
+                <ChevronRight size={12} color={colors.textSecondary} />
+              </View>
             </Pressable>
           </View>
         </View>

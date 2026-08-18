@@ -31,7 +31,16 @@ import {
   type ListingCard,
   type ListingDetail,
 } from '../../src/lib/listings';
-import { BadgeCheck, Car, Footprints, Heart, MapPin, Package, X } from 'lucide-react-native';
+import {
+  BadgeCheck,
+  Car,
+  ChevronRight,
+  Footprints,
+  Heart,
+  MapPin,
+  Package,
+  X,
+} from 'lucide-react-native';
 import { Avatar } from '../../src/components/Avatar';
 import { TrustBadge } from '../../src/components/TrustBadge';
 import { fetchTrust, type ProfileTrust } from '../../src/lib/reviews';
@@ -301,17 +310,7 @@ export default function ListingDetailScreen() {
                   </>
                 )}
               </View>
-              <Pressable
-                onPress={() =>
-                  router.push({
-                    pathname: '/my-reviews',
-                    params: { profileId: listing.seller_id, name: listing.profiles.display_name },
-                  })
-                }
-                accessibilityRole="button"
-              >
-                <TrustBadge trust={sellerTrust} />
-              </Pressable>
+              <TrustBadge trust={sellerTrust} />
               <Text style={styles.meta}>
                 {[
                   listing.profiles.suburb,
@@ -322,6 +321,10 @@ export default function ListingDetailScreen() {
                   .filter(Boolean)
                   .join(' · ')}
               </Text>
+            </View>
+            <View style={styles.sellerCta}>
+              <ChevronRight size={18} color={colors.textSecondary} />
+              <Text style={styles.sellerCtaText}>{t('profile.viewProfile')}</Text>
             </View>
           </Pressable>
 
@@ -478,6 +481,8 @@ const styles = StyleSheet.create({
   avatarText: { color: colors.white, fontSize: 18, fontWeight: '700' },
   sellerName: { fontSize: 16, fontWeight: '600', color: colors.text },
   verifiedText: { fontSize: 13, fontWeight: '600', color: colors.primary },
+  sellerCta: { alignItems: 'center', gap: 2 },
+  sellerCtaText: { fontSize: 10, color: colors.textSecondary },
   distanceRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
   miniCard: { width: 120, gap: 3 },
   miniPhoto: { width: 120, height: 120, borderRadius: radius.md, backgroundColor: colors.surface },

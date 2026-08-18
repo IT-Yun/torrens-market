@@ -67,7 +67,8 @@
     "stats": "Selling {{active}} · Sold {{sold}}",
     "deleteAccount": "Delete account",
     "deleteAccountConfirm": "This permanently removes your account, listings, chats and reviews. This cannot be undone.",
-    "sellingSection": "Selling now"
+    "sellingSection": "Selling now",
+    "viewProfile": "Profile"
   },
   "favorites": {
     "empty": "Listings you ♥ will appear here."
@@ -210,7 +211,8 @@
     "done": "Review posted!",
     "received": "Reviews received",
     "empty": "No reviews yet",
-    "reviewsOf": "{{name}}'s reviews"
+    "reviewsOf": "{{name}}'s reviews",
+    "viewCount": "Reviews {{count}}"
   },
   "meetup": {
     "schedule": "Schedule pickup",

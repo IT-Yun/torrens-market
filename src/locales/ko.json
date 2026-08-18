@@ -67,7 +67,8 @@
     "stats": "판매중 {{active}} · 거래완료 {{sold}}",
     "deleteAccount": "계정 삭제",
     "deleteAccountConfirm": "계정과 매물, 채팅, 후기가 모두 영구 삭제돼요. 되돌릴 수 없어요.",
-    "sellingSection": "판매 중인 매물"
+    "sellingSection": "판매 중인 매물",
+    "viewProfile": "프로필 보기"
   },
   "favorites": {
     "empty": "♥ 누른 매물이 여기에 모여요."
@@ -210,7 +211,8 @@
     "done": "후기가 등록됐어요!",
     "received": "받은 후기",
     "empty": "아직 받은 후기가 없어요",
-    "reviewsOf": "{{name}}님이 받은 후기"
+    "reviewsOf": "{{name}}님이 받은 후기",
+    "viewCount": "후기 {{count}}개"
   },
   "meetup": {
     "schedule": "픽업 약속 잡기",

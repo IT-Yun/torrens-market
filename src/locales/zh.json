@@ -67,7 +67,8 @@
     "stats": "在售 {{active}} · 已售 {{sold}}",
     "deleteAccount": "删除账号",
     "deleteAccountConfirm": "将永久删除你的账号、商品、聊天和评价，无法恢复。",
-    "sellingSection": "在售商品"
+    "sellingSection": "在售商品",
+    "viewProfile": "查看主页"
   },
   "favorites": {
     "empty": "你收藏的商品会显示在这里。"
@@ -210,7 +211,8 @@
     "done": "评价已提交！",
     "received": "收到的评价",
     "empty": "还没有收到评价",
-    "reviewsOf": "{{name}} 收到的评价"
+    "reviewsOf": "{{name}} 收到的评价",
+    "viewCount": "{{count}}条评价"
   },
   "meetup": {
     "schedule": "约定交易时间",
