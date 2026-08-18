@@ -171,7 +171,8 @@
     "koala": "考拉",
     "wombat": "袋熊",
     "wallaby": "小袋鼠",
-    "kangaroo": "袋鼠"
+    "kangaroo": "袋鼠",
+    "nextTier": "还差{{count}}分升级到{{name}}"
   },
   "review": {
     "leaveReview": "写交易评价",
@@ -181,7 +182,8 @@
     "submit": "提交评价",
     "done": "评价已提交！",
     "received": "收到的评价",
-    "empty": "还没有收到评价"
+    "empty": "还没有收到评价",
+    "reviewsOf": "{{name}} 收到的评价"
   },
   "meetup": {
     "schedule": "约定交易时间",

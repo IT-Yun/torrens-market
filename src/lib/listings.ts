@@ -101,7 +101,7 @@ export async function searchListings(filters: SearchFilters): Promise<ListingCar
     .select(
       `id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes,
        listing_photos (storage_path, sort_order),
-       profiles!inner (nationality, is_phone_verified)`,
+       profiles!listings_seller_id_fkey!inner (nationality, is_phone_verified)`,
     )
     .eq('status', 'active')
     .order('created_at', { ascending: false })
@@ -129,7 +129,7 @@ export async function fetchListing(id: string): Promise<ListingDetail | null> {
       `id, title, description, price_cents, suburb, status, created_at, category_id, attributes,
        lat, lng, condition, pickup_mode, seller_id,
        listing_photos (storage_path, sort_order),
-       profiles (display_name, avatar_url, suburb, nationality, is_phone_verified)`,
+       profiles!listings_seller_id_fkey (display_name, avatar_url, suburb, nationality, is_phone_verified)`,
     )
     .eq('id', id)
     .single();

@@ -273,7 +273,17 @@ export default function ListingDetailScreen() {
                   </>
                 )}
               </View>
-              <TrustBadge trust={sellerTrust} />
+              <Pressable
+                onPress={() =>
+                  router.push({
+                    pathname: '/my-reviews',
+                    params: { profileId: listing.seller_id, name: listing.profiles.display_name },
+                  })
+                }
+                accessibilityRole="button"
+              >
+                <TrustBadge trust={sellerTrust} />
+              </Pressable>
               <Text style={styles.meta}>
                 {[
                   listing.profiles.suburb,

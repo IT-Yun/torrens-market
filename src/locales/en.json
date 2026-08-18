@@ -171,7 +171,8 @@
     "koala": "Koala",
     "wombat": "Wombat",
     "wallaby": "Wallaby",
-    "kangaroo": "Kangaroo"
+    "kangaroo": "Kangaroo",
+    "nextTier": "{{count}} more points to {{name}}"
   },
   "review": {
     "leaveReview": "Leave a review",
@@ -181,7 +182,8 @@
     "submit": "Submit review",
     "done": "Review posted!",
     "received": "Reviews received",
-    "empty": "No reviews yet"
+    "empty": "No reviews yet",
+    "reviewsOf": "{{name}}'s reviews"
   },
   "meetup": {
     "schedule": "Schedule pickup",

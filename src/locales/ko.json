@@ -171,7 +171,8 @@
     "koala": "코알라",
     "wombat": "웜뱃",
     "wallaby": "왈라비",
-    "kangaroo": "캥거루"
+    "kangaroo": "캥거루",
+    "nextTier": "{{name}}까지 {{count}}포인트 남았어요"
   },
   "review": {
     "leaveReview": "거래 후기 남기기",
@@ -181,7 +182,8 @@
     "submit": "후기 등록",
     "done": "후기가 등록됐어요!",
     "received": "받은 후기",
-    "empty": "아직 받은 후기가 없어요"
+    "empty": "아직 받은 후기가 없어요",
+    "reviewsOf": "{{name}}님이 받은 후기"
   },
   "meetup": {
     "schedule": "픽업 약속 잡기",
