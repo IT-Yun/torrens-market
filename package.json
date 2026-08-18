@@ -6,7 +6,7 @@
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-community/datetimepicker": "^8.4.4",
     "@supabase/supabase-js": "^2.112.3",
-    "expo": "^54.0.36",
+    "expo": "^57.0.13",
     "expo-auth-session": "~7.0.11",
     "expo-constants": "~18.0.13",
     "expo-crypto": "~15.0.9",
