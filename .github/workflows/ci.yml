@@ -21,3 +21,5 @@ jobs:
         run: npm test
       - name: i18n completeness (KO/EN/ZH)
         run: node scripts/check-i18n.js
+      - name: Dependency audit (high+)
+        run: npm audit --omit=dev --audit-level=high

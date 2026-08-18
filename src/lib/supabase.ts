@@ -1,7 +1,39 @@
 import 'react-native-url-polyfill/auto';
 import { AppState } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { createClient } from '@supabase/supabase-js';
+
+// Session tokens belong in the device keychain, not plaintext storage
+// (ops-roadmap hardening). Falls back to AsyncStorage where SecureStore
+// is unavailable, and migrates any pre-existing AsyncStorage session.
+const secureStorage = {
+  async getItem(key: string): Promise<string | null> {
+    try {
+      const secure = await SecureStore.getItemAsync(key);
+      if (secure != null) return secure;
+      const legacy = await AsyncStorage.getItem(key);
+      if (legacy != null) {
+        await SecureStore.setItemAsync(key, legacy).catch(() => {});
+        await AsyncStorage.removeItem(key).catch(() => {});
+      }
+      return legacy;
+    } catch {
+      return AsyncStorage.getItem(key);
+    }
+  },
+  async setItem(key: string, value: string): Promise<void> {
+    try {
+      await SecureStore.setItemAsync(key, value);
+    } catch {
+      await AsyncStorage.setItem(key, value);
+    }
+  },
+  async removeItem(key: string): Promise<void> {
+    await SecureStore.deleteItemAsync(key).catch(() => {});
+    await AsyncStorage.removeItem(key).catch(() => {});
+  },
+};
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
@@ -14,7 +46,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    storage: AsyncStorage,
+    storage: secureStorage,
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,

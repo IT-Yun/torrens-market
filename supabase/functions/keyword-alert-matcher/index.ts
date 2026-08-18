@@ -16,6 +16,9 @@ type Alert = {
 const EXPO_PUSH_URL = 'https://exp.host/--/api/v2/push/send';
 
 Deno.serve(async (req) => {
+  if (req.headers.get('x-notify-secret') !== Deno.env.get('NOTIFY_SECRET')) {
+    return new Response('forbidden', { status: 403 });
+  }
   try {
     const { listing_id } = await req.json();
     if (!listing_id) return new Response('missing listing_id', { status: 400 });

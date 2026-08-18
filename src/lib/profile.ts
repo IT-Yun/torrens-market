@@ -1,4 +1,5 @@
 import * as ImagePicker from 'expo-image-picker';
+import { compressForUpload } from './images';
 import { supabase } from './supabase';
 
 /** Permanently delete the signed-in account (server verifies the JWT). */
@@ -24,13 +25,13 @@ export async function uploadAvatar(
   userId: string,
   asset: ImagePicker.ImagePickerAsset,
 ): Promise<string> {
-  const ext = asset.uri.split('.').pop()?.toLowerCase() ?? 'jpg';
-  const path = `${userId}/avatar-${Date.now()}.${ext}`;
-  const response = await fetch(asset.uri);
+  const compressed = await compressForUpload(asset, 512);
+  const path = `${userId}/avatar-${Date.now()}.jpg`;
+  const response = await fetch(compressed.uri);
   const arrayBuffer = await response.arrayBuffer();
   const { error } = await supabase.storage
     .from('avatars')
-    .upload(path, arrayBuffer, { contentType: asset.mimeType ?? 'image/jpeg' });
+    .upload(path, arrayBuffer, { contentType: compressed.mimeType });
   if (error) throw error;
   return supabase.storage.from('avatars').getPublicUrl(path).data.publicUrl;
 }

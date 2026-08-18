@@ -17,6 +17,7 @@ for (const f of ['.env', '.env.local']) {
 const URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const ANON = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 const SERVICE = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const NOTIFY_SECRET = process.env.NOTIFY_SECRET ?? '';
 if (!URL || !ANON || !SERVICE) throw new Error('missing env');
 
 const admin = createClient(URL, SERVICE, { auth: { persistSession: false } });
@@ -418,7 +419,11 @@ await step('seller: suburb verification timestamp write', async () => {
 await step('meetup-notify edge function responds 200', async () => {
   const res = await fetch(`${URL}/functions/v1/meetup-notify`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ANON}` },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${ANON}`,
+      'x-notify-secret': NOTIFY_SECRET,
+    },
     body: JSON.stringify({ meetup_id: meetupId, event: 'reminder' }),
   });
   assert(res.status === 200, `status ${res.status}: ${await res.text()}`);
@@ -498,11 +503,7 @@ await step('chat unread: new message → unread, markRead clears it', async () =
     return last.sender_id !== buyer.id && last.created_at > me.last_read_at;
   };
   assert(await isUnread(), 'expected unread after seller message');
-  await buyer.client
-    .from('chat_participants')
-    .update({ last_read_at: new Date().toISOString() })
-    .eq('room_id', roomId)
-    .eq('user_id', buyer.id);
+  await buyer.client.rpc('mark_read', { p_room_id: roomId });
   assert(!(await isUnread()), 'expected read after markRead');
 });
 
@@ -552,7 +553,11 @@ await step('chat-notify edge function responds 200', async () => {
     .single();
   const res = await fetch(`${URL}/functions/v1/chat-notify`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ANON}` },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${ANON}`,
+      'x-notify-secret': NOTIFY_SECRET,
+    },
     body: JSON.stringify({ message_id: lastMsg.id }),
   });
   assert(res.status === 200, `status ${res.status}: ${await res.text()}`);
@@ -561,7 +566,11 @@ await step('chat-notify edge function responds 200', async () => {
 await step('keyword-alert-matcher edge function responds 200', async () => {
   const res = await fetch(`${URL}/functions/v1/keyword-alert-matcher`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ANON}` },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${ANON}`,
+      'x-notify-secret': NOTIFY_SECRET,
+    },
     body: JSON.stringify({ listing_id: listingId }),
   });
   assert(res.status === 200, `status ${res.status}: ${await res.text()}`);
@@ -784,7 +793,11 @@ await step('auto-hide: 3 distinct reports soft-delete a listing', async () => {
 await step('price drop: function responds 200 for a favorited listing', async () => {
   const res = await fetch(`${URL}/functions/v1/price-drop-notify`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ANON}` },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${ANON}`,
+      'x-notify-secret': NOTIFY_SECRET,
+    },
     body: JSON.stringify({ listing_id: listingId, old_price: 4500, new_price: 4000 }),
   });
   assert(res.status === 200, `status ${res.status}: ${await res.text()}`);

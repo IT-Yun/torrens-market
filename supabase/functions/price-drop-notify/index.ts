@@ -12,6 +12,9 @@ const TITLES: Record<Lang, string> = {
 };
 
 Deno.serve(async (req) => {
+  if (req.headers.get('x-notify-secret') !== Deno.env.get('NOTIFY_SECRET')) {
+    return new Response('forbidden', { status: 403 });
+  }
   try {
     const { listing_id, old_price, new_price } = await req.json();
     if (!listing_id) return new Response('missing listing_id', { status: 400 });

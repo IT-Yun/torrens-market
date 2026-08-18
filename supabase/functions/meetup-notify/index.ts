@@ -30,6 +30,9 @@ function formatWhen(iso: string, lang: Lang): string {
 }
 
 Deno.serve(async (req) => {
+  if (req.headers.get('x-notify-secret') !== Deno.env.get('NOTIFY_SECRET')) {
+    return new Response('forbidden', { status: 403 });
+  }
   try {
     const { meetup_id, event } = (await req.json()) as { meetup_id: string; event: Event };
     if (!meetup_id || !TITLES[event]) return new Response('bad payload', { status: 400 });

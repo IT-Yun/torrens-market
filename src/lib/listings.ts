@@ -1,5 +1,6 @@
 import * as ImagePicker from 'expo-image-picker';
 export { attributeSnippet, formatPrice, timeAgo } from './format';
+import { compressForUpload } from './images';
 import { supabase } from './supabase';
 
 export type FieldDef = {
@@ -187,13 +188,13 @@ export async function pickImages(max: number): Promise<ImagePicker.ImagePickerAs
 }
 
 async function uploadPhoto(userId: string, asset: ImagePicker.ImagePickerAsset): Promise<string> {
-  const ext = asset.uri.split('.').pop()?.toLowerCase() ?? 'jpg';
-  const path = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const response = await fetch(asset.uri);
+  const compressed = await compressForUpload(asset);
+  const path = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+  const response = await fetch(compressed.uri);
   const arrayBuffer = await response.arrayBuffer();
   const { error } = await supabase.storage
     .from('listing-photos')
-    .upload(path, arrayBuffer, { contentType: asset.mimeType ?? 'image/jpeg' });
+    .upload(path, arrayBuffer, { contentType: compressed.mimeType });
   if (error) throw error;
   return path;
 }

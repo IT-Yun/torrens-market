@@ -14,6 +14,9 @@ const TITLES: Record<Event, Record<Lang, string>> = {
 };
 
 Deno.serve(async (req) => {
+  if (req.headers.get('x-notify-secret') !== Deno.env.get('NOTIFY_SECRET')) {
+    return new Response('forbidden', { status: 403 });
+  }
   try {
     const { offer_id, event } = (await req.json()) as { offer_id: string; event: Event };
     if (!offer_id || !TITLES[event]) return new Response('bad payload', { status: 400 });

@@ -1,4 +1,5 @@
 import type { RealtimeChannel } from '@supabase/supabase-js';
+import { compressForUpload } from './images';
 import { supabase } from './supabase';
 
 export type Message = {
@@ -159,12 +160,9 @@ export function subscribeToRoom(
     .subscribe();
 }
 
-export async function markRead(roomId: string, userId: string): Promise<void> {
-  await supabase
-    .from('chat_participants')
-    .update({ last_read_at: new Date().toISOString() })
-    .eq('room_id', roomId)
-    .eq('user_id', userId);
+export async function markRead(roomId: string, _userId: string): Promise<void> {
+  // Server-time stamp (mark_read RPC) — client clocks can lag the DB.
+  await supabase.rpc('mark_read', { p_room_id: roomId });
 }
 
 /** Number of rooms with unread messages — used for the chat tab badge. */
@@ -177,15 +175,15 @@ export async function fetchUnreadCount(userId: string): Promise<number> {
 export async function sendImageMessage(
   roomId: string,
   senderId: string,
-  asset: { uri: string; mimeType?: string },
+  asset: { uri: string; mimeType?: string; width?: number },
 ): Promise<void> {
-  const ext = asset.uri.split('.').pop()?.toLowerCase() ?? 'jpg';
-  const path = `${roomId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const response = await fetch(asset.uri);
+  const compressed = await compressForUpload(asset);
+  const path = `${roomId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+  const response = await fetch(compressed.uri);
   const arrayBuffer = await response.arrayBuffer();
   const { error: uploadError } = await supabase.storage
     .from('chat-images')
-    .upload(path, arrayBuffer, { contentType: asset.mimeType ?? 'image/jpeg' });
+    .upload(path, arrayBuffer, { contentType: compressed.mimeType });
   if (uploadError) throw uploadError;
   const { error } = await supabase
     .from('messages')
