@@ -691,6 +691,23 @@ await step('view count: increment_view RPC bumps counter', async () => {
   assert(data.view_count >= 2, `view_count=${data.view_count}`);
 });
 
+
+await step('unblock: blocked list readable + unblock restores chat', async () => {
+  const { data: list, error } = await buyer.client
+    .from('blocked_users')
+    .select('blocked_id, profiles!blocked_users_blocked_id_fkey (display_name)')
+    .eq('blocker_id', buyer.id);
+  assert(!error, error?.message);
+  assert(list.some((b) => b.blocked_id === seller.id), 'seller not in blocked list');
+  await buyer.client
+    .from('blocked_users')
+    .delete()
+    .eq('blocker_id', buyer.id)
+    .eq('blocked_id', seller.id);
+  const { error: chatError } = await buyer.client.rpc('start_chat', { p_listing_id: listingId });
+  assert(!chatError, `chat still blocked: ${chatError?.message}`);
+});
+
 console.log(results.join('\n'));
 console.log(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURES`}`);
 process.exit(failures === 0 ? 0 : 1);

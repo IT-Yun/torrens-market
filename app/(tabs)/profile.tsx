@@ -17,6 +17,7 @@ import {
   MapPin,
   Package,
   Pencil,
+  ShieldOff,
   Star,
 } from 'lucide-react-native';
 import { Avatar } from '../../src/components/Avatar';
@@ -141,6 +142,14 @@ export default function ProfileScreen() {
               })}
             </View>
           </View>
+          <View style={styles.separator} />
+          <Pressable style={styles.menuRow} onPress={() => router.push('/blocked-users')}>
+            <View style={styles.menuLeft}>
+              <ShieldOff size={18} color={colors.textSecondary} />
+              <Text style={styles.menuText}>{t('block.manageTitle')}</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </Pressable>
           <View style={styles.separator} />
           <Pressable
             style={styles.menuRow}

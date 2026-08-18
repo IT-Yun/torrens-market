@@ -182,7 +182,10 @@
   },
   "block": {
     "action": "Block this seller",
-    "done": "Seller blocked. You won't see their listings."
+    "done": "Seller blocked. You won't see their listings.",
+    "manageTitle": "Blocked users",
+    "unblock": "Unblock",
+    "empty": "You haven't blocked anyone."
   },
   "trust": {
     "quokka": "Quokka",
