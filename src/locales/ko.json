@@ -105,7 +105,8 @@
     "reserved": "예약중",
     "distance": "약 {{km}}km",
     "walkTime": "도보 약 {{min}}분",
-    "driveTime": "차로 약 {{min}}분"
+    "driveTime": "차로 약 {{min}}분",
+    "moreFromSeller": "{{name}}님의 다른 매물"
   },
   "conditions": {
     "new": "새상품",

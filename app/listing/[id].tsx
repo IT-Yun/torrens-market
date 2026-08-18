@@ -22,9 +22,11 @@ import { useSession } from '../../src/lib/session';
 import {
   fetchCategories,
   fetchListing,
+  fetchSellerListings,
   formatPrice,
   photoUrl,
   type Category,
+  type ListingCard,
   type ListingDetail,
 } from '../../src/lib/listings';
 import { BadgeCheck, Car, Footprints, Heart, MapPin, Package } from 'lucide-react-native';
@@ -47,11 +49,16 @@ export default function ListingDetailScreen() {
   const [photoIndex, setPhotoIndex] = useState(0);
   const [distanceKm, setDistanceKm] = useState<number | null>(null);
   const [sellerTrust, setSellerTrust] = useState<ProfileTrust | null>(null);
+  const [otherListings, setOtherListings] = useState<ListingCard[]>([]);
   const lang = i18n.language;
 
   useEffect(() => {
-    if (listing?.seller_id) fetchTrust(listing.seller_id).then(setSellerTrust).catch(() => {});
-  }, [listing?.seller_id]);
+    if (!listing?.seller_id) return;
+    fetchTrust(listing.seller_id).then(setSellerTrust).catch(() => {});
+    fetchSellerListings(listing.seller_id, listing.id)
+      .then(setOtherListings)
+      .catch(() => {});
+  }, [listing?.seller_id, listing?.id]);
 
   useEffect(() => {
     if (id) {
@@ -296,6 +303,46 @@ export default function ListingDetailScreen() {
               </Text>
             </View>
           </View>
+
+          {otherListings.length > 0 && (
+            <View style={{ gap: spacing.sm }}>
+              <Text style={styles.attrTitle}>
+                {t('listingDetail.moreFromSeller', { name: listing.profiles.display_name })}
+              </Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View style={{ flexDirection: 'row', gap: spacing.sm }}>
+                  {otherListings.map((other) => {
+                    const thumb = [...other.listing_photos].sort(
+                      (a, b) => a.sort_order - b.sort_order,
+                    )[0];
+                    return (
+                      <Pressable
+                        key={other.id}
+                        style={styles.miniCard}
+                        onPress={() => router.push(`/listing/${other.id}`)}
+                        accessibilityRole="button"
+                      >
+                        {thumb ? (
+                          <Image
+                            source={{ uri: photoUrl(thumb.storage_path) }}
+                            style={styles.miniPhoto}
+                          />
+                        ) : (
+                          <View style={[styles.miniPhoto, styles.miniPlaceholder]}>
+                            <Package size={20} color={colors.textSecondary} />
+                          </View>
+                        )}
+                        <Text style={styles.miniTitle} numberOfLines={1}>
+                          {other.title}
+                        </Text>
+                        <Text style={styles.miniPrice}>{formatPrice(other.price_cents)}</Text>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              </ScrollView>
+            </View>
+          )}
         </View>
       </ScrollView>
 
@@ -384,6 +431,11 @@ const styles = StyleSheet.create({
   sellerName: { fontSize: 16, fontWeight: '600', color: colors.text },
   verifiedText: { fontSize: 13, fontWeight: '600', color: colors.primary },
   distanceRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
+  miniCard: { width: 120, gap: 3 },
+  miniPhoto: { width: 120, height: 120, borderRadius: radius.md, backgroundColor: colors.surface },
+  miniPlaceholder: { alignItems: 'center', justifyContent: 'center' },
+  miniTitle: { fontSize: 13, color: colors.text },
+  miniPrice: { fontSize: 14, fontWeight: '700', color: colors.text },
   distanceText: { fontSize: 13, color: colors.textSecondary },
   dots: {
     position: 'absolute',

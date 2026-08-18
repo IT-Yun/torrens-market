@@ -105,7 +105,8 @@
     "reserved": "已预订",
     "distance": "约{{km}}公里",
     "walkTime": "步行约{{min}}分钟",
-    "driveTime": "开车约{{min}}分钟"
+    "driveTime": "开车约{{min}}分钟",
+    "moreFromSeller": "{{name}} 的其他商品"
   },
   "conditions": {
     "new": "全新",

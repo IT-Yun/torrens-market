@@ -221,6 +221,25 @@ export async function createListing(input: {
   return listingId;
 }
 
+/** Up to 10 other active listings by the same seller (detail-page strip). */
+export async function fetchSellerListings(
+  sellerId: string,
+  excludeId: string,
+): Promise<ListingCard[]> {
+  const { data, error } = await supabase
+    .from('listings')
+    .select(
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, bumped_at, listing_photos (storage_path, sort_order)',
+    )
+    .eq('seller_id', sellerId)
+    .eq('status', 'active')
+    .neq('id', excludeId)
+    .order('sort_ts', { ascending: false })
+    .limit(10);
+  if (error) throw error;
+  return (data as ListingCard[]) ?? [];
+}
+
 export async function fetchMyListings(userId: string): Promise<ListingCard[]> {
   const { data, error } = await supabase
     .from('listings')
