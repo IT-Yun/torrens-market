@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   FlatList,
@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import {
   fetchMessages,
   fetchRoomHeader,
@@ -37,7 +37,7 @@ export default function ChatRoomScreen() {
   const [canReview, setCanReview] = useState(false);
   const seenIds = useRef(new Set<string>());
 
-  useEffect(() => {
+  const loadHeader = useCallback(() => {
     if (!roomId || !session) return;
     fetchRoomHeader(roomId, session.user.id)
       .then((h) => {
@@ -46,9 +46,19 @@ export default function ChatRoomScreen() {
           hasReviewed(h.listingId, session.user.id)
             .then((done) => setCanReview(!done))
             .catch(() => {});
+        } else {
+          setCanReview(false);
         }
       })
       .catch(() => {});
+  }, [roomId, session]);
+
+  // Refresh listing status / review eligibility whenever the room regains focus
+  // (e.g. returning from the review screen or after the trade state changed).
+  useFocusEffect(loadHeader);
+
+  useEffect(() => {
+    if (!roomId || !session) return;
     fetchMessages(roomId)
       .then((items) => {
         items.forEach((m) => seenIds.current.add(m.id));

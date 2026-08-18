@@ -380,6 +380,149 @@ await step('buyer: report + block seller, feed hides their listings', async () =
   assert(data.some((b) => b.blocked_id === seller.id), 'block missing');
 });
 
+// ── iteration 2 coverage ───────────────────────────────────────────────
+const PNG = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+  'base64',
+);
+
+await step('seller: avatar upload to own folder + avatar_url save', async () => {
+  const path = `${seller.id}/avatar-e2e.png`;
+  const { error } = await seller.client.storage
+    .from('avatars')
+    .upload(path, PNG, { contentType: 'image/png', upsert: true });
+  assert(!error, error?.message);
+  const url = seller.client.storage.from('avatars').getPublicUrl(path).data.publicUrl;
+  const { error: saveError } = await seller.client
+    .from('profiles')
+    .update({ avatar_url: url })
+    .eq('id', seller.id);
+  assert(!saveError, saveError?.message);
+});
+
+await expectFail('avatar upload into ANOTHER user folder should be blocked', async () => {
+  const { error } = await rando.client.storage
+    .from('avatars')
+    .upload(`${seller.id}/evil.png`, PNG, { contentType: 'image/png' });
+  if (error) throw error;
+});
+
+await step('seller: suburb verification timestamp write', async () => {
+  const { error } = await seller.client
+    .from('profiles')
+    .update({ suburb_verified_at: new Date().toISOString() })
+    .eq('id', seller.id);
+  assert(!error, error?.message);
+});
+
+await step('meetup-notify edge function responds 200', async () => {
+  const res = await fetch(`${URL}/functions/v1/meetup-notify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ANON}` },
+    body: JSON.stringify({ meetup_id: meetupId, event: 'reminder' }),
+  });
+  assert(res.status === 200, `status ${res.status}: ${await res.text()}`);
+});
+
+await step('trust tier progression: +3 points → Bilby thresholds hold', async () => {
+  // Seed two more positive reviews via admin (distinct synthetic listings).
+  for (let i = 0; i < 2; i++) {
+    const { data: l } = await admin
+      .from('listings')
+      .insert({
+        seller_id: seller.id,
+        category_id: catId,
+        title: `E2E tier seed ${i}`,
+        description: 'seed',
+        price_cents: 100,
+        condition: 'used',
+        pickup_mode: 'pickup_only',
+        suburb: 'Norwood',
+        status: 'sold',
+        attributes: {},
+      })
+      .select('id')
+      .single();
+    await admin.from('reviews').insert({
+      listing_id: l.id,
+      reviewer_id: rando.id,
+      reviewee_id: seller.id,
+      rating: 5,
+    });
+  }
+  const { data } = await rando.client
+    .from('profile_trust')
+    .select('*')
+    .eq('profile_id', seller.id)
+    .single();
+  assert(data.trust_points === 3, `points=${data.trust_points}`);
+  // mirror of src/lib/trust.ts thresholds
+  const tiers = [['quokka', 0], ['bilby', 3], ['koala', 8], ['wombat', 15], ['wallaby', 30], ['kangaroo', 50]];
+  const tier = tiers.filter(([, min]) => data.trust_points >= min).pop()[0];
+  assert(tier === 'bilby', `tier=${tier}`);
+});
+
+await step('buyer: unfavorite → count drops to 0', async () => {
+  const { error } = await buyer.client
+    .from('favorites')
+    .delete()
+    .eq('user_id', buyer.id)
+    .eq('listing_id', listingId);
+  assert(!error, error?.message);
+  const { data } = await rando.client
+    .from('listing_favorite_counts')
+    .select('*')
+    .eq('listing_id', listingId)
+    .maybeSingle();
+  assert(!data || data.favorites_count === 0, `count=${data?.favorites_count}`);
+});
+
+await step('chat unread: new message → unread, markRead clears it', async () => {
+  await seller.client
+    .from('messages')
+    .insert({ room_id: roomId, sender_id: seller.id, body: 'See you tomorrow!' });
+  const isUnread = async () => {
+    const { data: me } = await buyer.client
+      .from('chat_participants')
+      .select('last_read_at')
+      .eq('room_id', roomId)
+      .eq('user_id', buyer.id)
+      .single();
+    const { data: last } = await buyer.client
+      .from('messages')
+      .select('created_at, sender_id')
+      .eq('room_id', roomId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
+    return last.sender_id !== buyer.id && last.created_at > me.last_read_at;
+  };
+  assert(await isUnread(), 'expected unread after seller message');
+  await buyer.client
+    .from('chat_participants')
+    .update({ last_read_at: new Date().toISOString() })
+    .eq('room_id', roomId)
+    .eq('user_id', buyer.id);
+  assert(!(await isUnread()), 'expected read after markRead');
+});
+
+await step('seller: my-listings status transitions sold → active → sold', async () => {
+  for (const status of ['active', 'sold']) {
+    const { error } = await seller.client
+      .from('listings')
+      .update({ status })
+      .eq('id', listingId);
+    assert(!error, `${status}: ${error?.message}`);
+  }
+});
+
+await step('buyer: push token upsert', async () => {
+  const { error } = await buyer.client
+    .from('push_tokens')
+    .upsert({ user_id: buyer.id, token: 'ExponentPushToken[e2e-fake]' });
+  assert(!error, error?.message);
+});
+
 console.log(results.join('\n'));
 console.log(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURES`}`);
 process.exit(failures === 0 ? 0 : 1);
