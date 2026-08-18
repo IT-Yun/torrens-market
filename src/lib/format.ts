@@ -2,8 +2,8 @@
 // in tests/format.test.ts.
 
 /** "$1,234" AUD display; zero renders as a free-item label. */
-export function formatPrice(priceCents: number): string {
-  if (priceCents === 0) return 'Free';
+export function formatPrice(priceCents: number, freeLabel = 'Free'): string {
+  if (priceCents === 0) return freeLabel;
   return `$${(priceCents / 100).toLocaleString('en-AU', { maximumFractionDigits: 2 })}`;
 }
 

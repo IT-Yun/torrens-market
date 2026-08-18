@@ -6,7 +6,8 @@
     "cancel": "Cancel",
     "loading": "Loading...",
     "loadError": "Couldn't load — check your connection.",
-    "retry": "Retry"
+    "retry": "Retry",
+    "free": "Free"
   },
   "onboarding": {
     "chooseLanguage": "Choose your language",

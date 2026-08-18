@@ -76,7 +76,7 @@ export default function MyListingsScreen() {
                   <Text style={[styles.itemTitle, sold && styles.soldText]} numberOfLines={1}>
                     {item.title}
                   </Text>
-                  <Text style={styles.price}>{formatPrice(item.price_cents)}</Text>
+                  <Text style={styles.price}>{formatPrice(item.price_cents, t('common.free'))}</Text>
                   <Text style={[styles.status, sold && { color: colors.textSecondary }]}>
                     {t(`myListings.status.${item.status}`)}
                   </Text>

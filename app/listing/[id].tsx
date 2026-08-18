@@ -233,7 +233,7 @@ export default function ListingDetailScreen() {
             </View>
           )}
           <Text style={styles.title}>{listing.title}</Text>
-          <Text style={styles.price}>{formatPrice(listing.price_cents)}</Text>
+          <Text style={styles.price}>{formatPrice(listing.price_cents, t('common.free'))}</Text>
           <Text style={styles.meta}>
             {[
               listing.suburb,
@@ -352,7 +352,7 @@ export default function ListingDetailScreen() {
                         <Text style={styles.miniTitle} numberOfLines={1}>
                           {other.title}
                         </Text>
-                        <Text style={styles.miniPrice}>{formatPrice(other.price_cents)}</Text>
+                        <Text style={styles.miniPrice}>{formatPrice(other.price_cents, t('common.free'))}</Text>
                       </Pressable>
                     );
                   })}
@@ -373,7 +373,7 @@ export default function ListingDetailScreen() {
             />
           </Pressable>
           <View style={{ flex: 1 }}>
-            <Text style={styles.footerPrice}>{formatPrice(listing.price_cents)}</Text>
+            <Text style={styles.footerPrice}>{formatPrice(listing.price_cents, t('common.free'))}</Text>
             <Text style={styles.footerMeta}>{t(`pickupModes.${listing.pickup_mode}`)}</Text>
           </View>
           <View style={{ width: 150 }}>

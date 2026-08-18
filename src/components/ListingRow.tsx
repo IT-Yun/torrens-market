@@ -64,7 +64,7 @@ export function ListingRow({
           )}
         </View>
         <View style={styles.priceRow}>
-          <Text style={styles.cardPrice}>{formatPrice(item.price_cents)}</Text>
+          <Text style={styles.cardPrice}>{formatPrice(item.price_cents, t('common.free'))}</Text>
           {(item.favorites_count ?? 0) > 0 && (
             <View style={styles.likes}>
               <Heart size={12} color={colors.textSecondary} />

@@ -56,7 +56,7 @@ export function OfferCard({ roomId, myId }: { roomId: string; myId: string }) {
           <View style={{ flex: 1, gap: 2 }}>
             <View style={styles.row}>
               <HandCoins size={15} color={colors.primary} />
-              <Text style={styles.amount}>{formatPrice(offer.price_cents)}</Text>
+              <Text style={styles.amount}>{formatPrice(offer.price_cents, t('common.free'))}</Text>
               <View
                 style={[
                   styles.statusChip,
