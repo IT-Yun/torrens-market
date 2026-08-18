@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   FlatList,
+  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -13,21 +14,36 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import {
+  chatImageUrl,
   fetchMessages,
   fetchRoomHeader,
   markRead,
+  sendImageMessage,
   sendMessage,
   subscribeToRoom,
   type Message,
   type RoomHeader,
 } from '../../src/lib/chat';
-import { Star } from 'lucide-react-native';
+import { pickImages } from '../../src/lib/listings';
+import { ImagePlus, Star } from 'lucide-react-native';
 import { MeetupCard } from '../../src/components/MeetupCard';
 import { OfferCard } from '../../src/components/OfferCard';
 import { TrustBadge } from '../../src/components/TrustBadge';
 import { fetchTrust, hasReviewed, type ProfileTrust } from '../../src/lib/reviews';
 import { useSession } from '../../src/lib/session';
 import { colors, radius, spacing } from '../../src/theme';
+
+function ChatImage({ path }: { path: string }) {
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    chatImageUrl(path).then(setUrl).catch(() => {});
+  }, [path]);
+  return url ? (
+    <Image source={{ uri: url }} style={styles.chatImage} />
+  ) : (
+    <View style={styles.chatImage} />
+  );
+}
 
 export default function ChatRoomScreen() {
   const { t } = useTranslation();
@@ -159,17 +175,35 @@ export default function ChatRoomScreen() {
             return (
               <View style={[styles.bubbleRow, mine && { justifyContent: 'flex-end' }]}>
                 {mine && <Text style={styles.time}>{time}</Text>}
-                <View style={[styles.bubble, mine ? styles.bubbleMine : styles.bubbleTheirs]}>
-                  <Text style={[styles.bubbleText, mine && { color: colors.white }]}>
-                    {item.body}
-                  </Text>
-                </View>
+                {item.image_path ? (
+                  <ChatImage path={item.image_path} />
+                ) : (
+                  <View style={[styles.bubble, mine ? styles.bubbleMine : styles.bubbleTheirs]}>
+                    <Text style={[styles.bubbleText, mine && { color: colors.white }]}>
+                      {item.body}
+                    </Text>
+                  </View>
+                )}
                 {!mine && <Text style={styles.time}>{time}</Text>}
               </View>
             );
           }}
         />
         <View style={styles.inputRow}>
+          <Pressable
+            onPress={async () => {
+              if (!roomId || !session) return;
+              const assets = await pickImages(1);
+              if (assets[0]) {
+                await sendImageMessage(roomId, session.user.id, assets[0]).catch(() => {});
+              }
+            }}
+            hitSlop={8}
+            accessibilityRole="button"
+            style={{ paddingBottom: 10 }}
+          >
+            <ImagePlus size={22} color={colors.textSecondary} />
+          </Pressable>
           <TextInput
             style={styles.input}
             placeholder={t('chat.typeMessage')}
@@ -211,6 +245,12 @@ const styles = StyleSheet.create({
   bubbleMine: { backgroundColor: colors.primary },
   bubbleTheirs: { backgroundColor: colors.surface },
   bubbleText: { fontSize: 15, color: colors.text },
+  chatImage: {
+    width: 200,
+    height: 200,
+    borderRadius: radius.lg,
+    backgroundColor: colors.surface,
+  },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'flex-end',

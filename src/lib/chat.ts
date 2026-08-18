@@ -172,3 +172,29 @@ export async function fetchUnreadCount(userId: string): Promise<number> {
   const rooms = await fetchRooms(userId);
   return rooms.filter((r) => r.unread).length;
 }
+
+/** Send an image message: uploads to the room-scoped bucket, then inserts. */
+export async function sendImageMessage(
+  roomId: string,
+  senderId: string,
+  asset: { uri: string; mimeType?: string },
+): Promise<void> {
+  const ext = asset.uri.split('.').pop()?.toLowerCase() ?? 'jpg';
+  const path = `${roomId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  const response = await fetch(asset.uri);
+  const arrayBuffer = await response.arrayBuffer();
+  const { error: uploadError } = await supabase.storage
+    .from('chat-images')
+    .upload(path, arrayBuffer, { contentType: asset.mimeType ?? 'image/jpeg' });
+  if (uploadError) throw uploadError;
+  const { error } = await supabase
+    .from('messages')
+    .insert({ room_id: roomId, sender_id: senderId, body: '📷', image_path: path });
+  if (error) throw error;
+}
+
+/** Signed URL for a chat image (bucket is private, participants-only). */
+export async function chatImageUrl(path: string): Promise<string | null> {
+  const { data } = await supabase.storage.from('chat-images').createSignedUrl(path, 3600);
+  return data?.signedUrl ?? null;
+}

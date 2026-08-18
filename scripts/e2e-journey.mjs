@@ -708,6 +708,28 @@ await step('unblock: blocked list readable + unblock restores chat', async () =>
   assert(!chatError, `chat still blocked: ${chatError?.message}`);
 });
 
+
+await step('chat image: room-scoped upload + participant signed URL + outsider blocked', async () => {
+  const png = PNG;
+  const path = `${roomId}/e2e-chat.png`;
+  const { error: upError } = await buyer.client.storage
+    .from('chat-images')
+    .upload(path, png, { contentType: 'image/png', upsert: true });
+  assert(!upError, upError?.message);
+  const { error: msgError } = await buyer.client
+    .from('messages')
+    .insert({ room_id: roomId, sender_id: buyer.id, body: '📷', image_path: path });
+  assert(!msgError, msgError?.message);
+  const { data: signed } = await seller.client.storage
+    .from('chat-images')
+    .createSignedUrl(path, 60);
+  assert(signed?.signedUrl, 'participant could not sign chat image');
+  const { data: randoSigned } = await rando.client.storage
+    .from('chat-images')
+    .createSignedUrl(path, 60);
+  assert(!randoSigned?.signedUrl, 'outsider signed a chat image (RLS HOLE)');
+});
+
 console.log(results.join('\n'));
 console.log(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURES`}`);
 process.exit(failures === 0 ? 0 : 1);
