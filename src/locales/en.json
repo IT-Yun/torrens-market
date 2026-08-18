@@ -132,7 +132,8 @@
     "noResults": "No results — try different keywords or filters.",
     "keywordCta": "Get notified when it's posted",
     "recent": "Recent searches",
-    "clearRecent": "Clear"
+    "clearRecent": "Clear",
+    "underPrice": "Under {{price}}"
   },
   "keywords": {
     "title": "Keyword alerts",

@@ -35,6 +35,7 @@ export default function SearchScreen() {
   const [categoryId, setCategoryId] = useState<number | null>(null);
   const [nationality, setNationality] = useState<string | null>(null);
   const [verifiedOnly, setVerifiedOnly] = useState(false);
+  const [maxPrice, setMaxPrice] = useState<number | null>(null);
   const [results, setResults] = useState<ListingCard[]>([]);
   const [pos, setPos] = useState<{ lat: number; lng: number } | null>(null);
 
@@ -65,17 +66,23 @@ export default function SearchScreen() {
   const run = useCallback(
     async (override?: string) => {
       const term = override ?? query;
-      const items = await searchListings({ query: term, categoryId, nationality, verifiedOnly });
+      const items = await searchListings({
+        query: term,
+        categoryId,
+        nationality,
+        verifiedOnly,
+        maxPriceCents: maxPrice,
+      });
       setResults(items);
       setSearched(true);
       if (term.trim()) saveRecent(term.trim());
     },
-    [query, categoryId, nationality, verifiedOnly, recents],
+    [query, categoryId, nationality, verifiedOnly, maxPrice, recents],
   );
 
   useEffect(() => {
     run().catch(() => {});
-  }, [categoryId, nationality, verifiedOnly]);
+  }, [categoryId, nationality, verifiedOnly, maxPrice]);
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
@@ -133,6 +140,22 @@ export default function SearchScreen() {
               >
                 <Text style={[styles.chipText, selected && { color: colors.white }]}>
                   {t(`nationalities.${code}`)}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </ScrollView>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
+          {[2000, 5000, 10000, 20000, 50000].map((cents) => {
+            const selected = maxPrice === cents;
+            return (
+              <Pressable
+                key={cents}
+                style={[styles.chip, selected && styles.chipSelected]}
+                onPress={() => setMaxPrice(selected ? null : cents)}
+              >
+                <Text style={[styles.chipText, selected && { color: colors.white }]}>
+                  {t('search.underPrice', { price: `$${cents / 100}` })}
                 </Text>
               </Pressable>
             );
