@@ -234,6 +234,23 @@ export async function fetchMyListings(userId: string): Promise<ListingCard[]> {
   return withFavoriteCounts((data as ListingCard[]) ?? []);
 }
 
+export async function updateListing(
+  listingId: string,
+  fields: {
+    category_id: number;
+    title: string;
+    description: string;
+    price_cents: number;
+    condition: string;
+    pickup_mode: string;
+    suburb: string;
+    attributes: Record<string, unknown>;
+  },
+): Promise<void> {
+  const { error } = await supabase.from('listings').update(fields).eq('id', listingId);
+  if (error) throw error;
+}
+
 export async function updateListingStatus(
   listingId: string,
   status: 'active' | 'reserved' | 'sold' | 'deleted',

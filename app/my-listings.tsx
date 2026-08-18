@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Package } from 'lucide-react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { Alert } from 'react-native';
-import { ArrowUp, Trash2 } from 'lucide-react-native';
+import { ArrowUp, Pencil, Trash2 } from 'lucide-react-native';
 import {
   bumpListing,
   canBump,
@@ -83,6 +83,18 @@ export default function MyListingsScreen() {
                 </View>
               </Pressable>
               <View style={{ gap: 6 }}>
+                <Pressable
+                  style={styles.deleteButton}
+                  onPress={() =>
+                    router.push({ pathname: '/listing/create', params: { editId: item.id } })
+                  }
+                  accessibilityRole="button"
+                >
+                  <Pencil size={13} color={colors.textSecondary} />
+                  <Text style={[styles.actionText, { color: colors.textSecondary }]}>
+                    {t('myListings.edit')}
+                  </Text>
+                </Pressable>
                 {item.status === 'active' && (
                   <Pressable
                     style={[styles.actionButton, styles.bumpButton, !canBump(item.bumped_at) && { opacity: 0.4 }]}

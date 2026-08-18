@@ -92,7 +92,10 @@
     "uploading": "Uploading photo {{done}}/{{total}}...",
     "locationNote": "Only your approximate location (~1 km) is saved.",
     "suggestedCategory": "Suggested category: {{name}}",
-    "photoTip": "Tip: shoot all angles and any flaws — honest photos sell faster."
+    "photoTip": "Tip: shoot all angles and any flaws — honest photos sell faster.",
+    "editTitle": "Edit listing",
+    "updated": "Listing updated!",
+    "save": "Save changes"
   },
   "listingDetail": {
     "chat": "Chat with seller",
@@ -156,7 +159,8 @@
     "bumpCooldown": "You can bump once every 24 hours.",
     "delete": "Delete",
     "deleteTitle": "Delete listing?",
-    "deleteConfirm": "This hides the listing permanently. Chats and reviews are kept."
+    "deleteConfirm": "This hides the listing permanently. Chats and reviews are kept.",
+    "edit": "Edit"
   },
   "report": {
     "menuTitle": "Report or block",

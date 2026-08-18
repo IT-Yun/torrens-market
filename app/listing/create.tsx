@@ -11,14 +11,16 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import type { ImagePickerAsset } from 'expo-image-picker';
 import { Button, Field } from '../../src/components/ui';
 import i18n from '../../src/lib/i18n';
 import {
   createListing,
   fetchCategories,
+  fetchListing,
   pickImages,
+  updateListing,
   type Category,
   type FieldDef,
 } from '../../src/lib/listings';
@@ -91,6 +93,7 @@ function CustomField({
 export default function CreateListingScreen() {
   const { t } = useTranslation();
   const { session, profile } = useSession();
+  const { editId } = useLocalSearchParams<{ editId?: string }>();
   const lang = i18n.language;
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -105,6 +108,23 @@ export default function CreateListingScreen() {
   const [attributes, setAttributes] = useState<Record<string, unknown>>({});
   const [busy, setBusy] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<[number, number] | null>(null);
+
+  useEffect(() => {
+    if (!editId) return;
+    fetchListing(editId)
+      .then((l) => {
+        if (!l) return;
+        setCategoryId(l.category_id);
+        setTitle(l.title);
+        setPrice(l.price_cents === 0 ? '0' : String(l.price_cents / 100));
+        setDescription(l.description);
+        setCondition(l.condition);
+        setPickupMode(l.pickup_mode);
+        setSuburb(l.suburb);
+        setAttributes(l.attributes ?? {});
+      })
+      .catch(() => {});
+  }, [editId]);
 
   useEffect(() => {
     fetchCategories().then(setCategories).catch(() => {});
@@ -128,13 +148,28 @@ export default function CreateListingScreen() {
     title.trim() !== '' &&
     price.trim() !== '' &&
     suburb.trim() !== '' &&
-    photos.length > 0 &&
+    (editId != null || photos.length > 0) &&
     requiredFieldsFilled;
 
   async function post() {
     if (!session || categoryId == null) return;
     setBusy(true);
     try {
+      if (editId) {
+        await updateListing(editId, {
+          category_id: categoryId,
+          title: title.trim(),
+          description: description.trim(),
+          price_cents: Math.round(parseFloat(price || '0') * 100),
+          condition,
+          pickup_mode: pickupMode,
+          suburb: suburb.trim(),
+          attributes,
+        });
+        Alert.alert(t('listingCreate.updated'));
+        router.back();
+        return;
+      }
       const approx = await getApproxPosition();
       const id = await createListing(
         {
@@ -169,12 +204,16 @@ export default function CreateListingScreen() {
         <Pressable onPress={() => router.back()}>
           <X size={24} color={colors.text} />
         </Pressable>
-        <Text style={styles.headerTitle}>{t('listingCreate.title')}</Text>
+        <Text style={styles.headerTitle}>
+          {t(editId ? 'listingCreate.editTitle' : 'listingCreate.title')}
+        </Text>
         <View style={{ width: 24 }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
-        {/* photos */}
+        {/* photos (unchanged in edit mode) */}
+        {!editId && (
+          <>
         <Text style={styles.sectionTitle}>
           {t('listingCreate.photos')} ({photos.length}/{MAX_PHOTOS})
         </Text>
@@ -201,6 +240,8 @@ export default function CreateListingScreen() {
             ))}
           </View>
         </ScrollView>
+          </>
+        )}
 
         {/* category */}
         <Text style={styles.sectionTitle}>{t('listingCreate.category')}</Text>
@@ -312,7 +353,12 @@ export default function CreateListingScreen() {
             })}
           </Text>
         )}
-        <Button title={t('listingCreate.post')} loading={busy} disabled={!canPost} onPress={post} />
+        <Button
+          title={t(editId ? 'listingCreate.save' : 'listingCreate.post')}
+          loading={busy}
+          disabled={!canPost}
+          onPress={post}
+        />
       </ScrollView>
     </SafeAreaView>
   );

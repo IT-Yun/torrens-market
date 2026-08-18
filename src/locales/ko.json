@@ -92,7 +92,10 @@
     "uploading": "사진 {{done}}/{{total}} 업로드 중...",
     "locationNote": "대략적인 위치(약 1km 단위)만 저장돼요.",
     "suggestedCategory": "추천 카테고리: {{name}}",
-    "photoTip": "팁: 여러 각도로, 하자 부위까지 찍어주세요 — 정직한 사진이 더 빨리 팔려요."
+    "photoTip": "팁: 여러 각도로, 하자 부위까지 찍어주세요 — 정직한 사진이 더 빨리 팔려요.",
+    "editTitle": "매물 수정",
+    "updated": "수정됐어요!",
+    "save": "저장하기"
   },
   "listingDetail": {
     "chat": "판매자와 채팅",
@@ -156,7 +159,8 @@
     "bumpCooldown": "끌어올리기는 24시간에 한 번 가능해요.",
     "delete": "삭제",
     "deleteTitle": "매물을 삭제할까요?",
-    "deleteConfirm": "매물이 영구적으로 숨겨져요. 채팅과 후기는 남아요."
+    "deleteConfirm": "매물이 영구적으로 숨겨져요. 채팅과 후기는 남아요.",
+    "edit": "수정"
   },
   "report": {
     "menuTitle": "신고 또는 차단",

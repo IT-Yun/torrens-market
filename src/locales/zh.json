@@ -92,7 +92,10 @@
     "uploading": "正在上传照片 {{done}}/{{total}}...",
     "locationNote": "只会保存你的大致位置（约1公里精度）。",
     "suggestedCategory": "推荐分类：{{name}}",
-    "photoTip": "提示：多角度拍摄，包括瑕疵部位——真实的照片卖得更快。"
+    "photoTip": "提示：多角度拍摄，包括瑕疵部位——真实的照片卖得更快。",
+    "editTitle": "编辑商品",
+    "updated": "已更新！",
+    "save": "保存修改"
   },
   "listingDetail": {
     "chat": "联系卖家",
@@ -156,7 +159,8 @@
     "bumpCooldown": "每24小时可顶一次。",
     "delete": "删除",
     "deleteTitle": "删除商品？",
-    "deleteConfirm": "商品将被永久隐藏。聊天和评价会保留。"
+    "deleteConfirm": "商品将被永久隐藏。聊天和评价会保留。",
+    "edit": "编辑"
   },
   "report": {
     "menuTitle": "举报或屏蔽",
