@@ -1,7 +1,9 @@
+# Security updates only: version-update PRs are disabled because Expo
+# dependency versions must move together via `npx expo install`.
 version: 2
 updates:
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 0
