@@ -106,7 +106,8 @@
     "distance": "~{{km}} km",
     "walkTime": "walk ~{{min}} min",
     "driveTime": "drive ~{{min}} min",
-    "moreFromSeller": "More from {{name}}"
+    "moreFromSeller": "More from {{name}}",
+    "views": "{{count}} views"
   },
   "conditions": {
     "new": "New",

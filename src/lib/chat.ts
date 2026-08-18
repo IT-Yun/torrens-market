@@ -13,7 +13,12 @@ export type Message = {
 export type ChatRoomSummary = {
   room_id: string;
   listing: { id: string; title: string; photo: string | null };
-  other: { id: string; display_name: string };
+  other: {
+    id: string;
+    display_name: string;
+    avatar_url: string | null;
+    nationality: string | null;
+  };
   lastMessage: { body: string; created_at: string } | null;
   unread: boolean;
 };
@@ -32,7 +37,7 @@ export async function fetchRooms(userId: string): Promise<ChatRoomSummary[]> {
        chat_rooms (
          id, created_at,
          listings (id, title, listing_photos (storage_path, sort_order)),
-         chat_participants (user_id, last_read_at, profiles (display_name)),
+         chat_participants (user_id, last_read_at, profiles (display_name, avatar_url, nationality)),
          messages (body, created_at, sender_id)
        )`,
     )
@@ -49,7 +54,11 @@ export async function fetchRooms(userId: string): Promise<ChatRoomSummary[]> {
         title: string;
         listing_photos: { storage_path: string; sort_order: number }[];
       };
-      chat_participants: { user_id: string; last_read_at: string; profiles: { display_name: string } }[];
+      chat_participants: {
+        user_id: string;
+        last_read_at: string;
+        profiles: { display_name: string; avatar_url: string | null; nationality: string | null };
+      }[];
       messages: { body: string; created_at: string; sender_id: string }[];
     };
   };
@@ -76,6 +85,8 @@ export async function fetchRooms(userId: string): Promise<ChatRoomSummary[]> {
         other: {
           id: other?.user_id ?? '',
           display_name: other?.profiles?.display_name ?? '?',
+          avatar_url: other?.profiles?.avatar_url ?? null,
+          nationality: other?.profiles?.nationality ?? null,
         },
         lastMessage: room.messages[0] ?? null,
       };

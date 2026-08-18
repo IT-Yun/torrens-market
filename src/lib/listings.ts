@@ -66,6 +66,7 @@ export type ListingDetail = ListingCard & {
   description: string;
   condition: string;
   seller_id: string;
+  view_count: number;
   profiles: {
     display_name: string;
     avatar_url: string | null;
@@ -139,7 +140,7 @@ export async function fetchListing(id: string): Promise<ListingDetail | null> {
     .from('listings')
     .select(
       `id, title, description, price_cents, suburb, status, created_at, category_id, attributes,
-       lat, lng, condition, pickup_mode, seller_id,
+       lat, lng, condition, pickup_mode, seller_id, view_count,
        listing_photos (storage_path, sort_order),
        profiles!listings_seller_id_fkey (display_name, avatar_url, suburb, nationality, is_phone_verified)`,
     )
@@ -219,6 +220,14 @@ export async function createListing(input: {
   }
   onProgress?.(input.photos.length, input.photos.length);
   return listingId;
+}
+
+/** Fire-and-forget view counter (definer RPC — no update rights needed). */
+export function recordView(listingId: string): void {
+  supabase.rpc('increment_view', { p_listing_id: listingId }).then(
+    () => {},
+    () => {},
+  );
 }
 
 /** Up to 10 other active listings by the same seller (detail-page strip). */

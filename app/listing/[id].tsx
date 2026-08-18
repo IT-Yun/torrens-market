@@ -25,6 +25,7 @@ import {
   fetchSellerListings,
   formatPrice,
   photoUrl,
+  recordView,
   type Category,
   type ListingCard,
   type ListingDetail,
@@ -63,6 +64,7 @@ export default function ListingDetailScreen() {
   useEffect(() => {
     if (id) {
       fetchListing(id).then(setListing).catch(() => {});
+      recordView(id);
       if (session) isFavorite(session.user.id, id).then(setLiked).catch(() => {});
     }
     fetchCategories().then(setCategories).catch(() => {});
@@ -225,7 +227,14 @@ export default function ListingDetailScreen() {
           <Text style={styles.title}>{listing.title}</Text>
           <Text style={styles.price}>{formatPrice(listing.price_cents)}</Text>
           <Text style={styles.meta}>
-            {[listing.suburb, t(`conditions.${listing.condition}`), t(`pickupModes.${listing.pickup_mode}`)].join(' · ')}
+            {[
+              listing.suburb,
+              t(`conditions.${listing.condition}`),
+              t(`pickupModes.${listing.pickup_mode}`),
+              listing.view_count > 0 ? t('listingDetail.views', { count: listing.view_count }) : null,
+            ]
+              .filter(Boolean)
+              .join(' · ')}
           </Text>
           {distanceKm != null &&
             (() => {

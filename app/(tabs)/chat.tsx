@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MessageCircle, Package } from 'lucide-react-native';
+import { Avatar } from '../../src/components/Avatar';
 import { router, useFocusEffect } from 'expo-router';
 import { timeAgo } from '../../src/components/ListingRow';
 import { fetchRooms, type ChatRoomSummary } from '../../src/lib/chat';
@@ -28,13 +29,21 @@ export default function ChatListScreen() {
         keyExtractor={(item) => item.room_id}
         renderItem={({ item }) => (
           <Pressable style={styles.row} onPress={() => router.push(`/chat/${item.room_id}`)}>
-            {item.listing.photo ? (
-              <Image source={{ uri: photoUrl(item.listing.photo) }} style={styles.thumb} />
-            ) : (
-              <View style={[styles.thumb, styles.thumbPlaceholder]}>
-                <Package size={20} color={colors.textSecondary} />
-              </View>
-            )}
+            <View>
+              <Avatar
+                name={item.other.display_name}
+                url={item.other.avatar_url}
+                nationality={item.other.nationality}
+                size={48}
+              />
+              {item.listing.photo ? (
+                <Image source={{ uri: photoUrl(item.listing.photo) }} style={styles.miniThumb} />
+              ) : (
+                <View style={[styles.miniThumb, styles.thumbPlaceholder]}>
+                  <Package size={12} color={colors.textSecondary} />
+                </View>
+              )}
+            </View>
             <View style={{ flex: 1, gap: 2 }}>
               <Text style={[styles.name, item.unread && styles.nameUnread]}>
                 {item.other.display_name}
@@ -78,6 +87,17 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
   },
   thumb: { width: 52, height: 52, borderRadius: radius.md, backgroundColor: colors.surface },
+  miniThumb: {
+    position: 'absolute',
+    right: -6,
+    bottom: -2,
+    width: 24,
+    height: 24,
+    borderRadius: radius.sm,
+    borderWidth: 2,
+    borderColor: colors.background,
+    backgroundColor: colors.surface,
+  },
   thumbPlaceholder: { alignItems: 'center', justifyContent: 'center' },
   name: { fontSize: 15, fontWeight: '600', color: colors.text },
   nameUnread: { fontWeight: '800' },

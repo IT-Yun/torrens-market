@@ -679,6 +679,18 @@ await step('edit: seller updates price/title, buyer sees changes', async () => {
   assert(data.title.endsWith('(edited)') && data.price_cents === 4000, JSON.stringify(data));
 });
 
+
+await step('view count: increment_view RPC bumps counter', async () => {
+  await buyer.client.rpc('increment_view', { p_listing_id: listingId });
+  await buyer.client.rpc('increment_view', { p_listing_id: listingId });
+  const { data } = await buyer.client
+    .from('listings')
+    .select('view_count')
+    .eq('id', listingId)
+    .single();
+  assert(data.view_count >= 2, `view_count=${data.view_count}`);
+});
+
 console.log(results.join('\n'));
 console.log(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURES`}`);
 process.exit(failures === 0 ? 0 : 1);
