@@ -790,6 +790,12 @@ await step('price drop: function responds 200 for a favorited listing', async ()
   assert(res.status === 200, `status ${res.status}: ${await res.text()}`);
 });
 
+
+// ── teardown: keep users, remove test artifacts from the live feed ─────
+await admin.from('listings').delete().eq('seller_id', seller.id);
+await admin.from('keyword_alerts').delete().eq('user_id', buyer.id);
+await admin.from('blocked_users').delete().eq('blocker_id', buyer.id);
+
 console.log(results.join('\n'));
 console.log(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURES`}`);
 process.exit(failures === 0 ? 0 : 1);
