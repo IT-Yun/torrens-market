@@ -581,10 +581,7 @@ await step('bump: old listing resurfaces to top, cooldown enforced', async () =>
   const a = await mk('E2E bump A');
   await new Promise((r) => setTimeout(r, 1100));
   const b = await mk('E2E bump B');
-  const { error: bumpError } = await seller.client
-    .from('listings')
-    .update({ bumped_at: new Date().toISOString() })
-    .eq('id', a);
+  const { error: bumpError } = await seller.client.rpc('bump_listing', { p_listing_id: a });
   assert(!bumpError, bumpError?.message);
   const { data: feed } = await buyer.client
     .from('listings')
@@ -595,10 +592,7 @@ await step('bump: old listing resurfaces to top, cooldown enforced', async () =>
   const ia = feed.findIndex((l) => l.id === a);
   const ib = feed.findIndex((l) => l.id === b);
   assert(ia !== -1 && ib !== -1 && ia < ib, `order a=${ia} b=${ib}`);
-  const { error: coolError } = await seller.client
-    .from('listings')
-    .update({ bumped_at: new Date().toISOString() })
-    .eq('id', a);
+  const { error: coolError } = await seller.client.rpc('bump_listing', { p_listing_id: a });
   assert(coolError, 'expected cooldown rejection');
 });
 

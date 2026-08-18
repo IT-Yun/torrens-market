@@ -35,12 +35,9 @@ export type ListingCard = {
   listing_photos: { storage_path: string; sort_order: number }[];
 };
 
-/** Karrot-style bump (ADR 010): resurface a listing; DB enforces 24h cooldown. */
+/** Karrot-style bump (ADR 010): server-time stamp; DB enforces 24h cooldown. */
 export async function bumpListing(listingId: string): Promise<void> {
-  const { error } = await supabase
-    .from('listings')
-    .update({ bumped_at: new Date().toISOString() })
-    .eq('id', listingId);
+  const { error } = await supabase.rpc('bump_listing', { p_listing_id: listingId });
   if (error) throw error;
 }
 
