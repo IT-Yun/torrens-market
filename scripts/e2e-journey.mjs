@@ -752,6 +752,34 @@ await step('account deletion: disposable user removes itself, data cascades', as
   assert(!gone, 'profile survived account deletion');
 });
 
+
+await step('auto-hide: 3 distinct reports soft-delete a listing', async () => {
+  const { data: l } = await admin
+    .from('listings')
+    .insert({
+      seller_id: seller.id,
+      category_id: catId,
+      title: 'E2E reported listing',
+      description: 'spam bait',
+      price_cents: 100,
+      condition: 'used',
+      pickup_mode: 'pickup_only',
+      suburb: 'Norwood',
+      attributes: {},
+    })
+    .select('id')
+    .single();
+  const extra = await ensureUser('reporter3.e2e@torrens.test', PW, 'E2E Reporter3');
+  for (const u of [buyer, rando, extra]) {
+    const { error } = await u.client
+      .from('reports')
+      .insert({ reporter_id: u.id, listing_id: l.id, reason: 'spam' });
+    assert(!error, error?.message);
+  }
+  const { data: st } = await admin.from('listings').select('status').eq('id', l.id).single();
+  assert(st.status === 'deleted', `status=${st.status}`);
+});
+
 console.log(results.join('\n'));
 console.log(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURES`}`);
 process.exit(failures === 0 ? 0 : 1);
