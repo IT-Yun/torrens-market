@@ -149,7 +149,10 @@
     "markSold": "판매완료",
     "markActive": "판매중으로",
     "empty": "아직 등록한 매물이 없어요.",
-    "markReserved": "예약중으로"
+    "markReserved": "예약중으로",
+    "bump": "끌어올리기",
+    "bumped": "맨 위로 끌어올렸어요!",
+    "bumpCooldown": "끌어올리기는 24시간에 한 번 가능해요."
   },
   "report": {
     "menuTitle": "신고 또는 차단",

@@ -149,7 +149,10 @@
     "markSold": "标记已售",
     "markActive": "重新上架",
     "empty": "你还没有发布商品。",
-    "markReserved": "标记预订"
+    "markReserved": "标记预订",
+    "bump": "顶一下",
+    "bumped": "已顶到顶部！",
+    "bumpCooldown": "每24小时可顶一次。"
   },
   "report": {
     "menuTitle": "举报或屏蔽",

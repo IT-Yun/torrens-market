@@ -149,7 +149,10 @@
     "markSold": "Mark sold",
     "markActive": "Relist",
     "empty": "You haven't posted anything yet.",
-    "markReserved": "Reserve"
+    "markReserved": "Reserve",
+    "bump": "Bump",
+    "bumped": "Bumped to the top!",
+    "bumpCooldown": "You can bump once every 24 hours."
   },
   "report": {
     "menuTitle": "Report or block",

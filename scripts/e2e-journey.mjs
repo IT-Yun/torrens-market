@@ -558,6 +558,50 @@ await step('buyer: push token upsert', async () => {
   assert(!error, error?.message);
 });
 
+await step('bump: old listing resurfaces to top, cooldown enforced', async () => {
+  // two fresh listings; A is older, B newer → bump A → A must lead sort_ts order
+  const mk = async (title) => {
+    const { data } = await seller.client
+      .from('listings')
+      .insert({
+        seller_id: seller.id,
+        category_id: catId,
+        title,
+        description: 'bump test',
+        price_cents: 100,
+        condition: 'used',
+        pickup_mode: 'pickup_only',
+        suburb: 'Norwood',
+        attributes: {},
+      })
+      .select('id')
+      .single();
+    return data.id;
+  };
+  const a = await mk('E2E bump A');
+  await new Promise((r) => setTimeout(r, 1100));
+  const b = await mk('E2E bump B');
+  const { error: bumpError } = await seller.client
+    .from('listings')
+    .update({ bumped_at: new Date().toISOString() })
+    .eq('id', a);
+  assert(!bumpError, bumpError?.message);
+  const { data: feed } = await buyer.client
+    .from('listings')
+    .select('id')
+    .eq('status', 'active')
+    .order('sort_ts', { ascending: false })
+    .limit(10);
+  const ia = feed.findIndex((l) => l.id === a);
+  const ib = feed.findIndex((l) => l.id === b);
+  assert(ia !== -1 && ib !== -1 && ia < ib, `order a=${ia} b=${ib}`);
+  const { error: coolError } = await seller.client
+    .from('listings')
+    .update({ bumped_at: new Date().toISOString() })
+    .eq('id', a);
+  assert(coolError, 'expected cooldown rejection');
+});
+
 console.log(results.join('\n'));
 console.log(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURES`}`);
 process.exit(failures === 0 ? 0 : 1);

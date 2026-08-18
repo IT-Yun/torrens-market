@@ -4,7 +4,11 @@ import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Package } from 'lucide-react-native';
 import { router, useFocusEffect } from 'expo-router';
+import { Alert } from 'react-native';
+import { ArrowUp } from 'lucide-react-native';
 import {
+  bumpListing,
+  canBump,
   fetchMyListings,
   formatPrice,
   photoUrl,
@@ -79,6 +83,26 @@ export default function MyListingsScreen() {
                 </View>
               </Pressable>
               <View style={{ gap: 6 }}>
+                {item.status === 'active' && (
+                  <Pressable
+                    style={[styles.actionButton, styles.bumpButton, !canBump(item.bumped_at) && { opacity: 0.4 }]}
+                    disabled={!canBump(item.bumped_at)}
+                    onPress={async () => {
+                      try {
+                        await bumpListing(item.id);
+                        Alert.alert(t('myListings.bumped'));
+                        load();
+                      } catch {
+                        Alert.alert(t('myListings.bumpCooldown'));
+                      }
+                    }}
+                  >
+                    <ArrowUp size={13} color={colors.primary} />
+                    <Text style={[styles.actionText, { color: colors.primary }]}>
+                      {t('myListings.bump')}
+                    </Text>
+                  </Pressable>
+                )}
                 {(ACTIONS[item.status] ?? []).map((next) => (
                   <Pressable
                     key={next}
@@ -140,6 +164,15 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     paddingHorizontal: 12,
     paddingVertical: 8,
+  },
+  bumpButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: colors.primary,
   },
   actionButtonSecondary: { backgroundColor: colors.surface },
   actionText: { fontSize: 13, fontWeight: '600', color: colors.white },

@@ -30,9 +30,24 @@ export type ListingCard = {
   lat: number | null;
   lng: number | null;
   pickup_mode: string;
+  bumped_at?: string | null;
   favorites_count?: number;
   listing_photos: { storage_path: string; sort_order: number }[];
 };
+
+/** Karrot-style bump (ADR 010): resurface a listing; DB enforces 24h cooldown. */
+export async function bumpListing(listingId: string): Promise<void> {
+  const { error } = await supabase
+    .from('listings')
+    .update({ bumped_at: new Date().toISOString() })
+    .eq('id', listingId);
+  if (error) throw error;
+}
+
+export function canBump(bumpedAt: string | null | undefined, now: number = Date.now()): boolean {
+  if (!bumpedAt) return true;
+  return now - new Date(bumpedAt).getTime() >= 24 * 3600 * 1000;
+}
 
 /** Merge public favorite counts (owner-rights view) into listing cards. */
 async function withFavoriteCounts<T extends { id: string }>(items: T[]): Promise<T[]> {
@@ -76,10 +91,10 @@ export async function fetchListings(categoryId?: number | null): Promise<Listing
   let query = supabase
     .from('listings')
     .select(
-      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, listing_photos (storage_path, sort_order)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, bumped_at, listing_photos (storage_path, sort_order)',
     )
     .eq('status', 'active')
-    .order('created_at', { ascending: false })
+    .order('sort_ts', { ascending: false })
     .limit(50);
   if (categoryId != null) query = query.eq('category_id', categoryId);
   const { data, error } = await query;
@@ -104,7 +119,7 @@ export async function searchListings(filters: SearchFilters): Promise<ListingCar
        profiles!listings_seller_id_fkey!inner (nationality, is_phone_verified)`,
     )
     .eq('status', 'active')
-    .order('created_at', { ascending: false })
+    .order('sort_ts', { ascending: false })
     .limit(50);
 
   if (filters.query?.trim())
@@ -213,7 +228,7 @@ export async function fetchMyListings(userId: string): Promise<ListingCard[]> {
   const { data, error } = await supabase
     .from('listings')
     .select(
-      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, listing_photos (storage_path, sort_order)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, bumped_at, listing_photos (storage_path, sort_order)',
     )
     .eq('seller_id', userId)
     .neq('status', 'deleted')
