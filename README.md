@@ -35,8 +35,10 @@ Named after Adelaide's River Torrens. Built with React Native + Expo + TypeScrip
 11. **Price offers** — one open offer per room, accept/decline/withdraw, push notified
 
 **Platform**
-12. Trilingual UI — 170+ keys × KO/EN/ZH, per-recipient push language
-13. 40-step live E2E journey suite (`scripts/e2e-journey.mjs`) covering flows *and* RLS negative cases
+12. Chat photos (private room-scoped bucket), public seller profiles, listing view counts, account deletion ([privacy policy](PRIVACY.md))
+13. Auto-moderation: 3 distinct reports hide a listing; blocking gates chat both ways
+14. Trilingual UI — 185 keys × KO/EN/ZH, per-recipient push language
+15. 46-step live E2E journey suite (`scripts/e2e-journey.mjs`) covering flows *and* RLS negative cases, plus GitHub Actions CI
 
 ## Architecture
 
@@ -85,7 +87,7 @@ Full product/design docs: [`docs/`](docs/) — MVP spec, category field system, 
 - [x] M4: realtime chat
 - [x] M5: keyword alerts (Edge Function matcher + Expo push)
 - [x] Reviews + trust tiers, meetups, price offers, bump, edit/delete, message push
-- [x] Live E2E journey suite (41 steps incl. RLS negative tests) — ALL PASS
+- [x] Live E2E journey suite (46 steps incl. RLS negative tests) — ALL PASS + CI
 - [ ] M6: device QA, EAS builds, store release (App Store / Play Store)
 
 ## Running locally
