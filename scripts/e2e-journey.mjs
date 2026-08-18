@@ -516,6 +516,41 @@ await step('seller: my-listings status transitions sold → active → sold', as
   }
 });
 
+await expectFail('seller self-chat on own listing should be blocked', async () => {
+  const { error } = await seller.client.rpc('start_chat', { p_listing_id: listingId });
+  if (error) throw error;
+});
+
+await expectFail('start_chat after blocking should be refused (either direction)', async () => {
+  // buyer blocked seller earlier; a NEW listing forces the create path
+  const { data: l3 } = await admin
+    .from('listings')
+    .insert({
+      seller_id: seller.id,
+      category_id: catId,
+      title: 'E2E block-guard listing',
+      description: 'guard test',
+      price_cents: 500,
+      condition: 'used',
+      pickup_mode: 'pickup_only',
+      suburb: 'Norwood',
+      attributes: {},
+    })
+    .select('id')
+    .single();
+  const { error } = await buyer.client.rpc('start_chat', { p_listing_id: l3.id });
+  if (error) throw error;
+});
+
+await step('keyword-alert-matcher edge function responds 200', async () => {
+  const res = await fetch(`${URL}/functions/v1/keyword-alert-matcher`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ANON}` },
+    body: JSON.stringify({ listing_id: listingId }),
+  });
+  assert(res.status === 200, `status ${res.status}: ${await res.text()}`);
+});
+
 await step('buyer: push token upsert', async () => {
   const { error } = await buyer.client
     .from('push_tokens')
