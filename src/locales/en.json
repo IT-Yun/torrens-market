@@ -160,7 +160,9 @@
     "delete": "Delete",
     "deleteTitle": "Delete listing?",
     "deleteConfirm": "This hides the listing permanently. Chats and reviews are kept.",
-    "edit": "Edit"
+    "edit": "Edit",
+    "manage": "Manage",
+    "manageTitle": "Manage listing"
   },
   "report": {
     "menuTitle": "Report or block",

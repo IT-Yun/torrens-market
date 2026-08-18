@@ -160,7 +160,9 @@
     "delete": "删除",
     "deleteTitle": "删除商品？",
     "deleteConfirm": "商品将被永久隐藏。聊天和评价会保留。",
-    "edit": "编辑"
+    "edit": "编辑",
+    "manage": "管理",
+    "manageTitle": "管理商品"
   },
   "report": {
     "menuTitle": "举报或屏蔽",

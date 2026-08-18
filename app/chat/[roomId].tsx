@@ -24,7 +24,8 @@ import {
 import { Star } from 'lucide-react-native';
 import { MeetupCard } from '../../src/components/MeetupCard';
 import { OfferCard } from '../../src/components/OfferCard';
-import { hasReviewed } from '../../src/lib/reviews';
+import { TrustBadge } from '../../src/components/TrustBadge';
+import { fetchTrust, hasReviewed, type ProfileTrust } from '../../src/lib/reviews';
 import { useSession } from '../../src/lib/session';
 import { colors, radius, spacing } from '../../src/theme';
 
@@ -36,6 +37,7 @@ export default function ChatRoomScreen() {
   const [draft, setDraft] = useState('');
   const [header, setHeader] = useState<RoomHeader | null>(null);
   const [canReview, setCanReview] = useState(false);
+  const [otherTrust, setOtherTrust] = useState<ProfileTrust | null>(null);
   const seenIds = useRef(new Set<string>());
 
   const loadHeader = useCallback(() => {
@@ -43,6 +45,7 @@ export default function ChatRoomScreen() {
     fetchRoomHeader(roomId, session.user.id)
       .then((h) => {
         setHeader(h);
+        if (h?.otherId) fetchTrust(h.otherId).then(setOtherTrust).catch(() => {});
         if (h && h.listingStatus !== 'active') {
           hasReviewed(h.listingId, session.user.id)
             .then((done) => setCanReview(!done))
@@ -101,7 +104,10 @@ export default function ChatRoomScreen() {
             style={styles.headerCenter}
             onPress={() => router.push(`/listing/${header.listingId}`)}
           >
-            <Text style={styles.headerName}>{header.otherName}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <Text style={styles.headerName}>{header.otherName}</Text>
+              <TrustBadge trust={otherTrust} compact />
+            </View>
             <Text style={styles.headerListing} numberOfLines={1}>
               {header.listingTitle}
             </Text>

@@ -664,6 +664,21 @@ await step('price offer: propose → double-open blocked → accept', async () =
   assert(!accError, accError?.message);
 });
 
+
+await step('edit: seller updates price/title, buyer sees changes', async () => {
+  const { error } = await seller.client
+    .from('listings')
+    .update({ title: 'E2E IKEA desk white (edited)', price_cents: 4000 })
+    .eq('id', listingId);
+  assert(!error, error?.message);
+  const { data } = await buyer.client
+    .from('listings')
+    .select('title, price_cents')
+    .eq('id', listingId)
+    .single();
+  assert(data.title.endsWith('(edited)') && data.price_cents === 4000, JSON.stringify(data));
+});
+
 console.log(results.join('\n'));
 console.log(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURES`}`);
 process.exit(failures === 0 ? 0 : 1);

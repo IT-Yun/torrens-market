@@ -160,7 +160,9 @@
     "delete": "삭제",
     "deleteTitle": "매물을 삭제할까요?",
     "deleteConfirm": "매물이 영구적으로 숨겨져요. 채팅과 후기는 남아요.",
-    "edit": "수정"
+    "edit": "수정",
+    "manage": "관리",
+    "manageTitle": "매물 관리"
   },
   "report": {
     "menuTitle": "신고 또는 차단",
