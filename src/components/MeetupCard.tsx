@@ -181,6 +181,8 @@ export function MeetupCard({
                 value={when}
                 mode="datetime"
                 display="spinner"
+                themeVariant="light"
+                textColor={colors.text}
                 minimumDate={new Date()}
                 minuteInterval={5}
                 style={styles.iosPicker}
