@@ -253,21 +253,22 @@ export function recordView(listingId: string): void {
   );
 }
 
-/** Up to 10 other active listings by the same seller (detail-page strip). */
+/** Active listings by a seller (detail-page strip, public profile). */
 export async function fetchSellerListings(
   sellerId: string,
-  excludeId: string,
+  excludeId?: string,
 ): Promise<ListingCard[]> {
-  const { data, error } = await supabase
+  let query = supabase
     .from('listings')
     .select(
       'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, bumped_at, listing_photos (storage_path, sort_order)',
     )
     .eq('seller_id', sellerId)
     .eq('status', 'active')
-    .neq('id', excludeId)
     .order('sort_ts', { ascending: false })
-    .limit(10);
+    .limit(20);
+  if (excludeId) query = query.neq('id', excludeId);
+  const { data, error } = await query;
   if (error) throw error;
   return (data as ListingCard[]) ?? [];
 }

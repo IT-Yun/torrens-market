@@ -809,6 +809,19 @@ await admin.from('listings').delete().eq('seller_id', seller.id);
 await admin.from('keyword_alerts').delete().eq('user_id', buyer.id);
 await admin.from('blocked_users').delete().eq('blocker_id', buyer.id);
 
+
+await step('public profile: seller listings query without exclude works', async () => {
+  const { data, error } = await rando.client
+    .from('listings')
+    .select('id')
+    .eq('seller_id', seller.id)
+    .eq('status', 'active')
+    .order('sort_ts', { ascending: false })
+    .limit(20);
+  assert(!error, error?.message);
+  assert(Array.isArray(data), 'no data');
+});
+
 console.log(results.join('\n'));
 console.log(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURES`}`);
 process.exit(failures === 0 ? 0 : 1);

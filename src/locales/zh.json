@@ -66,7 +66,8 @@
     "sectionSettings": "设置",
     "stats": "在售 {{active}} · 已售 {{sold}}",
     "deleteAccount": "删除账号",
-    "deleteAccountConfirm": "将永久删除你的账号、商品、聊天和评价，无法恢复。"
+    "deleteAccountConfirm": "将永久删除你的账号、商品、聊天和评价，无法恢复。",
+    "sellingSection": "在售商品"
   },
   "favorites": {
     "empty": "你收藏的商品会显示在这里。"

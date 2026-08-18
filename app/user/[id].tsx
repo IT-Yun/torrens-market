@@ -42,7 +42,7 @@ export default function PublicProfileScreen() {
       .then(({ data }) => setProfile((data as PublicProfile) ?? null));
     fetchTrust(id).then(setTrust).catch(() => {});
     fetchListingStats(id).then(setStats).catch(() => {});
-    fetchSellerListings(id, '').then(setListings).catch(() => {});
+    fetchSellerListings(id).then(setListings).catch(() => {});
     getPositionIfGranted().then((p) => p && setPos(p)).catch(() => {});
   }, [id]);
 
@@ -62,6 +62,7 @@ export default function PublicProfileScreen() {
         renderItem={({ item }) => <ListingRow item={item} viewerPos={pos} />}
         ListHeaderComponent={
           profile && (
+            <>
             <View style={styles.card}>
               <View style={styles.cardTop}>
                 <Avatar
@@ -114,11 +115,12 @@ export default function PublicProfileScreen() {
                 </Pressable>
               </View>
             </View>
+            <Text style={styles.sectionTitle}>{t('profile.sellingSection')}</Text>
+          </>
           )
         }
-        ListEmptyComponent={
-          <Text style={styles.empty}>{t('home.empty')}</Text>
-        }
+        ListFooterComponent={<View style={{ height: spacing.xl }} />}
+        ListEmptyComponent={<Text style={styles.empty}>{t('home.empty')}</Text>}
       />
     </SafeAreaView>
   );
@@ -153,6 +155,13 @@ const styles = StyleSheet.create({
   statDivider: { width: 1, height: 28, backgroundColor: colors.border },
   statValue: { fontSize: 18, fontWeight: '800', color: colors.text },
   statLabel: { fontSize: 12, color: colors.textSecondary },
+  sectionTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.textSecondary,
+    paddingHorizontal: spacing.md,
+    paddingBottom: spacing.xs,
+  },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   name: { fontSize: 18, fontWeight: '700', color: colors.text },
   meta: { fontSize: 13, color: colors.textSecondary },
