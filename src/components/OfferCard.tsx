@@ -1,6 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { HandCoins, X } from 'lucide-react-native';
 import { formatPrice } from '../lib/format';
 import { fetchOffer, proposeOffer, setOfferStatus, type Offer } from '../lib/offers';
@@ -114,7 +124,10 @@ export function OfferCard({ roomId, myId }: { roomId: string; myId: string }) {
       )}
 
       <Modal visible={modalOpen} transparent animationType="slide">
-        <View style={styles.modalBackdrop}>
+        <KeyboardAvoidingView
+          style={styles.modalBackdrop}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
           <View style={styles.modal}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>{t('offer.title')}</Text>
@@ -145,7 +158,7 @@ export function OfferCard({ roomId, myId }: { roomId: string; myId: string }) {
               <Text style={styles.sendText}>{t('offer.send')}</Text>
             </Pressable>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );
