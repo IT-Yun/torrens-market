@@ -62,7 +62,8 @@
     "editProfile": "프로필 수정",
     "sectionTrading": "거래",
     "sectionAlerts": "알림",
-    "sectionSettings": "설정"
+    "sectionSettings": "설정",
+    "stats": "판매중 {{active}} · 거래완료 {{sold}}"
   },
   "favorites": {
     "empty": "♥ 누른 매물이 여기에 모여요."
@@ -138,7 +139,10 @@
     "keywordCta": "올라오면 알림 받기",
     "recent": "최근 검색어",
     "clearRecent": "지우기",
-    "underPrice": "{{price}} 이하"
+    "underPrice": "{{price}} 이하",
+    "sort_recent": "최신순",
+    "sort_cheap": "낮은 가격순",
+    "sort_expensive": "높은 가격순"
   },
   "keywords": {
     "title": "키워드 알림",

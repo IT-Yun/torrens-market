@@ -62,7 +62,8 @@
     "editProfile": "编辑资料",
     "sectionTrading": "交易",
     "sectionAlerts": "通知",
-    "sectionSettings": "设置"
+    "sectionSettings": "设置",
+    "stats": "在售 {{active}} · 已售 {{sold}}"
   },
   "favorites": {
     "empty": "你收藏的商品会显示在这里。"
@@ -138,7 +139,10 @@
     "keywordCta": "有货时通知我",
     "recent": "最近搜索",
     "clearRecent": "清除",
-    "underPrice": "{{price}}以下"
+    "underPrice": "{{price}}以下",
+    "sort_recent": "最新",
+    "sort_cheap": "价格从低到高",
+    "sort_expensive": "价格从高到低"
   },
   "keywords": {
     "title": "关键词提醒",

@@ -62,7 +62,8 @@
     "editProfile": "Edit profile",
     "sectionTrading": "Trading",
     "sectionAlerts": "Alerts",
-    "sectionSettings": "Settings"
+    "sectionSettings": "Settings",
+    "stats": "Selling {{active}} · Sold {{sold}}"
   },
   "favorites": {
     "empty": "Listings you ♥ will appear here."
@@ -138,7 +139,10 @@
     "keywordCta": "Get notified when it's posted",
     "recent": "Recent searches",
     "clearRecent": "Clear",
-    "underPrice": "Under {{price}}"
+    "underPrice": "Under {{price}}",
+    "sort_recent": "Newest",
+    "sort_cheap": "Price ↑",
+    "sort_expensive": "Price ↓"
   },
   "keywords": {
     "title": "Keyword alerts",

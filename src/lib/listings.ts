@@ -100,13 +100,32 @@ export async function fetchListings(categoryId?: number | null): Promise<Listing
   return withFavoriteCounts((data as ListingCard[]) ?? []);
 }
 
+export type SearchSort = 'recent' | 'cheap' | 'expensive';
+
 export type SearchFilters = {
   query?: string;
   categoryId?: number | null;
   nationality?: string | null;
   verifiedOnly?: boolean;
   maxPriceCents?: number | null;
+  sort?: SearchSort;
 };
+
+/** Active/sold counts for a profile's trading stats line. */
+export async function fetchListingStats(
+  userId: string,
+): Promise<{ active: number; sold: number }> {
+  const count = async (status: string) => {
+    const { count: n } = await supabase
+      .from('listings')
+      .select('id', { count: 'exact', head: true })
+      .eq('seller_id', userId)
+      .eq('status', status);
+    return n ?? 0;
+  };
+  const [active, sold] = await Promise.all([count('active'), count('sold')]);
+  return { active, sold };
+}
 
 export async function searchListings(filters: SearchFilters): Promise<ListingCard[]> {
   let query = supabase
@@ -117,8 +136,11 @@ export async function searchListings(filters: SearchFilters): Promise<ListingCar
        profiles!listings_seller_id_fkey!inner (nationality, is_phone_verified)`,
     )
     .eq('status', 'active')
-    .order('sort_ts', { ascending: false })
     .limit(50);
+
+  if (filters.sort === 'cheap') query = query.order('price_cents', { ascending: true });
+  else if (filters.sort === 'expensive') query = query.order('price_cents', { ascending: false });
+  else query = query.order('sort_ts', { ascending: false });
 
   if (filters.query?.trim())
     query = query.textSearch('search_vector', filters.query.trim(), {

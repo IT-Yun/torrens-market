@@ -21,6 +21,7 @@ import {
   searchListings,
   type Category,
   type ListingCard,
+  type SearchSort,
 } from '../src/lib/listings';
 import { colors, radius, spacing } from '../src/theme';
 
@@ -36,6 +37,7 @@ export default function SearchScreen() {
   const [nationality, setNationality] = useState<string | null>(null);
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
+  const [sort, setSort] = useState<SearchSort>('recent');
   const [results, setResults] = useState<ListingCard[]>([]);
   const [pos, setPos] = useState<{ lat: number; lng: number } | null>(null);
 
@@ -72,17 +74,18 @@ export default function SearchScreen() {
         nationality,
         verifiedOnly,
         maxPriceCents: maxPrice,
+        sort,
       });
       setResults(items);
       setSearched(true);
       if (term.trim()) saveRecent(term.trim());
     },
-    [query, categoryId, nationality, verifiedOnly, maxPrice, recents],
+    [query, categoryId, nationality, verifiedOnly, maxPrice, sort, recents],
   );
 
   useEffect(() => {
     run().catch(() => {});
-  }, [categoryId, nationality, verifiedOnly, maxPrice]);
+  }, [categoryId, nationality, verifiedOnly, maxPrice, sort]);
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
@@ -156,6 +159,22 @@ export default function SearchScreen() {
               >
                 <Text style={[styles.chipText, selected && { color: colors.white }]}>
                   {t('search.underPrice', { price: `$${cents / 100}` })}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </ScrollView>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
+          {(['recent', 'cheap', 'expensive'] as const).map((s) => {
+            const selected = sort === s;
+            return (
+              <Pressable
+                key={s}
+                style={[styles.chip, selected && styles.chipSelected]}
+                onPress={() => setSort(s)}
+              >
+                <Text style={[styles.chipText, selected && { color: colors.white }]}>
+                  {t(`search.sort_${s}`)}
                 </Text>
               </Pressable>
             );

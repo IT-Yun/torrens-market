@@ -21,6 +21,7 @@ import {
 } from 'lucide-react-native';
 import { Avatar } from '../../src/components/Avatar';
 import { TrustBadge } from '../../src/components/TrustBadge';
+import { fetchListingStats } from '../../src/lib/listings';
 import { fetchTrust, type ProfileTrust } from '../../src/lib/reviews';
 import { colors, radius, spacing } from '../../src/theme';
 
@@ -28,9 +29,12 @@ export default function ProfileScreen() {
   const { t } = useTranslation();
   const { session, profile, refreshProfile } = useSession();
   const [trust, setTrust] = useState<ProfileTrust | null>(null);
+  const [stats, setStats] = useState<{ active: number; sold: number } | null>(null);
 
   useEffect(() => {
-    if (session) fetchTrust(session.user.id).then(setTrust).catch(() => {});
+    if (!session) return;
+    fetchTrust(session.user.id).then(setTrust).catch(() => {});
+    fetchListingStats(session.user.id).then(setStats).catch(() => {});
   }, [session]);
 
   async function changeLanguage(lang: 'ko' | 'en' | 'zh') {
@@ -57,6 +61,11 @@ export default function ProfileScreen() {
               {profile?.is_phone_verified && <BadgeCheck size={16} color={colors.primary} />}
             </View>
             <TrustBadge trust={trust} />
+            {stats && (
+              <Text style={styles.meta}>
+                {t('profile.stats', { active: stats.active, sold: stats.sold })}
+              </Text>
+            )}
             <Text style={styles.meta}>
               {profile?.suburb_verified_at && (
                 <>
