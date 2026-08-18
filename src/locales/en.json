@@ -219,7 +219,11 @@
     "decline": "Decline",
     "cancel": "Cancel meetup",
     "statusProposed": "Proposed",
-    "statusAccepted": "Confirmed"
+    "statusAccepted": "Confirmed",
+    "when": "When",
+    "placeLabel": "Where",
+    "changeTime": "Change date & time",
+    "placeHint": "Pick a busy public spot — shopping centre entrances work well."
   },
   "offer": {
     "make": "Make an offer",

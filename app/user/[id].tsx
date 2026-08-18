@@ -87,20 +87,18 @@ export default function PublicProfileScreen() {
                   <TrustBadge trust={trust} />
                   <ChevronRight size={14} color={colors.textSecondary} />
                 </Pressable>
-                <Text style={styles.meta}>
-                  {profile.suburb_verified_at && (
-                    <>
-                      <MapPin size={12} color={colors.primary} />{' '}
-                    </>
-                  )}
-                  {[
-                    profile.suburb,
-                    profile.nationality ? t(`nationalities.${profile.nationality}`) : null,
-                    stats ? t('profile.stats', { active: stats.active, sold: stats.sold }) : null,
-                  ]
-                    .filter(Boolean)
-                    .join(' · ')}
-                </Text>
+                <View style={styles.nameRow}>
+                  {profile.suburb_verified_at && <MapPin size={13} color={colors.primary} />}
+                  <Text style={styles.meta}>
+                    {[
+                      profile.suburb,
+                      profile.nationality ? t(`nationalities.${profile.nationality}`) : null,
+                      stats ? t('profile.stats', { active: stats.active, sold: stats.sold }) : null,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')}
+                  </Text>
+                </View>
               </View>
             </View>
           )

@@ -1,6 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Modal, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { CalendarClock, MapPin, X } from 'lucide-react-native';
 import i18n from '../lib/i18n';
@@ -71,6 +81,8 @@ export function MeetupCard({
     try {
       await fn();
       load();
+    } catch (e) {
+      Alert.alert((e as Error).message ?? String(e));
     } finally {
       setBusy(false);
     }
@@ -147,7 +159,10 @@ export function MeetupCard({
       )}
 
       <Modal visible={modalOpen} transparent animationType="slide">
-        <View style={styles.modalBackdrop}>
+        <KeyboardAvoidingView
+          style={styles.modalBackdrop}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
           <View style={styles.modal}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>{t('meetup.title')}</Text>
@@ -156,19 +171,26 @@ export function MeetupCard({
               </Pressable>
             </View>
 
+            <Text style={styles.fieldLabel}>{t('meetup.when')}</Text>
+            <View style={styles.whenRow}>
+              <CalendarClock size={16} color={colors.primary} />
+              <Text style={styles.whenText}>{formatWhen(when.toISOString())}</Text>
+            </View>
             {Platform.OS === 'ios' ? (
               <DateTimePicker
                 value={when}
                 mode="datetime"
                 display="spinner"
                 minimumDate={new Date()}
+                minuteInterval={5}
+                style={styles.iosPicker}
                 onChange={(_, date) => date && setWhen(date)}
               />
             ) : (
               <View style={{ gap: spacing.sm }}>
                 <Pressable style={styles.androidPick} onPress={() => setAndroidStep('date')}>
                   <CalendarClock size={15} color={colors.primary} />
-                  <Text style={styles.androidPickText}>{formatWhen(when.toISOString())}</Text>
+                  <Text style={styles.androidPickText}>{t('meetup.changeTime')}</Text>
                 </Pressable>
                 {androidStep && (
                   <DateTimePicker
@@ -188,13 +210,16 @@ export function MeetupCard({
               </View>
             )}
 
+            <Text style={styles.fieldLabel}>{t('meetup.placeLabel')}</Text>
             <TextInput
               style={styles.placeInput}
               placeholder={t('meetup.placePlaceholder')}
               placeholderTextColor={colors.textSecondary}
               value={place}
               onChangeText={setPlace}
+              maxLength={120}
             />
+            <Text style={styles.placeHint}>{t('meetup.placeHint')}</Text>
 
             <Pressable
               style={[styles.proposeBtn, (!place.trim() || busy) && { opacity: 0.5 }]}
@@ -209,7 +234,7 @@ export function MeetupCard({
               <Text style={styles.proposeText}>{t('meetup.propose')}</Text>
             </Pressable>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );
@@ -283,6 +308,20 @@ const styles = StyleSheet.create({
   },
   modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   modalTitle: { fontSize: 17, fontWeight: '700', color: colors.text },
+  fieldLabel: { fontSize: 13, fontWeight: '700', color: colors.textSecondary },
+  whenRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    padding: 12,
+    backgroundColor: colors.white,
+  },
+  whenText: { fontSize: 16, fontWeight: '700', color: colors.text },
+  iosPicker: { height: 180, alignSelf: 'center' },
+  placeHint: { fontSize: 12, color: colors.textSecondary, marginTop: -6 },
   androidPick: {
     flexDirection: 'row',
     alignItems: 'center',

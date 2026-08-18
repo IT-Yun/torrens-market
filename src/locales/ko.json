@@ -219,7 +219,11 @@
     "decline": "거절",
     "cancel": "약속 취소",
     "statusProposed": "제안됨",
-    "statusAccepted": "확정됨"
+    "statusAccepted": "확정됨",
+    "when": "시간",
+    "placeLabel": "장소",
+    "changeTime": "날짜·시간 변경",
+    "placeHint": "사람 많은 공공장소가 좋아요 — 쇼핑센터 입구 추천!"
   },
   "offer": {
     "make": "가격 제안하기",

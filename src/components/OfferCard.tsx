@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { HandCoins, X } from 'lucide-react-native';
 import { formatPrice } from '../lib/format';
 import { fetchOffer, proposeOffer, setOfferStatus, type Offer } from '../lib/offers';
@@ -42,6 +42,8 @@ export function OfferCard({ roomId, myId }: { roomId: string; myId: string }) {
     try {
       await fn();
       load();
+    } catch (e) {
+      Alert.alert((e as Error).message ?? String(e));
     } finally {
       setBusy(false);
     }

@@ -219,7 +219,11 @@
     "decline": "拒绝",
     "cancel": "取消约定",
     "statusProposed": "已提议",
-    "statusAccepted": "已确认"
+    "statusAccepted": "已确认",
+    "when": "时间",
+    "placeLabel": "地点",
+    "changeTime": "更改日期和时间",
+    "placeHint": "建议选择人多的公共场所，比如购物中心入口。"
   },
   "offer": {
     "make": "出个价",

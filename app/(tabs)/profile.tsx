@@ -69,16 +69,14 @@ export default function ProfileScreen() {
                 {t('profile.stats', { active: stats.active, sold: stats.sold })}
               </Text>
             )}
-            <Text style={styles.meta}>
-              {profile?.suburb_verified_at && (
-                <>
-                  <MapPin size={12} color={colors.primary} />{' '}
-                </>
-              )}
-              {[profile?.suburb, profile?.nationality ? t(`nationalities.${profile.nationality}`) : null]
-                .filter(Boolean)
-                .join(' · ') || ' '}
-            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+              {profile?.suburb_verified_at && <MapPin size={13} color={colors.primary} />}
+              <Text style={styles.meta}>
+                {[profile?.suburb, profile?.nationality ? t(`nationalities.${profile.nationality}`) : null]
+                  .filter(Boolean)
+                  .join(' · ') || ' '}
+              </Text>
+            </View>
           </View>
         </View>
 
@@ -122,28 +120,29 @@ export default function ProfileScreen() {
             <ChevronRight size={18} color={colors.textSecondary} />
           </Pressable>
           <View style={styles.separator} />
-          <View style={[styles.menuRow, { justifyContent: 'flex-start', gap: 10 }]}>
+          <Pressable
+            style={styles.menuRow}
+            onPress={() =>
+              Alert.alert(t('profile.language'), undefined, [
+                ...LANGUAGES.map((l) => ({
+                  text: `${l.label}${i18n.language === l.code ? ' ✓' : ''}`,
+                  onPress: () => changeLanguage(l.code),
+                })),
+                { text: t('common.cancel'), style: 'cancel' as const },
+              ])
+            }
+          >
             <View style={styles.menuLeft}>
               <Globe size={18} color={colors.textSecondary} />
               <Text style={styles.menuText}>{t('profile.language')}</Text>
             </View>
-            <View style={[styles.langRow, { flex: 1, justifyContent: 'flex-end' }]}>
-              {LANGUAGES.map((l) => {
-                const selected = i18n.language === l.code;
-                return (
-                  <Pressable
-                    key={l.code}
-                    style={[styles.chip, selected && styles.chipSelected]}
-                    onPress={() => changeLanguage(l.code)}
-                  >
-                    <Text style={[styles.chipText, selected && { color: colors.white }]}>
-                      {l.label}
-                    </Text>
-                  </Pressable>
-                );
-              })}
+            <View style={styles.menuLeft}>
+              <Text style={styles.menuValue}>
+                {LANGUAGES.find((l) => l.code === i18n.language)?.label ?? ''}
+              </Text>
+              <ChevronRight size={18} color={colors.textSecondary} />
             </View>
-          </View>
+          </Pressable>
           <View style={styles.separator} />
           <Pressable style={styles.menuRow} onPress={() => router.push('/blocked-users')}>
             <View style={styles.menuLeft}>
@@ -210,29 +209,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  avatar: {
-    width: 52,
-    height: 52,
-    borderRadius: radius.full,
-    backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  avatarText: { color: colors.white, fontSize: 20, fontWeight: '700' },
   name: { fontSize: 20, fontWeight: '700', color: colors.text },
   meta: { fontSize: 14, color: colors.textSecondary },
   sectionTitle: { fontSize: 14, fontWeight: '600', color: colors.textSecondary },
-  langRow: { flexDirection: 'row', gap: spacing.sm },
-  chip: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.full,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: colors.white,
-  },
-  chipSelected: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipText: { fontSize: 14, color: colors.text },
   menuGroup: {
     borderWidth: 1,
     borderColor: colors.border,
@@ -249,5 +228,6 @@ const styles = StyleSheet.create({
   },
   separator: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border },
   menuText: { fontSize: 15, fontWeight: '600', color: colors.text },
+  menuValue: { fontSize: 14, color: colors.textSecondary },
   menuLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
 });
