@@ -780,6 +780,16 @@ await step('auto-hide: 3 distinct reports soft-delete a listing', async () => {
   assert(st.status === 'deleted', `status=${st.status}`);
 });
 
+
+await step('price drop: function responds 200 for a favorited listing', async () => {
+  const res = await fetch(`${URL}/functions/v1/price-drop-notify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ANON}` },
+    body: JSON.stringify({ listing_id: listingId, old_price: 4500, new_price: 4000 }),
+  });
+  assert(res.status === 200, `status ${res.status}: ${await res.text()}`);
+});
+
 console.log(results.join('\n'));
 console.log(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURES`}`);
 process.exit(failures === 0 ? 0 : 1);
