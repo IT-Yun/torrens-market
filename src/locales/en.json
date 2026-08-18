@@ -152,7 +152,10 @@
     "markReserved": "Reserve",
     "bump": "Bump",
     "bumped": "Bumped to the top!",
-    "bumpCooldown": "You can bump once every 24 hours."
+    "bumpCooldown": "You can bump once every 24 hours.",
+    "delete": "Delete",
+    "deleteTitle": "Delete listing?",
+    "deleteConfirm": "This hides the listing permanently. Chats and reviews are kept."
   },
   "report": {
     "menuTitle": "Report or block",

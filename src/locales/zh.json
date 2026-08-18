@@ -152,7 +152,10 @@
     "markReserved": "标记预订",
     "bump": "顶一下",
     "bumped": "已顶到顶部！",
-    "bumpCooldown": "每24小时可顶一次。"
+    "bumpCooldown": "每24小时可顶一次。",
+    "delete": "删除",
+    "deleteTitle": "删除商品？",
+    "deleteConfirm": "商品将被永久隐藏。聊天和评价会保留。"
   },
   "report": {
     "menuTitle": "举报或屏蔽",

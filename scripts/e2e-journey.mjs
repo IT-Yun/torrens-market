@@ -596,6 +596,35 @@ await step('bump: old listing resurfaces to top, cooldown enforced', async () =>
   assert(coolError, 'expected cooldown rejection');
 });
 
+await step('delete: listing hidden from feed and my-listings filter', async () => {
+  const { data: l } = await seller.client
+    .from('listings')
+    .insert({
+      seller_id: seller.id,
+      category_id: catId,
+      title: 'E2E delete me',
+      description: 'delete test',
+      price_cents: 100,
+      condition: 'used',
+      pickup_mode: 'pickup_only',
+      suburb: 'Norwood',
+      attributes: {},
+    })
+    .select('id')
+    .single();
+  const { error } = await seller.client
+    .from('listings')
+    .update({ status: 'deleted' })
+    .eq('id', l.id);
+  assert(!error, error?.message);
+  const { data: feed } = await buyer.client
+    .from('listings')
+    .select('id')
+    .eq('status', 'active')
+    .eq('id', l.id);
+  assert(feed.length === 0, 'deleted listing still in feed');
+});
+
 console.log(results.join('\n'));
 console.log(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURES`}`);
 process.exit(failures === 0 ? 0 : 1);

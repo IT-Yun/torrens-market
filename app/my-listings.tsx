@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Package } from 'lucide-react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { Alert } from 'react-native';
-import { ArrowUp } from 'lucide-react-native';
+import { ArrowUp, Trash2 } from 'lucide-react-native';
 import {
   bumpListing,
   canBump,
@@ -117,6 +117,28 @@ export default function MyListingsScreen() {
                     </Text>
                   </Pressable>
                 ))}
+                <Pressable
+                  style={styles.deleteButton}
+                  onPress={() =>
+                    Alert.alert(t('myListings.deleteTitle'), t('myListings.deleteConfirm'), [
+                      { text: t('common.cancel'), style: 'cancel' },
+                      {
+                        text: t('myListings.delete'),
+                        style: 'destructive',
+                        onPress: async () => {
+                          await updateListingStatus(item.id, 'deleted').catch(() => {});
+                          load();
+                        },
+                      },
+                    ])
+                  }
+                  accessibilityRole="button"
+                >
+                  <Trash2 size={13} color={colors.textSecondary} />
+                  <Text style={[styles.actionText, { color: colors.textSecondary }]}>
+                    {t('myListings.delete')}
+                  </Text>
+                </Pressable>
               </View>
             </View>
           );
@@ -175,6 +197,18 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
   },
   actionButtonSecondary: { backgroundColor: colors.surface },
+  deleteButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    borderRadius: radius.md,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
   actionText: { fontSize: 13, fontWeight: '600', color: colors.white },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
   emptyText: { fontSize: 14, color: colors.textSecondary },

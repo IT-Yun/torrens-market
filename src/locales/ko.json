@@ -152,7 +152,10 @@
     "markReserved": "예약중으로",
     "bump": "끌어올리기",
     "bumped": "맨 위로 끌어올렸어요!",
-    "bumpCooldown": "끌어올리기는 24시간에 한 번 가능해요."
+    "bumpCooldown": "끌어올리기는 24시간에 한 번 가능해요.",
+    "delete": "삭제",
+    "deleteTitle": "매물을 삭제할까요?",
+    "deleteConfirm": "매물이 영구적으로 숨겨져요. 채팅과 후기는 남아요."
   },
   "report": {
     "menuTitle": "신고 또는 차단",
