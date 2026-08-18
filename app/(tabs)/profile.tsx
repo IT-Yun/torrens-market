@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,13 +17,21 @@ import {
   MapPin,
   Package,
   Pencil,
+  Star,
 } from 'lucide-react-native';
 import { Avatar } from '../../src/components/Avatar';
+import { TrustBadge } from '../../src/components/TrustBadge';
+import { fetchTrust, type ProfileTrust } from '../../src/lib/reviews';
 import { colors, radius, spacing } from '../../src/theme';
 
 export default function ProfileScreen() {
   const { t } = useTranslation();
   const { session, profile, refreshProfile } = useSession();
+  const [trust, setTrust] = useState<ProfileTrust | null>(null);
+
+  useEffect(() => {
+    if (session) fetchTrust(session.user.id).then(setTrust).catch(() => {});
+  }, [session]);
 
   async function changeLanguage(lang: 'ko' | 'en' | 'zh') {
     await setAppLanguage(lang);
@@ -47,6 +56,7 @@ export default function ProfileScreen() {
               <Text style={styles.name}>{profile?.display_name ?? '—'}</Text>
               {profile?.is_phone_verified && <BadgeCheck size={16} color={colors.primary} />}
             </View>
+            <TrustBadge trust={trust} />
             <Text style={styles.meta}>
               {profile?.suburb_verified_at && (
                 <>
@@ -66,6 +76,14 @@ export default function ProfileScreen() {
             <View style={styles.menuLeft}>
               <Package size={18} color={colors.textSecondary} />
               <Text style={styles.menuText}>{t('profile.myListings')}</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </Pressable>
+          <View style={styles.separator} />
+          <Pressable style={styles.menuRow} onPress={() => router.push('/my-reviews')}>
+            <View style={styles.menuLeft}>
+              <Star size={18} color={colors.textSecondary} />
+              <Text style={styles.menuText}>{t('review.received')}</Text>
             </View>
             <ChevronRight size={18} color={colors.textSecondary} />
           </Pressable>

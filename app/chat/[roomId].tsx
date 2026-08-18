@@ -21,6 +21,9 @@ import {
   type Message,
   type RoomHeader,
 } from '../../src/lib/chat';
+import { Star } from 'lucide-react-native';
+import { MeetupCard } from '../../src/components/MeetupCard';
+import { hasReviewed } from '../../src/lib/reviews';
 import { useSession } from '../../src/lib/session';
 import { colors, radius, spacing } from '../../src/theme';
 
@@ -31,11 +34,21 @@ export default function ChatRoomScreen() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [draft, setDraft] = useState('');
   const [header, setHeader] = useState<RoomHeader | null>(null);
+  const [canReview, setCanReview] = useState(false);
   const seenIds = useRef(new Set<string>());
 
   useEffect(() => {
     if (!roomId || !session) return;
-    fetchRoomHeader(roomId, session.user.id).then(setHeader).catch(() => {});
+    fetchRoomHeader(roomId, session.user.id)
+      .then((h) => {
+        setHeader(h);
+        if (h && h.listingStatus !== 'active') {
+          hasReviewed(h.listingId, session.user.id)
+            .then((done) => setCanReview(!done))
+            .catch(() => {});
+        }
+      })
+      .catch(() => {});
     fetchMessages(roomId)
       .then((items) => {
         items.forEach((m) => seenIds.current.add(m.id));
@@ -85,6 +98,28 @@ export default function ChatRoomScreen() {
         )}
         <View style={{ width: 24 }} />
       </View>
+      {roomId && session && header && (
+        <MeetupCard roomId={roomId} myId={session.user.id} defaultPlace={header.listingSuburb} />
+      )}
+      {canReview && header?.otherId ? (
+        <Pressable
+          style={styles.reviewChip}
+          onPress={() =>
+            router.push({
+              pathname: '/review',
+              params: {
+                listingId: header.listingId,
+                revieweeId: header.otherId,
+                name: header.otherName,
+              },
+            })
+          }
+          accessibilityRole="button"
+        >
+          <Star size={14} color={colors.primary} />
+          <Text style={styles.reviewChipText}>{t('review.leaveReview')}</Text>
+        </Pressable>
+      ) : null}
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -181,4 +216,18 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   sendText: { color: colors.white, fontWeight: '600' },
+  reviewChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    marginHorizontal: spacing.md,
+    marginTop: spacing.sm,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    backgroundColor: colors.white,
+  },
+  reviewChipText: { color: colors.primary, fontWeight: '700', fontSize: 13 },
 });

@@ -164,5 +164,34 @@
   "block": {
     "action": "이 판매자 차단하기",
     "done": "차단했어요. 이 판매자의 매물이 더 이상 보이지 않아요."
+  },
+  "trust": {
+    "quokka": "쿼카",
+    "bilby": "빌비",
+    "koala": "코알라",
+    "wombat": "웜뱃",
+    "wallaby": "왈라비",
+    "kangaroo": "캥거루"
+  },
+  "review": {
+    "leaveReview": "거래 후기 남기기",
+    "title": "거래 후기",
+    "ratePrompt": "{{name}}님과의 거래는 어떠셨나요?",
+    "commentPlaceholder": "짧은 후기를 남겨주세요 (선택)",
+    "submit": "후기 등록",
+    "done": "후기가 등록됐어요!",
+    "received": "받은 후기",
+    "empty": "아직 받은 후기가 없어요"
+  },
+  "meetup": {
+    "schedule": "픽업 약속 잡기",
+    "title": "픽업 약속",
+    "placePlaceholder": "예: Rundle Mall 분수 앞",
+    "propose": "제안 보내기",
+    "accept": "수락",
+    "decline": "거절",
+    "cancel": "약속 취소",
+    "statusProposed": "제안됨",
+    "statusAccepted": "확정됨"
   }
 }

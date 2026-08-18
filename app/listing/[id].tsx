@@ -29,6 +29,8 @@ import {
 } from '../../src/lib/listings';
 import { BadgeCheck, Car, Footprints, Heart, MapPin, Package } from 'lucide-react-native';
 import { Avatar } from '../../src/components/Avatar';
+import { TrustBadge } from '../../src/components/TrustBadge';
+import { fetchTrust, type ProfileTrust } from '../../src/lib/reviews';
 import { haversineKm, travelEstimate } from '../../src/lib/geo';
 import { getPosition } from '../../src/lib/location';
 import { colors, radius, spacing } from '../../src/theme';
@@ -44,7 +46,12 @@ export default function ListingDetailScreen() {
   const [liked, setLiked] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
   const [distanceKm, setDistanceKm] = useState<number | null>(null);
+  const [sellerTrust, setSellerTrust] = useState<ProfileTrust | null>(null);
   const lang = i18n.language;
+
+  useEffect(() => {
+    if (listing?.seller_id) fetchTrust(listing.seller_id).then(setSellerTrust).catch(() => {});
+  }, [listing?.seller_id]);
 
   useEffect(() => {
     if (id) {
@@ -266,6 +273,7 @@ export default function ListingDetailScreen() {
                   </>
                 )}
               </View>
+              <TrustBadge trust={sellerTrust} />
               <Text style={styles.meta}>
                 {[
                   listing.profiles.suburb,

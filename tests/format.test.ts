@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { attributeSnippet, flagEmoji, formatPrice, timeAgo } from '../src/lib/format.ts';
 import { formatDistance, fuzzCoord, haversineKm, travelEstimate } from '../src/lib/geo.ts';
 import { suggestCategorySlug } from '../src/lib/categorize.ts';
+import { trustTier } from '../src/lib/trust.ts';
 
 test('formatPrice renders AUD with grouping', () => {
   assert.equal(formatPrice(125000), '$1,250');
@@ -75,4 +76,15 @@ test('formatDistance: m under 1km, decimals under 10km', () => {
   assert.equal(formatDistance(0.83), '850m');
   assert.equal(formatDistance(1.24), '1.2km');
   assert.equal(formatDistance(12.6), '13km');
+});
+
+test('trustTier: quokka floor, thresholds, kangaroo ceiling', () => {
+  assert.equal(trustTier(0).slug, 'quokka');
+  assert.equal(trustTier(-5).slug, 'quokka');
+  assert.equal(trustTier(3).slug, 'bilby');
+  assert.equal(trustTier(14).slug, 'koala');
+  assert.equal(trustTier(15).slug, 'wombat');
+  assert.equal(trustTier(49).slug, 'wallaby');
+  assert.equal(trustTier(120).slug, 'kangaroo');
+  assert.equal(trustTier(120).level, 6);
 });

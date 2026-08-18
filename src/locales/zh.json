@@ -164,5 +164,34 @@
   "block": {
     "action": "屏蔽该卖家",
     "done": "已屏蔽。你将不再看到该卖家的商品。"
+  },
+  "trust": {
+    "quokka": "短尾矮袋鼠",
+    "bilby": "兔耳袋狸",
+    "koala": "考拉",
+    "wombat": "袋熊",
+    "wallaby": "小袋鼠",
+    "kangaroo": "袋鼠"
+  },
+  "review": {
+    "leaveReview": "写交易评价",
+    "title": "交易评价",
+    "ratePrompt": "与 {{name}} 的交易怎么样？",
+    "commentPlaceholder": "写一句简短评价（可选）",
+    "submit": "提交评价",
+    "done": "评价已提交！",
+    "received": "收到的评价",
+    "empty": "还没有收到评价"
+  },
+  "meetup": {
+    "schedule": "约定交易时间",
+    "title": "交易约定",
+    "placePlaceholder": "例如：Rundle Mall 喷泉前",
+    "propose": "发送提议",
+    "accept": "接受",
+    "decline": "拒绝",
+    "cancel": "取消约定",
+    "statusProposed": "已提议",
+    "statusAccepted": "已确认"
   }
 }

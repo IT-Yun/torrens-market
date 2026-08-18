@@ -85,24 +85,34 @@ export async function fetchRooms(userId: string): Promise<ChatRoomSummary[]> {
     );
 }
 
-export type RoomHeader = { otherName: string; listingTitle: string; listingId: string };
+export type RoomHeader = {
+  otherName: string;
+  otherId: string;
+  listingTitle: string;
+  listingId: string;
+  listingStatus: string;
+  listingSuburb: string;
+};
 
 export async function fetchRoomHeader(roomId: string, myUserId: string): Promise<RoomHeader | null> {
   const { data, error } = await supabase
     .from('chat_rooms')
-    .select('listings (id, title), chat_participants (user_id, profiles (display_name))')
+    .select('listings (id, title, status, suburb), chat_participants (user_id, profiles (display_name))')
     .eq('id', roomId)
     .single();
   if (error) return null;
   const room = data as unknown as {
-    listings: { id: string; title: string };
+    listings: { id: string; title: string; status: string; suburb: string };
     chat_participants: { user_id: string; profiles: { display_name: string } }[];
   };
   const other = room.chat_participants.find((p) => p.user_id !== myUserId);
   return {
     otherName: other?.profiles?.display_name ?? '?',
+    otherId: other?.user_id ?? '',
     listingTitle: room.listings?.title ?? '',
     listingId: room.listings?.id ?? '',
+    listingStatus: room.listings?.status ?? 'active',
+    listingSuburb: room.listings?.suburb ?? '',
   };
 }
 

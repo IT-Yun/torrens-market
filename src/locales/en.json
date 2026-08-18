@@ -164,5 +164,34 @@
   "block": {
     "action": "Block this seller",
     "done": "Seller blocked. You won't see their listings."
+  },
+  "trust": {
+    "quokka": "Quokka",
+    "bilby": "Bilby",
+    "koala": "Koala",
+    "wombat": "Wombat",
+    "wallaby": "Wallaby",
+    "kangaroo": "Kangaroo"
+  },
+  "review": {
+    "leaveReview": "Leave a review",
+    "title": "Trade review",
+    "ratePrompt": "How was your trade with {{name}}?",
+    "commentPlaceholder": "Add a short comment (optional)",
+    "submit": "Submit review",
+    "done": "Review posted!",
+    "received": "Reviews received",
+    "empty": "No reviews yet"
+  },
+  "meetup": {
+    "schedule": "Schedule pickup",
+    "title": "Pickup meetup",
+    "placePlaceholder": "e.g. Rundle Mall fountain",
+    "propose": "Send proposal",
+    "accept": "Accept",
+    "decline": "Decline",
+    "cancel": "Cancel meetup",
+    "statusProposed": "Proposed",
+    "statusAccepted": "Confirmed"
   }
 }
