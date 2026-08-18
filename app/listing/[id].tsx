@@ -5,6 +5,7 @@ import {
   Alert,
   Dimensions,
   Image,
+  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -30,7 +31,7 @@ import {
   type ListingCard,
   type ListingDetail,
 } from '../../src/lib/listings';
-import { BadgeCheck, Car, Footprints, Heart, MapPin, Package } from 'lucide-react-native';
+import { BadgeCheck, Car, Footprints, Heart, MapPin, Package, X } from 'lucide-react-native';
 import { Avatar } from '../../src/components/Avatar';
 import { TrustBadge } from '../../src/components/TrustBadge';
 import { fetchTrust, type ProfileTrust } from '../../src/lib/reviews';
@@ -48,6 +49,7 @@ export default function ListingDetailScreen() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [liked, setLiked] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
+  const [viewerOpen, setViewerOpen] = useState(false);
   const [distanceKm, setDistanceKm] = useState<number | null>(null);
   const [sellerTrust, setSellerTrust] = useState<ProfileTrust | null>(null);
   const [otherListings, setOtherListings] = useState<ListingCard[]>([]);
@@ -199,7 +201,13 @@ export default function ListingDetailScreen() {
           >
             {photos.length > 0 ? (
               photos.map((p) => (
-                <Image key={p.storage_path} source={{ uri: photoUrl(p.storage_path) }} style={styles.photo} />
+                <Pressable
+                  key={p.storage_path}
+                  onPress={() => setViewerOpen(true)}
+                  accessibilityRole="imagebutton"
+                >
+                  <Image source={{ uri: photoUrl(p.storage_path) }} style={styles.photo} />
+                </Pressable>
               ))
             ) : (
               <View style={[styles.photo, styles.photoPlaceholder]}>
@@ -383,6 +391,33 @@ export default function ListingDetailScreen() {
           </View>
         </View>
       )}
+      <Modal visible={viewerOpen} transparent={false} animationType="fade">
+        <View style={styles.viewer}>
+          <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            contentOffset={{ x: photoIndex * width, y: 0 }}
+          >
+            {photos.map((p) => (
+              <Image
+                key={p.storage_path}
+                source={{ uri: photoUrl(p.storage_path) }}
+                style={styles.viewerPhoto}
+                resizeMode="contain"
+              />
+            ))}
+          </ScrollView>
+          <Pressable
+            style={styles.viewerClose}
+            onPress={() => setViewerOpen(false)}
+            hitSlop={12}
+            accessibilityRole="button"
+          >
+            <X size={26} color={colors.white} />
+          </Pressable>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -445,6 +480,9 @@ const styles = StyleSheet.create({
   miniPlaceholder: { alignItems: 'center', justifyContent: 'center' },
   miniTitle: { fontSize: 13, color: colors.text },
   miniPrice: { fontSize: 14, fontWeight: '700', color: colors.text },
+  viewer: { flex: 1, backgroundColor: '#000', justifyContent: 'center' },
+  viewerPhoto: { width, height: '100%' },
+  viewerClose: { position: 'absolute', top: 56, right: 20 },
   distanceText: { fontSize: 13, color: colors.textSecondary },
   dots: {
     position: 'absolute',
