@@ -542,6 +542,22 @@ await expectFail('start_chat after blocking should be refused (either direction)
   if (error) throw error;
 });
 
+await step('chat-notify edge function responds 200', async () => {
+  const { data: lastMsg } = await buyer.client
+    .from('messages')
+    .select('id')
+    .eq('room_id', roomId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single();
+  const res = await fetch(`${URL}/functions/v1/chat-notify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ANON}` },
+    body: JSON.stringify({ message_id: lastMsg.id }),
+  });
+  assert(res.status === 200, `status ${res.status}: ${await res.text()}`);
+});
+
 await step('keyword-alert-matcher edge function responds 200', async () => {
   const res = await fetch(`${URL}/functions/v1/keyword-alert-matcher`, {
     method: 'POST',
