@@ -280,7 +280,11 @@ export default function ListingDetailScreen() {
 
           {listing.description ? <Text style={styles.description}>{listing.description}</Text> : null}
 
-          <View style={styles.sellerCard}>
+          <Pressable
+            style={styles.sellerCard}
+            onPress={() => router.push(`/user/${listing.seller_id}`)}
+            accessibilityRole="button"
+          >
             <Avatar
               name={listing.profiles.display_name}
               url={listing.profiles.avatar_url}
@@ -319,7 +323,7 @@ export default function ListingDetailScreen() {
                   .join(' · ')}
               </Text>
             </View>
-          </View>
+          </Pressable>
 
           {otherListings.length > 0 && (
             <View style={{ gap: spacing.sm }}>
