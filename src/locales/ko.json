@@ -201,5 +201,16 @@
     "cancel": "약속 취소",
     "statusProposed": "제안됨",
     "statusAccepted": "확정됨"
+  },
+  "offer": {
+    "make": "가격 제안하기",
+    "title": "가격 제안",
+    "pricePlaceholder": "제안 가격 (AUD)",
+    "send": "제안 보내기",
+    "accept": "수락",
+    "decline": "거절",
+    "withdraw": "철회",
+    "statusProposed": "제안됨",
+    "statusAccepted": "합의됨"
   }
 }

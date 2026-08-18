@@ -23,6 +23,7 @@ import {
 } from '../../src/lib/chat';
 import { Star } from 'lucide-react-native';
 import { MeetupCard } from '../../src/components/MeetupCard';
+import { OfferCard } from '../../src/components/OfferCard';
 import { hasReviewed } from '../../src/lib/reviews';
 import { useSession } from '../../src/lib/session';
 import { colors, radius, spacing } from '../../src/theme';
@@ -109,7 +110,10 @@ export default function ChatRoomScreen() {
         <View style={{ width: 24 }} />
       </View>
       {roomId && session && header && (
-        <MeetupCard roomId={roomId} myId={session.user.id} defaultPlace={header.listingSuburb} />
+        <>
+          <OfferCard roomId={roomId} myId={session.user.id} />
+          <MeetupCard roomId={roomId} myId={session.user.id} defaultPlace={header.listingSuburb} />
+        </>
       )}
       {canReview && header?.otherId ? (
         <Pressable

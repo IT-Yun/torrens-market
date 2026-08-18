@@ -641,6 +641,29 @@ await step('delete: listing hidden from feed and my-listings filter', async () =
   assert(feed.length === 0, 'deleted listing still in feed');
 });
 
+
+await step('price offer: propose → double-open blocked → accept', async () => {
+  const { error } = await buyer.client
+    .from('offers')
+    .insert({ room_id: roomId, proposer_id: buyer.id, price_cents: 4000 });
+  assert(!error, error?.message);
+  const { error: dupError } = await buyer.client
+    .from('offers')
+    .insert({ room_id: roomId, proposer_id: buyer.id, price_cents: 3500 });
+  assert(dupError, 'expected one-open-offer rejection');
+  const { data: open } = await seller.client
+    .from('offers')
+    .select('id')
+    .eq('room_id', roomId)
+    .eq('status', 'proposed')
+    .single();
+  const { error: accError } = await seller.client
+    .from('offers')
+    .update({ status: 'accepted' })
+    .eq('id', open.id);
+  assert(!accError, accError?.message);
+});
+
 console.log(results.join('\n'));
 console.log(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURES`}`);
 process.exit(failures === 0 ? 0 : 1);

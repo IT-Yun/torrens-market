@@ -201,5 +201,16 @@
     "cancel": "Cancel meetup",
     "statusProposed": "Proposed",
     "statusAccepted": "Confirmed"
+  },
+  "offer": {
+    "make": "Make an offer",
+    "title": "Price offer",
+    "pricePlaceholder": "Your price (AUD)",
+    "send": "Send offer",
+    "accept": "Accept",
+    "decline": "Decline",
+    "withdraw": "Withdraw",
+    "statusProposed": "Offered",
+    "statusAccepted": "Agreed"
   }
 }

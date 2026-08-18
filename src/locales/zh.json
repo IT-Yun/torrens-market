@@ -201,5 +201,16 @@
     "cancel": "取消约定",
     "statusProposed": "已提议",
     "statusAccepted": "已确认"
+  },
+  "offer": {
+    "make": "出个价",
+    "title": "价格提议",
+    "pricePlaceholder": "你的出价 (AUD)",
+    "send": "发送出价",
+    "accept": "接受",
+    "decline": "拒绝",
+    "withdraw": "撤回",
+    "statusProposed": "已出价",
+    "statusAccepted": "已成交"
   }
 }
