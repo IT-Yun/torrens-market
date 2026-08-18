@@ -64,7 +64,9 @@
     "sectionTrading": "거래",
     "sectionAlerts": "알림",
     "sectionSettings": "설정",
-    "stats": "판매중 {{active}} · 거래완료 {{sold}}"
+    "stats": "판매중 {{active}} · 거래완료 {{sold}}",
+    "deleteAccount": "계정 삭제",
+    "deleteAccountConfirm": "계정과 매물, 채팅, 후기가 모두 영구 삭제돼요. 되돌릴 수 없어요."
   },
   "favorites": {
     "empty": "♥ 누른 매물이 여기에 모여요."

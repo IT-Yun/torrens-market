@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { LANGUAGES, setAppLanguage } from '../../src/lib/i18n';
@@ -19,10 +19,12 @@ import {
   Pencil,
   ShieldOff,
   Star,
+  UserX,
 } from 'lucide-react-native';
 import { Avatar } from '../../src/components/Avatar';
 import { TrustBadge } from '../../src/components/TrustBadge';
 import { fetchListingStats } from '../../src/lib/listings';
+import { deleteAccount } from '../../src/lib/profile';
 import { fetchTrust, type ProfileTrust } from '../../src/lib/reviews';
 import { colors, radius, spacing } from '../../src/theme';
 
@@ -161,6 +163,34 @@ export default function ProfileScreen() {
             <View style={styles.menuLeft}>
               <LogOut size={18} color={colors.textSecondary} />
               <Text style={styles.menuText}>{t('profile.signOut')}</Text>
+            </View>
+          </Pressable>
+          <View style={styles.separator} />
+          <Pressable
+            style={styles.menuRow}
+            onPress={() =>
+              Alert.alert(t('profile.deleteAccount'), t('profile.deleteAccountConfirm'), [
+                { text: t('common.cancel'), style: 'cancel' },
+                {
+                  text: t('profile.deleteAccount'),
+                  style: 'destructive',
+                  onPress: async () => {
+                    try {
+                      await deleteAccount();
+                      router.replace('/');
+                    } catch {
+                      Alert.alert(t('auth.error'));
+                    }
+                  },
+                },
+              ])
+            }
+          >
+            <View style={styles.menuLeft}>
+              <UserX size={18} color="#B4423E" />
+              <Text style={[styles.menuText, { color: '#B4423E' }]}>
+                {t('profile.deleteAccount')}
+              </Text>
             </View>
           </Pressable>
         </View>

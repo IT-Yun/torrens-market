@@ -1,6 +1,13 @@
 import * as ImagePicker from 'expo-image-picker';
 import { supabase } from './supabase';
 
+/** Permanently delete the signed-in account (server verifies the JWT). */
+export async function deleteAccount(): Promise<void> {
+  const { error } = await supabase.functions.invoke('delete-account');
+  if (error) throw error;
+  await supabase.auth.signOut();
+}
+
 /** Pick a single square-cropped avatar image, or null if cancelled. */
 export async function pickAvatar(): Promise<ImagePicker.ImagePickerAsset | null> {
   const result = await ImagePicker.launchImageLibraryAsync({

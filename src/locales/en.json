@@ -64,7 +64,9 @@
     "sectionTrading": "Trading",
     "sectionAlerts": "Alerts",
     "sectionSettings": "Settings",
-    "stats": "Selling {{active}} · Sold {{sold}}"
+    "stats": "Selling {{active}} · Sold {{sold}}",
+    "deleteAccount": "Delete account",
+    "deleteAccountConfirm": "This permanently removes your account, listings, chats and reviews. This cannot be undone."
   },
   "favorites": {
     "empty": "Listings you ♥ will appear here."

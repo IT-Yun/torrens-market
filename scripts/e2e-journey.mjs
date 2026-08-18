@@ -730,6 +730,28 @@ await step('chat image: room-scoped upload + participant signed URL + outsider b
   assert(!randoSigned?.signedUrl, 'outsider signed a chat image (RLS HOLE)');
 });
 
+
+await step('account deletion: disposable user removes itself, data cascades', async () => {
+  const victim = await ensureUser('victim.e2e@torrens.test', PW, 'E2E Victim');
+  const { data: session } = await victim.client.auth.getSession();
+  const res = await fetch(`${URL}/functions/v1/delete-account`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.session.access_token}`,
+      apikey: ANON,
+    },
+    body: '{}',
+  });
+  assert(res.status === 200, `status ${res.status}: ${await res.text()}`);
+  const { data: gone } = await admin
+    .from('profiles')
+    .select('id')
+    .eq('id', victim.id)
+    .maybeSingle();
+  assert(!gone, 'profile survived account deletion');
+});
+
 console.log(results.join('\n'));
 console.log(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILURES`}`);
 process.exit(failures === 0 ? 0 : 1);
