@@ -29,8 +29,16 @@ export function travelEstimate(km: number): { mode: 'walk' | 'drive'; minutes: n
   return { mode: 'drive', minutes: Math.max(3, Math.round((km / 30) * 60) + 2) };
 }
 
-/** Compact distance label: 850m under 1km, 1.2km under 10, then whole km. */
-export function formatDistance(km: number): string {
+/** Beyond this the viewer isn't local — showing "12,994 km" is just noise. */
+export const MAX_LOCAL_DISTANCE_KM = 100;
+
+/**
+ * Compact distance label: 850m under 1km, 1.2km under 10, then whole km.
+ * Returns null when the distance isn't locally meaningful (traveller,
+ * emulator default location, VPN) so callers can hide the row entirely.
+ */
+export function formatDistance(km: number): string | null {
+  if (km > MAX_LOCAL_DISTANCE_KM) return null;
   if (km < 1) return `${Math.max(50, Math.round(km * 1000 / 50) * 50)}m`;
   if (km < 10) return `${km.toFixed(1)}km`;
   return `${Math.round(km)}km`;

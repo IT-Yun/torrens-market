@@ -44,7 +44,7 @@ import {
 import { Avatar } from '../../src/components/Avatar';
 import { TrustBadge } from '../../src/components/TrustBadge';
 import { fetchTrust, type ProfileTrust } from '../../src/lib/reviews';
-import { haversineKm, travelEstimate } from '../../src/lib/geo';
+import { haversineKm, MAX_LOCAL_DISTANCE_KM, travelEstimate } from '../../src/lib/geo';
 import { getPosition } from '../../src/lib/location';
 import { colors, radius, spacing } from '../../src/theme';
 
@@ -272,7 +272,7 @@ export default function ListingDetailScreen() {
                 .join(' · ')}
             </Text>
           </View>
-          {distanceKm != null &&
+          {distanceKm != null && distanceKm <= MAX_LOCAL_DISTANCE_KM &&
             (() => {
               const est = travelEstimate(distanceKm);
               const km = distanceKm < 10 ? distanceKm.toFixed(1) : String(Math.round(distanceKm));
