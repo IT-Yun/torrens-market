@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
@@ -30,6 +30,17 @@ export default function ProfileSetupScreen() {
   const { session, profile, refreshProfile } = useSession();
   const [displayName, setDisplayName] = useState(profile?.display_name ?? '');
   const [suburb, setSuburb] = useState(profile?.suburb ?? '');
+
+  // Cold-start recovery: if the profile arrives after mount (fetch raced the
+  // token refresh), prefill the blank fields — and when the user is already
+  // onboarded and this is NOT an explicit edit (no back stack), go home.
+  useEffect(() => {
+    if (!profile) return;
+    setDisplayName((v) => (v === '' ? profile.display_name ?? '' : v));
+    setSuburb((v) => (v === '' ? profile.suburb ?? '' : v));
+    setNationality((v) => v ?? profile.nationality ?? null);
+    if (profile.suburb && !router.canGoBack()) router.replace('/(tabs)/home');
+  }, [profile]);
   const [nationality, setNationality] = useState<string | null>(profile?.nationality ?? null);
   const [avatarAsset, setAvatarAsset] = useState<ImagePickerAsset | null>(null);
   const [busy, setBusy] = useState(false);

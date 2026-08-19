@@ -33,8 +33,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  async function fetchProfile(userId: string) {
-    const { data } = await supabase.from('profiles').select('*').eq('id', userId).single();
+  async function fetchProfile(userId: string, retry = 1) {
+    const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
+    if ((error || !data) && retry > 0) {
+      // Cold-start fetches can race the token refresh — one retry prevents an
+      // onboarded user from being bounced to profile setup.
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+      return fetchProfile(userId, retry - 1);
+    }
     setProfile((data as Profile) ?? null);
   }
 
