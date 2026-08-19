@@ -101,7 +101,8 @@
     "photoTip": "팁: 여러 각도로, 하자 부위까지 찍어주세요 — 정직한 사진이 더 빨리 팔려요.",
     "editTitle": "매물 수정",
     "updated": "수정됐어요!",
-    "save": "저장하기"
+    "save": "저장하기",
+    "paymentMethod": "결제 방식"
   },
   "listingDetail": {
     "chat": "판매자와 채팅",
@@ -124,6 +125,11 @@
     "pickup_only": "픽업만 가능",
     "seller_delivers": "판매자 배달",
     "buyer_collects": "구매자 수령"
+  },
+  "paymentMethods": {
+    "any": "결제 무관",
+    "cash_only": "현금만",
+    "bank_transfer": "계좌이체"
   },
   "nationalities": {
     "CN": "중국",

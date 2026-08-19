@@ -34,6 +34,7 @@ import { colors, radius, spacing } from '../../src/theme';
 const MAX_PHOTOS = 10;
 const CONDITIONS = ['used', 'like_new', 'new'];
 const PICKUP_MODES = ['pickup_only', 'seller_delivers', 'buyer_collects'];
+const PAYMENT_METHODS = ['any', 'cash_only', 'bank_transfer'];
 
 function Chip({
   label,
@@ -104,6 +105,7 @@ export default function CreateListingScreen() {
   const [description, setDescription] = useState('');
   const [condition, setCondition] = useState('used');
   const [pickupMode, setPickupMode] = useState('pickup_only');
+  const [paymentMethod, setPaymentMethod] = useState('any');
   const [suburb, setSuburb] = useState(profile?.suburb ?? '');
   const [attributes, setAttributes] = useState<Record<string, unknown>>({});
   const [busy, setBusy] = useState(false);
@@ -120,6 +122,7 @@ export default function CreateListingScreen() {
         setDescription(l.description);
         setCondition(l.condition);
         setPickupMode(l.pickup_mode);
+        setPaymentMethod(l.payment_method ?? 'any');
         setSuburb(l.suburb);
         setAttributes(l.attributes ?? {});
       })
@@ -163,6 +166,7 @@ export default function CreateListingScreen() {
           price_cents: Math.round(parseFloat(price || '0') * 100),
           condition,
           pickup_mode: pickupMode,
+          payment_method: paymentMethod,
           suburb: suburb.trim(),
           attributes,
         });
@@ -180,6 +184,7 @@ export default function CreateListingScreen() {
           priceCents: Math.round(parseFloat(price || '0') * 100),
           condition,
           pickupMode,
+          paymentMethod,
           suburb: suburb.trim(),
           lat: approx?.lat,
           lng: approx?.lng,
@@ -335,6 +340,18 @@ export default function CreateListingScreen() {
               label={t(`pickupModes.${m}`)}
               selected={pickupMode === m}
               onPress={() => setPickupMode(m)}
+            />
+          ))}
+        </View>
+
+        <Text style={styles.sectionTitle}>{t('listingCreate.paymentMethod')}</Text>
+        <View style={styles.chipWrap}>
+          {PAYMENT_METHODS.map((m) => (
+            <Chip
+              key={m}
+              label={t(`paymentMethods.${m}`)}
+              selected={paymentMethod === m}
+              onPress={() => setPaymentMethod(m)}
             />
           ))}
         </View>

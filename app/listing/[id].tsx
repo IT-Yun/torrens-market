@@ -234,25 +234,44 @@ export default function ListingDetailScreen() {
         </View>
 
         <View style={styles.body}>
-          {listing.status !== 'active' && (
-            <View style={styles.statusBadge}>
-              <Text style={styles.statusBadgeText}>
-                {t(listing.status === 'sold' ? 'listingDetail.sold' : 'listingDetail.reserved')}
-              </Text>
+          <View style={styles.headerBlock}>
+            {listing.status !== 'active' && (
+              <View style={styles.statusBadge}>
+                <Text style={styles.statusBadgeText}>
+                  {t(listing.status === 'sold' ? 'listingDetail.sold' : 'listingDetail.reserved')}
+                </Text>
+              </View>
+            )}
+            <Text style={styles.title}>{listing.title}</Text>
+            {listing.price_cents === 0 ? (
+              <View style={styles.freeBadge}>
+                <Text style={styles.freeBadgeText}>{t('common.free')}</Text>
+              </View>
+            ) : (
+              <Text style={styles.price}>{formatPrice(listing.price_cents)}</Text>
+            )}
+            <View style={styles.chipRow}>
+              <View style={styles.chip}>
+                <Text style={styles.chipText}>{t(`conditions.${listing.condition}`)}</Text>
+              </View>
+              <View style={styles.chip}>
+                <Text style={styles.chipText}>{t(`pickupModes.${listing.pickup_mode}`)}</Text>
+              </View>
+              {listing.payment_method !== 'any' && (
+                <View style={styles.chip}>
+                  <Text style={styles.chipText}>{t(`paymentMethods.${listing.payment_method}`)}</Text>
+                </View>
+              )}
             </View>
-          )}
-          <Text style={styles.title}>{listing.title}</Text>
-          <Text style={styles.price}>{formatPrice(listing.price_cents, t('common.free'))}</Text>
-          <Text style={styles.meta}>
-            {[
-              listing.suburb,
-              t(`conditions.${listing.condition}`),
-              t(`pickupModes.${listing.pickup_mode}`),
-              listing.view_count > 0 ? t('listingDetail.views', { count: listing.view_count }) : null,
-            ]
-              .filter(Boolean)
-              .join(' · ')}
-          </Text>
+            <Text style={styles.meta}>
+              {[
+                listing.suburb,
+                listing.view_count > 0 ? t('listingDetail.views', { count: listing.view_count }) : null,
+              ]
+                .filter(Boolean)
+                .join(' · ')}
+            </Text>
+          </View>
           {distanceKm != null &&
             (() => {
               const est = travelEstimate(distanceKm);
@@ -445,8 +464,27 @@ const styles = StyleSheet.create({
   photo: { width, height: width * 0.9, backgroundColor: colors.surface },
   photoPlaceholder: { alignItems: 'center', justifyContent: 'center' },
   body: { padding: spacing.md, gap: spacing.sm },
+  headerBlock: { gap: 6 },
   title: { fontSize: 20, fontWeight: '700', color: colors.text },
-  price: { fontSize: 22, fontWeight: '800', color: colors.primary },
+  price: { fontSize: 18, fontWeight: '800', color: colors.text },
+  freeBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: colors.primarySoft,
+    borderRadius: radius.sm,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  freeBadgeText: { fontSize: 15, fontWeight: '800', color: colors.primaryDark },
+  chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 2 },
+  chip: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.full,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  chipText: { fontSize: 12, fontWeight: '600', color: colors.text },
   meta: { fontSize: 13, color: colors.textSecondary },
   attrCard: {
     backgroundColor: colors.surface,

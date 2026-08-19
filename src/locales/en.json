@@ -101,7 +101,8 @@
     "photoTip": "Tip: shoot all angles and any flaws — honest photos sell faster.",
     "editTitle": "Edit listing",
     "updated": "Listing updated!",
-    "save": "Save changes"
+    "save": "Save changes",
+    "paymentMethod": "Payment"
   },
   "listingDetail": {
     "chat": "Chat with seller",
@@ -124,6 +125,11 @@
     "pickup_only": "Pickup only",
     "seller_delivers": "Seller delivers",
     "buyer_collects": "Buyer collects"
+  },
+  "paymentMethods": {
+    "any": "Any payment",
+    "cash_only": "Cash only",
+    "bank_transfer": "Bank transfer"
   },
   "nationalities": {
     "CN": "China",

@@ -1,6 +1,7 @@
 export const colors = {
   primary: '#1B7A6D', // River Torrens teal-green
   primaryDark: '#12554C',
+  primarySoft: '#E7F1EF',
   accent: '#F4A83D',
   background: '#FFFFFF',
   surface: '#F6F7F8',

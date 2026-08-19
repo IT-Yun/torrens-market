@@ -66,6 +66,7 @@ async function withFavoriteCounts<T extends { id: string }>(items: T[]): Promise
 export type ListingDetail = ListingCard & {
   description: string;
   condition: string;
+  payment_method: string;
   seller_id: string;
   view_count: number;
   profiles: {
@@ -163,7 +164,7 @@ export async function fetchListing(id: string): Promise<ListingDetail | null> {
     .from('listings')
     .select(
       `id, title, description, price_cents, suburb, status, created_at, category_id, attributes,
-       lat, lng, condition, pickup_mode, seller_id, view_count,
+       lat, lng, condition, pickup_mode, payment_method, seller_id, view_count,
        listing_photos (storage_path, sort_order),
        profiles!listings_seller_id_fkey (display_name, avatar_url, suburb, nationality, is_phone_verified)`,
     )
@@ -207,6 +208,7 @@ export async function createListing(input: {
   priceCents: number;
   condition: string;
   pickupMode: string;
+  paymentMethod: string;
   suburb: string;
   lat?: number | null;
   lng?: number | null;
@@ -223,6 +225,7 @@ export async function createListing(input: {
       price_cents: input.priceCents,
       condition: input.condition,
       pickup_mode: input.pickupMode,
+      payment_method: input.paymentMethod,
       suburb: input.suburb,
       lat: input.lat ?? null,
       lng: input.lng ?? null,
@@ -295,6 +298,7 @@ export async function updateListing(
     price_cents: number;
     condition: string;
     pickup_mode: string;
+    payment_method: string;
     suburb: string;
     attributes: Record<string, unknown>;
   },

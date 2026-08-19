@@ -101,7 +101,8 @@
     "photoTip": "提示：多角度拍摄，包括瑕疵部位——真实的照片卖得更快。",
     "editTitle": "编辑商品",
     "updated": "已更新！",
-    "save": "保存修改"
+    "save": "保存修改",
+    "paymentMethod": "支付方式"
   },
   "listingDetail": {
     "chat": "联系卖家",
@@ -124,6 +125,11 @@
     "pickup_only": "仅自取",
     "seller_delivers": "卖家配送",
     "buyer_collects": "买家自提"
+  },
+  "paymentMethods": {
+    "any": "不限支付方式",
+    "cash_only": "仅现金",
+    "bank_transfer": "银行转账"
   },
   "nationalities": {
     "CN": "中国",
