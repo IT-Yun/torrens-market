@@ -162,6 +162,7 @@ export default function ChatRoomScreen() {
         keyboardVerticalOffset={0}
       >
         <FlatList
+          keyboardShouldPersistTaps="handled"
           inverted
           data={messages}
           keyExtractor={(item) => item.id}

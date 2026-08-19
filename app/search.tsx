@@ -183,6 +183,8 @@ export default function SearchScreen() {
       </View>
 
       <FlatList
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         data={results}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ListingRow item={item} viewerPos={pos} />}

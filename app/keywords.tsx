@@ -65,6 +65,7 @@ export default function KeywordsScreen() {
       </View>
 
       <FlatList
+        keyboardShouldPersistTaps="handled"
         data={alerts}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ padding: spacing.md, gap: spacing.sm }}
