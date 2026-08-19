@@ -81,7 +81,8 @@ Key design choices (each recorded as an ADR in [`docs/adr/`](docs/adr/)):
 |---|---|
 | [docs/database.md](docs/database.md) | **The entire data layer on one page** — tables by domain, design patterns, all 29 migrations |
 | [docs/security.md](docs/security.md) | **The security architecture** — RLS model, definer surface, privacy, abuse defense, audit log |
-| [SECURITY.md](SECURITY.md) / [PRIVACY.md](PRIVACY.md) | Vulnerability reporting policy / user privacy policy |
+| [SECURITY.md](SECURITY.md) / [PRIVACY.md](PRIVACY.md) / [TERMS.md](TERMS.md) | Vulnerability reporting / privacy policy / terms of service |
+| [Public site](https://it-yun.github.io/torrens-market/) | Store-facing landing, [privacy](https://it-yun.github.io/torrens-market/privacy.html) & [support](https://it-yun.github.io/torrens-market/support.html) pages (GitHub Pages) |
 | [docs/adr/](docs/adr/) | 14 decision records — *why* each choice was made, with alternatives |
 | [docs/mvp-spec.md](docs/mvp-spec.md) · [categories](docs/categories.md) · [scenarios](docs/user-scenarios.md) · [data-model](docs/data-model.md) | The original product/design phase docs |
 
