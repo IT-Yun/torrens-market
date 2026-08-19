@@ -1,21 +1,19 @@
 # App Store Connect — Review Notes (draft)
 
 Paste into ASC "App Review Information → Notes" at submission. Keep under
-4000 chars. `[DEMO-*]` placeholders are filled in when the demo account is
-created (DB-lane task).
+4000 chars. Reviewer sign-in uses Sign in with Apple — no demo credentials required.
 
 ---
 
 Torrens Market is a free local secondhand marketplace for Adelaide, South
 Australia, with a fully trilingual UI (English / Korean / Chinese).
 
-DEMO ACCOUNT
-- Email: [DEMO-EMAIL]
-- A fixed one-time code is configured for this reviewer account: [DEMO-OTP]
-  (enter it on the code screen — no email access needed).
-- The account is pre-seeded with realistic listings, an active chat with a
-  price offer and a scheduled meetup, favorites, and keyword alerts, so all
-  features are visible immediately.
+SIGN-IN FOR REVIEW (no demo credentials needed)
+This app uses Sign in with Apple (and Google). On the login screen, tap
+"Continue with Apple" — no username/password required. The marketplace is
+pre-populated with sample listings, so a fresh account immediately sees a
+populated feed and can browse, search with filters, open listing details,
+and start a chat. Account deletion: Profile → Settings → Delete account.
 
 KEY FLOWS TO TEST
 1. Language: the first screen selects English / 한국어 / 中文; every screen
