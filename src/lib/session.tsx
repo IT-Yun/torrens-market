@@ -11,6 +11,7 @@ export type Profile = {
   nationality: string | null;
   preferred_language: 'ko' | 'en' | 'zh';
   is_phone_verified: boolean;
+  tos_accepted_at: string | null;
 };
 
 type SessionContextValue = {

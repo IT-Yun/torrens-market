@@ -4,6 +4,7 @@ import {
   Alert,
   Image,
   KeyboardAvoidingView,
+  Modal,
   Platform,
   Pressable,
   ScrollView,
@@ -27,7 +28,8 @@ import {
   type FieldDef,
 } from '../../src/lib/listings';
 import { useSession } from '../../src/lib/session';
-import { Camera, MapPin, Sparkles, X } from 'lucide-react-native';
+import { supabase } from '../../src/lib/supabase';
+import { Camera, MapPin, ShieldCheck, Sparkles, X } from 'lucide-react-native';
 import { SuburbField } from '../../src/components/SuburbField';
 import { suggestCategorySlug } from '../../src/lib/categorize';
 import { getApproxPosition } from '../../src/lib/location';
@@ -95,8 +97,24 @@ function CustomField({
 
 export default function CreateListingScreen() {
   const { t } = useTranslation();
-  const { session, profile } = useSession();
+  const { session, profile, refreshProfile } = useSession();
   const { editId } = useLocalSearchParams<{ editId?: string }>();
+
+  // App Store 1.2 / Play UGC: terms acceptance gate before the first post.
+  const needsTos = !editId && !!profile && !profile.tos_accepted_at;
+
+  async function acceptTos() {
+    if (!session) return;
+    const { error } = await supabase
+      .from('profiles')
+      .update({ tos_accepted_at: new Date().toISOString() })
+      .eq('id', session.user.id);
+    if (error) {
+      Alert.alert(error.message);
+      return;
+    }
+    await refreshProfile();
+  }
   const lang = i18n.language;
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -388,11 +406,47 @@ export default function CreateListingScreen() {
         />
       </ScrollView>
       </KeyboardAvoidingView>
+      <Modal visible={needsTos} transparent animationType="fade">
+        <View style={styles.tosBackdrop}>
+          <View style={styles.tosCard}>
+            <ShieldCheck size={32} color={colors.primary} />
+            <Text style={styles.tosTitle}>{t('terms.title')}</Text>
+            <Text style={styles.tosBody}>{t('terms.intro')}</Text>
+            {['rule1', 'rule2', 'rule3', 'rule4'].map((key) => (
+              <Text key={key} style={styles.tosRule}>
+                · {t(`terms.${key}`)}
+              </Text>
+            ))}
+            <View style={{ gap: spacing.sm, alignSelf: 'stretch', marginTop: spacing.md }}>
+              <Button title={t('terms.accept')} onPress={acceptTos} />
+              <Button title={t('terms.decline')} variant="secondary" onPress={() => router.back()} />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  tosBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: spacing.lg,
+  },
+  tosCard: {
+    backgroundColor: colors.background,
+    borderRadius: radius.lg,
+    padding: spacing.lg,
+    gap: spacing.sm,
+    alignItems: 'center',
+    alignSelf: 'stretch',
+  },
+  tosTitle: { fontSize: 18, fontWeight: '700', color: colors.text },
+  tosBody: { fontSize: 14, color: colors.textSecondary, textAlign: 'center' },
+  tosRule: { fontSize: 13, color: colors.text, alignSelf: 'flex-start' },
   safe: { flex: 1, backgroundColor: colors.background },
   header: {
     flexDirection: 'row',

@@ -23,7 +23,9 @@
     "codeSent": "请输入邮箱收到的6位验证码",
     "codePlaceholder": "6位验证码",
     "verifyCode": "验证",
-    "error": "登录失败，请重试。"
+    "error": "登录失败，请重试。",
+    "resend": "重新发送验证码",
+    "resendIn": "{{s}}秒后可重发"
   },
   "profileSetup": {
     "title": "设置个人资料",
@@ -245,5 +247,15 @@
     "withdraw": "撤回",
     "statusProposed": "已出价",
     "statusAccepted": "已成交"
+  },
+  "terms": {
+    "title": "发布前请确认",
+    "intro": "为了让 Torrens 市集对所有人都安全：",
+    "rule1": "只出售本人拥有且允许出售的物品",
+    "rule2": "禁止违禁品（武器、假货、药品等）",
+    "rule3": "照片和描述真实，在公共场所交易",
+    "rule4": "举报会被审核，违规内容或账号可能被处理",
+    "accept": "同意并开始出售",
+    "decline": "暂不"
   }
 }

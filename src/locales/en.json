@@ -23,7 +23,9 @@
     "codeSent": "Check your email for a 6-digit code",
     "codePlaceholder": "6-digit code",
     "verifyCode": "Verify",
-    "error": "Sign-in failed. Please try again."
+    "error": "Sign-in failed. Please try again.",
+    "resend": "Resend code",
+    "resendIn": "Resend in {{s}}s"
   },
   "profileSetup": {
     "title": "Set up your profile",
@@ -245,5 +247,15 @@
     "withdraw": "Withdraw",
     "statusProposed": "Offered",
     "statusAccepted": "Agreed"
+  },
+  "terms": {
+    "title": "Before your first listing",
+    "intro": "A quick agreement to keep Torrens Market safe for everyone:",
+    "rule1": "Sell only items you own and may legally sell",
+    "rule2": "No prohibited items (weapons, counterfeits, medicines...)",
+    "rule3": "Honest photos & descriptions; meet in public places",
+    "rule4": "Reports are reviewed; violations can remove content or accounts",
+    "accept": "I agree — start selling",
+    "decline": "Not now"
   }
 }

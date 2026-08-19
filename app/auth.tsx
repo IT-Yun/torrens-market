@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
@@ -21,6 +21,21 @@ export default function AuthScreen() {
   const [code, setCode] = useState('');
   const [codeSent, setCodeSent] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
+  // Resend cooldown: cost defense against OTP email hammering (spec-abuse-cost-defense)
+  const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setInterval(() => setCooldown((s) => Math.max(0, s - 1)), 1000);
+    return () => clearInterval(timer);
+  }, [cooldown > 0]);
+
+  const sendCode = () =>
+    run('send', async () => {
+      await sendEmailCode(email.trim());
+      setCodeSent(true);
+      setCooldown(60);
+    });
 
   async function run(key: string, fn: () => Promise<void>) {
     setBusy(key);
@@ -84,13 +99,8 @@ export default function AuthScreen() {
               <Button
                 title={t('auth.sendCode')}
                 loading={busy === 'send'}
-                disabled={!email.includes('@')}
-                onPress={() =>
-                  run('send', async () => {
-                    await sendEmailCode(email.trim());
-                    setCodeSent(true);
-                  })
-                }
+                disabled={!email.includes('@') || cooldown > 0}
+                onPress={sendCode}
               />
             </>
           ) : (
@@ -113,6 +123,13 @@ export default function AuthScreen() {
                     router.replace('/');
                   })
                 }
+              />
+              <Button
+                title={cooldown > 0 ? t('auth.resendIn', { s: cooldown }) : t('auth.resend')}
+                variant="secondary"
+                disabled={cooldown > 0}
+                loading={busy === 'send'}
+                onPress={sendCode}
               />
             </>
           )}
