@@ -75,7 +75,24 @@ Key design choices (each recorded as an ADR in [`docs/adr/`](docs/adr/)):
 - **[ADR 009](docs/adr/009-meetup-scheduling.md)** / **[ADR 011](docs/adr/011-price-offers.md)** — deal-making state machines in chat
 - **[ADR 010](docs/adr/010-listing-bump.md)** — once-a-day bump with a server-time RPC (an E2E-caught clock-skew fix)
 
-Full product/design docs: [`docs/`](docs/) — MVP spec, category field system, user scenarios, 9-table ERD.
+## Documentation map
+
+| Read this | To understand |
+|---|---|
+| [docs/database.md](docs/database.md) | **The entire data layer on one page** — tables by domain, design patterns, all 29 migrations |
+| [docs/security.md](docs/security.md) | **The security architecture** — RLS model, definer surface, privacy, abuse defense, audit log |
+| [SECURITY.md](SECURITY.md) / [PRIVACY.md](PRIVACY.md) | Vulnerability reporting policy / user privacy policy |
+| [docs/adr/](docs/adr/) | 14 decision records — *why* each choice was made, with alternatives |
+| [docs/mvp-spec.md](docs/mvp-spec.md) · [categories](docs/categories.md) · [scenarios](docs/user-scenarios.md) · [data-model](docs/data-model.md) | The original product/design phase docs |
+
+## Security
+
+Authorization is enforced **in the database**, never in the client — the app ships only the public Supabase URL + anon key, which are safe *because* Row-Level Security is the real gate ([SECURITY.md](SECURITY.md)).
+
+- **RLS on every table**, proven by an attack-simulation suite: cross-tenant reads/writes, BOLA (broken object-level authorization), and mass-assignment. Example caught & fixed: column-level privileges now prevent a client from self-assigning the phone-verification badge.
+- **No secrets in the repo or bundle** — `service_role` and third-party keys live only in server-side env; verified by full-history secret scanning.
+- **Trust badges & trade state are server-managed**; **coordinates fuzzed on-device** (~1.1 km) so exact GPS never leaves the phone.
+- **CI security gates**: gitleaks (secret scan), CodeQL (JS/TS static analysis), `npm audit` + Dependabot.
 
 ## Status
 
