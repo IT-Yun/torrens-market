@@ -12,7 +12,8 @@
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Torrens Market uses your location to show secondhand listings near you in Adelaide and to verify your suburb. Your exact position is rounded on your device before anything is uploaded.",
         "NSPhotoLibraryUsageDescription": "Torrens Market needs access to your photos so you can add pictures to your listings and to chats.",
-        "NSCameraUsageDescription": "Torrens Market needs camera access so you can take photos for your listings."
+        "NSCameraUsageDescription": "Torrens Market needs camera access so you can take photos for your listings.",
+        "ITSAppUsesNonExemptEncryption": false
       },
       "usesAppleSignIn": true
     },
@@ -27,6 +28,7 @@
       "permissions": [
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.RECORD_AUDIO",
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.RECORD_AUDIO"
@@ -69,6 +71,12 @@
       "eas": {
         "projectId": "033c38ab-cbee-4f0a-b604-ed56befe6c2a"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/033c38ab-cbee-4f0a-b604-ed56befe6c2a"
     }
   }
 }
