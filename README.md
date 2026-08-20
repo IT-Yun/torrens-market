@@ -83,6 +83,9 @@ Key design choices (each recorded as an ADR in [`docs/adr/`](docs/adr/)):
 | [docs/security.md](docs/security.md) | **The security architecture** — RLS model, definer surface, privacy, abuse defense, audit log |
 | [SECURITY.md](SECURITY.md) / [PRIVACY.md](PRIVACY.md) / [TERMS.md](TERMS.md) | Vulnerability reporting / privacy policy / terms of service |
 | [Public site](https://it-yun.github.io/torrens-market/) | Store-facing landing, [privacy](https://it-yun.github.io/torrens-market/privacy.html) & [support](https://it-yun.github.io/torrens-market/support.html) pages (GitHub Pages) |
+| [docs/architecture.md](docs/architecture.md) | **How the whole system fits together** — the deep-dive behind the diagram above |
+| [docs/operations.md](docs/operations.md) | Scalability, cost curve, backups & disaster recovery runbook |
+| [docs/roadmap.md](docs/roadmap.md) | Monetization plan and the Karrot-style vertical expansion path |
 | [docs/adr/](docs/adr/) | 14 decision records — *why* each choice was made, with alternatives |
 | [docs/mvp-spec.md](docs/mvp-spec.md) · [categories](docs/categories.md) · [scenarios](docs/user-scenarios.md) · [data-model](docs/data-model.md) | The original product/design phase docs |
 
