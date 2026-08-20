@@ -29,6 +29,10 @@ export default function MyReviewsScreen() {
     }, [targetId]),
   );
 
+  // Karrot-style visibility: negative feedback is private to the recipient —
+  // public profiles only surface positive reviews.
+  const visible = isSelf ? reviews : reviews.filter((r) => r.rating >= 4);
+
   const tier = trustTier(trust?.trust_points ?? 0);
   const nextTier = tier.level < TRUST_TIERS.length ? TRUST_TIERS[tier.level] : null;
 
@@ -55,7 +59,7 @@ export default function MyReviewsScreen() {
         )}
       </View>
       <FlatList
-        data={reviews}
+        data={visible}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.card}>
@@ -84,7 +88,7 @@ export default function MyReviewsScreen() {
             <Text style={styles.emptyText}>{t('review.empty')}</Text>
           </View>
         }
-        contentContainerStyle={reviews.length === 0 ? { flex: 1 } : { padding: spacing.md, gap: spacing.sm }}
+        contentContainerStyle={visible.length === 0 ? { flex: 1 } : { padding: spacing.md, gap: spacing.sm }}
       />
     </SafeAreaView>
   );
