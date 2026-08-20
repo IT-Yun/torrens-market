@@ -104,7 +104,8 @@
     "editTitle": "매물 수정",
     "updated": "수정됐어요!",
     "save": "저장하기",
-    "paymentMethod": "결제 방식"
+    "paymentMethod": "결제 방식",
+    "requiredHint": "* 이 카테고리의 필수 항목"
   },
   "listingDetail": {
     "chat": "판매자와 채팅",

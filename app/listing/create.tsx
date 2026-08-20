@@ -68,7 +68,8 @@ function CustomField({
   lang: string;
 }) {
   const { t } = useTranslation();
-  const label = def.label_i18n[lang] ?? def.label_i18n.en ?? def.key;
+  const baseLabel = def.label_i18n[lang] ?? def.label_i18n.en ?? def.key;
+  const label = def.required ? `${baseLabel} *` : baseLabel;
 
   if (def.type === 'boolean') {
     return (
@@ -278,7 +279,11 @@ export default function CreateListingScreen() {
 
         {/* category */}
         <Text style={styles.sectionTitle}>{t('listingCreate.category')}</Text>
-        <View style={styles.chipWrap}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.chipScroll}
+        >
           {categories.map((c) => (
             <Chip
               key={c.id}
@@ -290,7 +295,7 @@ export default function CreateListingScreen() {
               }}
             />
           ))}
-        </View>
+        </ScrollView>
 
         <Field label={t('listingCreate.listingTitle')} value={title} onChangeText={setTitle} />
         {(() => {
@@ -332,7 +337,7 @@ export default function CreateListingScreen() {
 
         {/* category-specific fields — the differentiator */}
         {selectedCategory && selectedCategory.field_template.length > 0 && (
-          <>
+          <View style={styles.detailsCard}>
             <Text style={styles.sectionTitle}>{t('listingCreate.details')}</Text>
             {selectedCategory.field_template
               .filter((f) => f.type !== 'photo')
@@ -345,7 +350,8 @@ export default function CreateListingScreen() {
                   onChange={(v) => setAttributes((prev) => ({ ...prev, [f.key]: v }))}
                 />
               ))}
-          </>
+            <Text style={styles.requiredHint}>{t('listingCreate.requiredHint')}</Text>
+          </View>
         )}
 
         <Text style={styles.sectionTitle}>{t('listingCreate.condition')}</Text>
@@ -488,6 +494,14 @@ const styles = StyleSheet.create({
   addPhotoText: { fontSize: 10, color: colors.textSecondary, marginTop: 2 },
   photo: { width: 84, height: 84, borderRadius: radius.md },
   chipWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
+  chipScroll: { flexDirection: 'row', gap: spacing.sm, paddingVertical: 2 },
+  detailsCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    padding: spacing.md,
+    gap: spacing.md,
+  },
+  requiredHint: { fontSize: 11, color: colors.textSecondary },
   chip: {
     borderWidth: 1,
     borderColor: colors.border,

@@ -104,7 +104,8 @@
     "editTitle": "编辑商品",
     "updated": "已更新！",
     "save": "保存修改",
-    "paymentMethod": "支付方式"
+    "paymentMethod": "支付方式",
+    "requiredHint": "* 此分类的必填项"
   },
   "listingDetail": {
     "chat": "联系卖家",

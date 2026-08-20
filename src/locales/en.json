@@ -104,7 +104,8 @@
     "editTitle": "Edit listing",
     "updated": "Listing updated!",
     "save": "Save changes",
-    "paymentMethod": "Payment"
+    "paymentMethod": "Payment",
+    "requiredHint": "* required for this category"
   },
   "listingDetail": {
     "chat": "Chat with seller",
