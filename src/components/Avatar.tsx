@@ -1,4 +1,5 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { flagEmoji } from '../lib/format';
 import { colors } from '../theme';
 
 /**
@@ -16,9 +17,9 @@ export function Avatar({
   nationality?: string | null;
   size?: number;
 }) {
-  // Country-code text badge: flag emoji (two regional indicators) renders as
-  // split tofu glyphs under the RN new-architecture Release text layout.
-  const flag = nationality && /^[A-Za-z]{2}$/.test(nationality) ? nationality.toUpperCase() : null;
+  // Flag emoji badge (Sean's device feedback). Real devices render regional
+  // indicators fine — the earlier tofu boxes were a simulator font gap.
+  const flag = flagEmoji(nationality);
   const round = { width: size, height: size, borderRadius: size / 2 };
   return (
     <View style={{ width: size, height: size }}>
@@ -32,8 +33,8 @@ export function Avatar({
         </View>
       )}
       {flag && (
-        <View style={[styles.flagBadge, { borderRadius: size * 0.18 }]}>
-          <Text style={[styles.flagText, { fontSize: Math.max(9, size * 0.17) }]}>{flag}</Text>
+        <View style={[styles.flagBadge, { borderRadius: size * 0.2 }]}>
+          <Text style={{ fontSize: Math.max(11, size * 0.22) }}>{flag}</Text>
         </View>
       )}
     </View>
@@ -49,11 +50,12 @@ const styles = StyleSheet.create({
   initial: { fontWeight: '700', color: colors.primary },
   flagBadge: {
     position: 'absolute',
-    right: -4,
-    bottom: -4,
-    backgroundColor: colors.primary,
-    paddingHorizontal: 4,
-    paddingVertical: 1,
+    right: -5,
+    bottom: -5,
+    backgroundColor: colors.white,
+    paddingHorizontal: 2,
+    paddingVertical: 0,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
-  flagText: { color: colors.white, fontWeight: '700', letterSpacing: 0.5 },
 });

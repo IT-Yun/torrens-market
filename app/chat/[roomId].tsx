@@ -277,9 +277,6 @@ const styles = StyleSheet.create({
   },
   sendText: { color: colors.white, fontWeight: '600' },
   reviewChip: {
-    backgroundColor: colors.primarySoft,
-    justifyContent: 'center',
-    paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

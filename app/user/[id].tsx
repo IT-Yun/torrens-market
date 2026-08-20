@@ -81,7 +81,6 @@ export default function PublicProfileScreen() {
                     <Text style={styles.meta}>
                       {[
                         profile.suburb,
-                        profile.nationality ? t(`nationalities.${profile.nationality}`) : null,
                       ]
                         .filter(Boolean)
                         .join(' · ')}

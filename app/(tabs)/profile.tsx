@@ -67,7 +67,7 @@ export default function ProfileScreen() {
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                 {profile?.suburb_verified_at && <MapPin size={13} color={colors.primary} />}
                 <Text style={styles.meta}>
-                  {[profile?.suburb, profile?.nationality ? t(`nationalities.${profile.nationality}`) : null]
+                  {[profile?.suburb]
                     .filter(Boolean)
                     .join(' · ') || ' '}
                 </Text>

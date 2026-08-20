@@ -16,7 +16,9 @@ export function TrustBadge({ trust, compact }: { trust: ProfileTrust | null; com
     <View style={styles.row}>
       <View style={[styles.chip, { borderColor: tier.color }]}>
         <PawPrint size={12} color={tier.color} />
-        <Text style={[styles.chipText, { color: tier.color }]}>{t(`trust.${tier.slug}`)}</Text>
+        <Text style={[styles.chipText, { color: tier.color }]}>
+          {t('trust.levelTier', { level: tier.level, name: t(`trust.${tier.slug}`) })}
+        </Text>
       </View>
       {!compact && trust && trust.review_count > 0 && (
         <View style={styles.stars}>

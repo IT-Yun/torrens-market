@@ -330,12 +330,7 @@ export default function ListingDetailScreen() {
               </View>
               <TrustBadge trust={sellerTrust} />
               <Text style={styles.meta}>
-                {[
-                  listing.profiles.suburb,
-                  listing.profiles.nationality
-                    ? t(`nationalities.${listing.profiles.nationality}`)
-                    : null,
-                ]
+                {[listing.profiles.suburb]
                   .filter(Boolean)
                   .join(' · ')}
               </Text>
