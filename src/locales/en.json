@@ -26,7 +26,8 @@
     "verifyCode": "Verify",
     "error": "Sign-in failed. Please try again.",
     "resend": "Resend code",
-    "resendIn": "Resend in {{s}}s"
+    "resendIn": "Resend in {{s}}s",
+    "rateLimited": "Too many attempts — please wait a bit and try again."
   },
   "profileSetup": {
     "title": "Set up your profile",
@@ -276,5 +277,23 @@
     "placeholder": "What happened? The more detail, the faster the fix.",
     "submit": "Send",
     "done": "Thanks! Your report is in."
+  },
+  "notifPrefs": {
+    "title": "Notification settings",
+    "hint": "Choose which push notifications you receive.",
+    "keyword_alerts": "Keyword alerts",
+    "chat": "Chat messages",
+    "offers": "Price offers",
+    "meetups": "Meetup updates",
+    "price_drops": "Price drops on favorites"
+  },
+  "trustLadder": {
+    "title": "Trust tiers",
+    "intro": "Every good trade grows your Aussie animal. Points = good reviews (4–5★) minus bad ones (1–2★) from completed trades.",
+    "pointsNeeded": "{{points}}+ points",
+    "howTitle": "How to climb",
+    "how1": "· Complete trades and leave the chat once it's done",
+    "how2": "· Earn 4–5★ post-trade reviews from the other side",
+    "how3": "· Keep your listings honest — bad reviews cost points"
   }
 }

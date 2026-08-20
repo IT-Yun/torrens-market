@@ -16,6 +16,7 @@ import {
   LogOut,
   MapPin,
   MessageSquareWarning,
+  PawPrint,
   Package,
   Pencil,
   ShieldOff,
@@ -115,6 +116,14 @@ export default function ProfileScreen() {
             </View>
             <ChevronRight size={18} color={colors.textSecondary} />
           </Pressable>
+          <View style={styles.separator} />
+          <Pressable style={styles.menuRow} onPress={() => router.push('/trust-ladder')}>
+            <View style={styles.menuLeft}>
+              <PawPrint size={18} color={colors.textSecondary} />
+              <Text style={styles.menuText}>{t('trustLadder.title')}</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </Pressable>
         </View>
 
         <Text style={styles.sectionTitle}>{t('profile.sectionAlerts')}</Text>
@@ -123,6 +132,14 @@ export default function ProfileScreen() {
             <View style={styles.menuLeft}>
               <Bell size={18} color={colors.textSecondary} />
               <Text style={styles.menuText}>{t('keywords.title')}</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
+          </Pressable>
+          <View style={styles.separator} />
+          <Pressable style={styles.menuRow} onPress={() => router.push('/notification-settings')}>
+            <View style={styles.menuLeft}>
+              <Bell size={18} color={colors.textSecondary} />
+              <Text style={styles.menuText}>{t('notifPrefs.title')}</Text>
             </View>
             <ChevronRight size={18} color={colors.textSecondary} />
           </Pressable>

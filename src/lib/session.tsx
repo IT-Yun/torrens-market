@@ -12,6 +12,7 @@ export type Profile = {
   preferred_language: 'ko' | 'en' | 'zh';
   is_phone_verified: boolean;
   tos_accepted_at: string | null;
+  notification_prefs: Record<string, boolean> | null;
 };
 
 type SessionContextValue = {

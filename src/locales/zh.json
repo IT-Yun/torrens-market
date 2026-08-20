@@ -26,7 +26,8 @@
     "verifyCode": "验证",
     "error": "登录失败，请重试。",
     "resend": "重新发送验证码",
-    "resendIn": "{{s}}秒后可重发"
+    "resendIn": "{{s}}秒后可重发",
+    "rateLimited": "请求过于频繁 — 请稍后再试。"
   },
   "profileSetup": {
     "title": "设置个人资料",
@@ -276,5 +277,23 @@
     "placeholder": "发生了什么？描述越详细，修复越快。",
     "submit": "发送",
     "done": "谢谢！已收到你的反馈。"
+  },
+  "notifPrefs": {
+    "title": "通知设置",
+    "hint": "选择你想接收的推送通知。",
+    "keyword_alerts": "关键词提醒",
+    "chat": "聊天消息",
+    "offers": "出价",
+    "meetups": "见面约定",
+    "price_drops": "收藏商品降价"
+  },
+  "trustLadder": {
+    "title": "信任等级说明",
+    "intro": "每一次好的交易都会让你的澳洲动物成长。积分 = 已完成交易的好评（4–5★）− 差评（1–2★）。",
+    "pointsNeeded": "{{points}}分以上",
+    "howTitle": "如何升级",
+    "how1": "· 完成交易全程",
+    "how2": "· 获得对方 4–5★ 的交易后评价",
+    "how3": "· 保持诚信 — 差评会扣分"
   }
 }

@@ -4,6 +4,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,6 +13,7 @@ import {
 import { router } from 'expo-router';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { AdelaideHero } from '../src/components/AdelaideHero';
+import { GoogleLogo } from '../src/components/GoogleLogo';
 import { Button, Field, Screen } from '../src/components/ui';
 import { sendEmailCode, signInWithApple, signInWithProvider, verifyEmailCode } from '../src/lib/auth';
 import { colors, spacing } from '../src/theme';
@@ -43,7 +45,10 @@ export default function AuthScreen() {
     try {
       await fn();
     } catch (e) {
-      if ((e as Error).message !== 'auth_cancelled') Alert.alert(t('auth.error'));
+      const msg = (e as Error).message ?? '';
+      if (msg === 'auth_cancelled') return;
+      if (/rate limit|too many|429/i.test(msg)) Alert.alert(t('auth.rateLimited'));
+      else Alert.alert(t('auth.error'));
     } finally {
       setBusy(null);
     }
@@ -77,12 +82,16 @@ export default function AuthScreen() {
         <Text style={styles.tagline}>{t('auth.tagline')}</Text>
 
         <View style={{ gap: spacing.sm, alignSelf: 'stretch', marginTop: spacing.xl }}>
-          <Button
-            title={t('auth.continueWithGoogle')}
-            variant="outline"
-            loading={busy === 'google'}
+          <Pressable
+            style={styles.googleButton}
+            disabled={busy === 'google'}
             onPress={() => oauth('google')}
-          />
+            accessibilityRole="button"
+            accessibilityLabel={t('auth.continueWithGoogle')}
+          >
+            <GoogleLogo size={18} />
+            <Text style={styles.googleText}>{t('auth.continueWithGoogle')}</Text>
+          </Pressable>
           {Platform.OS === 'ios' && (
             <AppleAuthentication.AppleAuthenticationButton
               buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
@@ -160,4 +169,17 @@ const styles = StyleSheet.create({
   },
   hint: { textAlign: 'center', color: colors.textSecondary, fontSize: 14 },
   appleButton: { alignSelf: 'stretch', height: 50 },
+  googleButton: {
+    alignSelf: 'stretch',
+    height: 50,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.white,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  googleText: { fontSize: 17, fontWeight: '600', color: colors.text },
 });
