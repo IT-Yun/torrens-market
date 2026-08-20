@@ -10,9 +10,10 @@ import {
   View,
 } from 'react-native';
 import { router } from 'expo-router';
+import * as AppleAuthentication from 'expo-apple-authentication';
 import { AdelaideHero } from '../src/components/AdelaideHero';
 import { Button, Field, Screen } from '../src/components/ui';
-import { sendEmailCode, signInWithProvider, verifyEmailCode } from '../src/lib/auth';
+import { sendEmailCode, signInWithApple, signInWithProvider, verifyEmailCode } from '../src/lib/auth';
 import { colors, spacing } from '../src/theme';
 
 export default function AuthScreen() {
@@ -54,6 +55,12 @@ export default function AuthScreen() {
       router.replace('/');
     });
 
+  const appleNative = () =>
+    run('apple', async () => {
+      await signInWithApple();
+      router.replace('/');
+    });
+
   return (
     <Screen>
       <KeyboardAvoidingView
@@ -77,11 +84,12 @@ export default function AuthScreen() {
             onPress={() => oauth('google')}
           />
           {Platform.OS === 'ios' && (
-            <Button
-              title={t('auth.continueWithApple')}
-              variant="outline"
-              loading={busy === 'apple'}
-              onPress={() => oauth('apple')}
+            <AppleAuthentication.AppleAuthenticationButton
+              buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
+              buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+              cornerRadius={12}
+              style={styles.appleButton}
+              onPress={appleNative}
             />
           )}
 
@@ -151,4 +159,5 @@ const styles = StyleSheet.create({
     marginVertical: spacing.sm,
   },
   hint: { textAlign: 'center', color: colors.textSecondary, fontSize: 14 },
+  appleButton: { alignSelf: 'stretch', height: 50 },
 });

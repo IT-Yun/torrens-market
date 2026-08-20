@@ -1,3 +1,5 @@
+import * as AppleAuthentication from 'expo-apple-authentication';
+import * as Crypto from 'expo-crypto';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri } from 'expo-auth-session';
 import { supabase } from './supabase';
@@ -23,6 +25,53 @@ export async function signInWithProvider(provider: 'google' | 'apple'): Promise<
 
   const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
   if (exchangeError) throw exchangeError;
+}
+
+/**
+ * Native Sign in with Apple (App Store review expects the native sheet).
+ * Uses the id-token flow: Apple returns an identity token bound to a nonce,
+ * which Supabase verifies against our bundle id (no client secret needed).
+ */
+export async function signInWithApple(): Promise<void> {
+  const rawNonce = Crypto.randomUUID().replace(/-/g, '');
+  const hashedNonce = await Crypto.digestStringAsync(
+    Crypto.CryptoDigestAlgorithm.SHA256,
+    rawNonce,
+  );
+
+  let credential: AppleAuthentication.AppleAuthenticationCredential;
+  try {
+    credential = await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+      ],
+      nonce: hashedNonce,
+    });
+  } catch (e) {
+    if ((e as { code?: string }).code === 'ERR_REQUEST_CANCELED')
+      throw new Error('auth_cancelled');
+    throw e;
+  }
+  if (!credential.identityToken) throw new Error('auth_no_token');
+
+  const { error } = await supabase.auth.signInWithIdToken({
+    provider: 'apple',
+    token: credential.identityToken,
+    nonce: rawNonce,
+  });
+  if (error) throw error;
+
+  // Apple sends the name only on first authorization — persist it then.
+  const name = credential.fullName?.givenName
+    ? `${credential.fullName.givenName} ${credential.fullName.familyName ?? ''}`.trim()
+    : null;
+  if (name) {
+    const { data } = await supabase.auth.getUser();
+    if (data.user) {
+      await supabase.from('profiles').update({ display_name: name }).eq('id', data.user.id);
+    }
+  }
 }
 
 /** Email OTP fallback: sends a 6-digit code to the address. */

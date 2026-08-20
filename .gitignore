@@ -41,3 +41,8 @@ yarn-error.*
 /android
 .env
 supabase/.temp/
+
+# EAS submit credentials (Play service account, ASC keys) — never commit
+secrets/
+*.p8
+play-service-account.json

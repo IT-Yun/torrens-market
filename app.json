@@ -7,15 +7,27 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.ityun.torrensmarket",
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Torrens Market uses your location to show secondhand listings near you in Adelaide and to verify your suburb. Your exact position is rounded on your device before anything is uploaded.",
+        "NSPhotoLibraryUsageDescription": "Torrens Market needs access to your photos so you can add pictures to your listings and to chats.",
+        "NSCameraUsageDescription": "Torrens Market needs camera access so you can take photos for your listings."
+      },
+      "usesAppleSignIn": true
     },
     "android": {
+      "package": "com.ityun.torrensmarket",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ],
       "predictiveBackGestureEnabled": false
     },
     "web": {
@@ -25,7 +37,22 @@
       "expo-router",
       "expo-localization",
       "expo-web-browser",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Torrens Market uses your location to show listings near you in Adelaide and to verify your suburb. Your exact position is rounded on your device before upload."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Torrens Market needs access to your photos so you can add pictures to your listings and to chats.",
+          "cameraPermission": "Torrens Market needs camera access so you can take photos for your listings."
+        }
+      ],
+      "expo-notifications",
+      "expo-apple-authentication"
     ],
     "scheme": "torrensmarket",
     "splash": {
