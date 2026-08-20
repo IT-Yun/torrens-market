@@ -1,0 +1,27 @@
+# gitleaks configuration for Torrens Market.
+#
+# The ONLY credential in this repository is the Supabase "anon" (publishable)
+# key in eas.json. That key is PUBLIC BY DESIGN — it ships inside the mobile
+# app bundle and every user already holds it. It grants nothing on its own:
+# authorization is enforced by Postgres Row-Level Security, which the anon key
+# cannot bypass (see docs/security.md, verified by the attack-simulation suite).
+#
+# The real secrets — the Supabase service_role key, the database password, and
+# the pg_net notify secret — are gitignored (.env*) and live only in Supabase
+# Edge Function secrets / the local environment. They are never committed.
+#
+# This config keeps the default rules on but allowlists that one intentional,
+# non-sensitive public key so secret-scanning stays green.
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Supabase anon (publishable) key — public by design; RLS is the gate"
+regexTarget = "match"
+# anon-role Supabase JWTs only. A service_role JWT would NOT match this and
+# would still be flagged — exactly what we want.
+regexes = [
+  '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+''',
+]
+paths = ['''eas\.json''']
