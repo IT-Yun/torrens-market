@@ -67,6 +67,7 @@ export type ListingDetail = ListingCard & {
   description: string;
   condition: string;
   payment_method: string;
+  offers_enabled: boolean;
   seller_id: string;
   view_count: number;
   profiles: {
@@ -164,7 +165,7 @@ export async function fetchListing(id: string): Promise<ListingDetail | null> {
     .from('listings')
     .select(
       `id, title, description, price_cents, suburb, status, created_at, category_id, attributes,
-       lat, lng, condition, pickup_mode, payment_method, seller_id, view_count,
+       lat, lng, condition, pickup_mode, payment_method, offers_enabled, seller_id, view_count,
        listing_photos (storage_path, sort_order),
        profiles!listings_seller_id_fkey (display_name, avatar_url, suburb, nationality, is_phone_verified)`,
     )
@@ -209,6 +210,7 @@ export async function createListing(input: {
   condition: string;
   pickupMode: string;
   paymentMethod: string;
+  offersEnabled: boolean;
   suburb: string;
   lat?: number | null;
   lng?: number | null;
@@ -226,6 +228,7 @@ export async function createListing(input: {
       condition: input.condition,
       pickup_mode: input.pickupMode,
       payment_method: input.paymentMethod,
+      offers_enabled: input.offersEnabled,
       suburb: input.suburb,
       lat: input.lat ?? null,
       lng: input.lng ?? null,
@@ -299,6 +302,7 @@ export async function updateListing(
     condition: string;
     pickup_mode: string;
     payment_method: string;
+    offers_enabled: boolean;
     suburb: string;
     attributes: Record<string, unknown>;
   },

@@ -106,7 +106,9 @@
     "updated": "수정됐어요!",
     "save": "저장하기",
     "paymentMethod": "결제 방식",
-    "requiredHint": "* 이 카테고리의 필수 항목"
+    "requiredHint": "* 이 카테고리의 필수 항목",
+    "offersEnabled": "가격 제안 받기",
+    "offersHint": "끄면 정가 판매 — 구매자가 가격 제안을 보낼 수 없어요."
   },
   "listingDetail": {
     "chat": "판매자와 채팅",
@@ -252,7 +254,8 @@
     "decline": "거절",
     "withdraw": "철회",
     "statusProposed": "제안됨",
-    "statusAccepted": "합의됨"
+    "statusAccepted": "합의됨",
+    "firmPrice": "정가 판매 — 제안 불가"
   },
   "terms": {
     "title": "첫 판매 전에 확인해 주세요",

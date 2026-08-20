@@ -104,17 +104,18 @@ export type RoomHeader = {
   listingId: string;
   listingStatus: string;
   listingSuburb: string;
+  offersEnabled: boolean;
 };
 
 export async function fetchRoomHeader(roomId: string, myUserId: string): Promise<RoomHeader | null> {
   const { data, error } = await supabase
     .from('chat_rooms')
-    .select('listings (id, title, status, suburb), chat_participants (user_id, profiles (display_name))')
+    .select('listings (id, title, status, suburb, offers_enabled), chat_participants (user_id, profiles (display_name))')
     .eq('id', roomId)
     .single();
   if (error) return null;
   const room = data as unknown as {
-    listings: { id: string; title: string; status: string; suburb: string };
+    listings: { id: string; title: string; status: string; suburb: string; offers_enabled: boolean };
     chat_participants: { user_id: string; profiles: { display_name: string } }[];
   };
   const other = room.chat_participants.find((p) => p.user_id !== myUserId);
@@ -125,6 +126,7 @@ export async function fetchRoomHeader(roomId: string, myUserId: string): Promise
     listingId: room.listings?.id ?? '',
     listingStatus: room.listings?.status ?? 'active',
     listingSuburb: room.listings?.suburb ?? '',
+    offersEnabled: room.listings?.offers_enabled ?? true,
   };
 }
 

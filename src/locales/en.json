@@ -106,7 +106,9 @@
     "updated": "Listing updated!",
     "save": "Save changes",
     "paymentMethod": "Payment",
-    "requiredHint": "* required for this category"
+    "requiredHint": "* required for this category",
+    "offersEnabled": "Accept price offers",
+    "offersHint": "Off = firm price; buyers can't send offers."
   },
   "listingDetail": {
     "chat": "Chat with seller",
@@ -252,7 +254,8 @@
     "decline": "Decline",
     "withdraw": "Withdraw",
     "statusProposed": "Offered",
-    "statusAccepted": "Agreed"
+    "statusAccepted": "Agreed",
+    "firmPrice": "Firm price — no offers"
   },
   "terms": {
     "title": "Before your first listing",

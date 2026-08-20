@@ -21,7 +21,15 @@ import { colors, radius, spacing } from '../theme';
  * Pinned price-offer area for a chat room (ADR 011): shows the open or
  * accepted offer with contextual actions, or a "make offer" entry point.
  */
-export function OfferCard({ roomId, myId }: { roomId: string; myId: string }) {
+export function OfferCard({
+  roomId,
+  myId,
+  offersEnabled = true,
+}: {
+  roomId: string;
+  myId: string;
+  offersEnabled?: boolean;
+}) {
   const { t } = useTranslation();
   const [offer, setOffer] = useState<Offer | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -116,11 +124,18 @@ export function OfferCard({ roomId, myId }: { roomId: string; myId: string }) {
             )}
           </View>
         </View>
-      ) : (
+      ) : offersEnabled ? (
         <Pressable style={styles.makeBtn} onPress={() => setModalOpen(true)}>
           <HandCoins size={15} color={colors.primary} />
           <Text style={styles.makeText}>{t('offer.make')}</Text>
         </Pressable>
+      ) : (
+        <View style={[styles.makeBtn, { opacity: 0.65 }]}>
+          <HandCoins size={15} color={colors.textSecondary} />
+          <Text style={[styles.makeText, { color: colors.textSecondary }]}>
+            {t('offer.firmPrice')}
+          </Text>
+        </View>
       )}
 
       <Modal visible={modalOpen} transparent animationType="slide">

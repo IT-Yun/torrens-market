@@ -106,7 +106,9 @@
     "updated": "已更新！",
     "save": "保存修改",
     "paymentMethod": "支付方式",
-    "requiredHint": "* 此分类的必填项"
+    "requiredHint": "* 此分类的必填项",
+    "offersEnabled": "接受出价",
+    "offersHint": "关闭后为一口价，买家无法出价。"
   },
   "listingDetail": {
     "chat": "联系卖家",
@@ -252,7 +254,8 @@
     "decline": "拒绝",
     "withdraw": "撤回",
     "statusProposed": "已出价",
-    "statusAccepted": "已成交"
+    "statusAccepted": "已成交",
+    "firmPrice": "一口价 — 不接受出价"
   },
   "terms": {
     "title": "发布前请确认",

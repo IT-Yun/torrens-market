@@ -127,6 +127,7 @@ export default function CreateListingScreen() {
   const [condition, setCondition] = useState('used');
   const [pickupMode, setPickupMode] = useState('pickup_only');
   const [paymentMethod, setPaymentMethod] = useState('any');
+  const [offersEnabled, setOffersEnabled] = useState(true);
   const [suburb, setSuburb] = useState(profile?.suburb ?? '');
   const [attributes, setAttributes] = useState<Record<string, unknown>>({});
   const [busy, setBusy] = useState(false);
@@ -144,6 +145,7 @@ export default function CreateListingScreen() {
         setCondition(l.condition);
         setPickupMode(l.pickup_mode);
         setPaymentMethod(l.payment_method ?? 'any');
+        setOffersEnabled(l.offers_enabled ?? true);
         setSuburb(l.suburb);
         setAttributes(l.attributes ?? {});
       })
@@ -188,6 +190,7 @@ export default function CreateListingScreen() {
           condition,
           pickup_mode: pickupMode,
           payment_method: paymentMethod,
+          offers_enabled: offersEnabled,
           suburb: suburb.trim(),
           attributes,
         });
@@ -206,6 +209,7 @@ export default function CreateListingScreen() {
           condition,
           pickupMode,
           paymentMethod,
+          offersEnabled: price.trim() === '0' ? false : offersEnabled,
           suburb: suburb.trim(),
           lat: approx?.lat,
           lng: approx?.lng,
@@ -519,4 +523,5 @@ const styles = StyleSheet.create({
   },
   label: { fontSize: 14, fontWeight: '600', color: colors.text },
   uploadProgress: { textAlign: 'center', fontSize: 13, color: colors.textSecondary },
+  offersHint: { fontSize: 11, color: colors.textSecondary, marginTop: 2 },
 });

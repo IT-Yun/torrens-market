@@ -132,7 +132,7 @@ export default function ChatRoomScreen() {
       </View>
       {roomId && session && header && (
         <>
-          <OfferCard roomId={roomId} myId={session.user.id} />
+          <OfferCard roomId={roomId} myId={session.user.id} offersEnabled={header.offersEnabled} />
           <MeetupCard roomId={roomId} myId={session.user.id} defaultPlace={header.listingSuburb} />
         </>
       )}
