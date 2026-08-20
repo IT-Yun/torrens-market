@@ -21,10 +21,11 @@ type PublicProfile = {
   suburb_verified_at: string | null;
   nationality: string | null;
   is_phone_verified: boolean;
+  created_at: string;
 };
 
 export default function PublicProfileScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [profile, setProfile] = useState<PublicProfile | null>(null);
   const [trust, setTrust] = useState<ProfileTrust | null>(null);
@@ -36,7 +37,7 @@ export default function PublicProfileScreen() {
     if (!id) return;
     supabase
       .from('profiles')
-      .select('id, display_name, avatar_url, suburb, suburb_verified_at, nationality, is_phone_verified')
+      .select('id, display_name, avatar_url, suburb, suburb_verified_at, nationality, is_phone_verified, created_at')
       .eq('id', id)
       .single()
       .then(({ data }) => setProfile((data as PublicProfile) ?? null));
@@ -81,6 +82,14 @@ export default function PublicProfileScreen() {
                     <Text style={styles.meta}>
                       {[
                         profile.suburb,
+                        profile.created_at
+                          ? t('profile.joined', {
+                              date: new Date(profile.created_at).toLocaleDateString(
+                                i18n.language === 'zh' ? 'zh-CN' : i18n.language,
+                                { year: 'numeric', month: 'short' },
+                              ),
+                            })
+                          : null,
                       ]
                         .filter(Boolean)
                         .join(' · ')}
