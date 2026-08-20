@@ -7,7 +7,8 @@
     "loading": "加载中...",
     "loadError": "加载失败 — 请检查网络连接。",
     "retry": "重试",
-    "free": "免费"
+    "free": "免费",
+    "back": "返回"
   },
   "onboarding": {
     "chooseLanguage": "选择你的语言",
@@ -182,7 +183,10 @@
     "deleteConfirm": "商品将被永久隐藏。聊天和评价会保留。",
     "edit": "编辑",
     "manage": "管理",
-    "manageTitle": "管理商品"
+    "manageTitle": "管理商品",
+    "showSold": "显示已售",
+    "review": "写评价",
+    "noChatYet": "该商品还没有聊天记录。"
   },
   "report": {
     "menuTitle": "举报或屏蔽",

@@ -128,6 +128,17 @@ export async function fetchRoomHeader(roomId: string, myUserId: string): Promise
   };
 }
 
+/** The caller's chat room for a listing, or null (e.g. jump from my-listings to review). */
+export async function findRoomForListing(listingId: string, userId: string): Promise<string | null> {
+  const { data } = await supabase
+    .from('chat_rooms')
+    .select('id, chat_participants!inner (user_id)')
+    .eq('listing_id', listingId)
+    .eq('chat_participants.user_id', userId)
+    .limit(1);
+  return (data as { id: string }[] | null)?.[0]?.id ?? null;
+}
+
 export async function fetchMessages(roomId: string): Promise<Message[]> {
   const { data, error } = await supabase
     .from('messages')

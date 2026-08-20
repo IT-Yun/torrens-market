@@ -7,7 +7,8 @@
     "loading": "Loading...",
     "loadError": "Couldn't load — check your connection.",
     "retry": "Retry",
-    "free": "Free"
+    "free": "Free",
+    "back": "Back"
   },
   "onboarding": {
     "chooseLanguage": "Choose your language",
@@ -182,7 +183,10 @@
     "deleteConfirm": "This hides the listing permanently. Chats and reviews are kept.",
     "edit": "Edit",
     "manage": "Manage",
-    "manageTitle": "Manage listing"
+    "manageTitle": "Manage listing",
+    "showSold": "Show sold",
+    "review": "Review",
+    "noChatYet": "No chat for this listing yet."
   },
   "report": {
     "menuTitle": "Report or block",

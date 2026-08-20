@@ -15,8 +15,10 @@ import {
   updateListingStatus,
   type ListingCard,
 } from '../src/lib/listings';
+import { findRoomForListing } from '../src/lib/chat';
 import { useSession } from '../src/lib/session';
 import { colors, radius, spacing } from '../src/theme';
+import { BackButton } from '../src/components/BackButton';
 
 const ACTIONS: Record<string, ('reserved' | 'sold' | 'active')[]> = {
   active: ['reserved', 'sold'],
@@ -33,6 +35,8 @@ export default function MyListingsScreen() {
   const { t } = useTranslation();
   const { session } = useSession();
   const [items, setItems] = useState<ListingCard[]>([]);
+  const [showSold, setShowSold] = useState(true);
+  const visible = showSold ? items : items.filter((i) => i.status !== 'sold');
 
   const load = useCallback(() => {
     if (session) fetchMyListings(session.user.id).then(setItems).catch(() => {});
@@ -43,15 +47,21 @@ export default function MyListingsScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()}>
-          <Text style={styles.back}>‹</Text>
-        </Pressable>
+        <BackButton />
         <Text style={styles.title}>{t('profile.myListings')}</Text>
-        <View style={{ width: 24 }} />
+        <Pressable
+          style={[styles.soldToggle, showSold && styles.soldToggleOn]}
+          onPress={() => setShowSold((v) => !v)}
+          accessibilityRole="button"
+        >
+          <Text style={[styles.soldToggleText, showSold && { color: colors.white }]}>
+            {t('myListings.showSold')}
+          </Text>
+        </Pressable>
       </View>
 
       <FlatList
-        data={items}
+        data={visible}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
           const photo = [...item.listing_photos].sort((a, b) => a.sort_order - b.sort_order)[0];
@@ -100,6 +110,22 @@ export default function MyListingsScreen() {
                     <ArrowUp size={13} color={colors.primary} />
                     <Text style={[styles.actionText, { color: colors.primary }]}>
                       {t('myListings.bump')}
+                    </Text>
+                  </Pressable>
+                )}
+                {sold && (
+                  <Pressable
+                    style={[styles.actionButton, styles.reviewButton]}
+                    onPress={async () => {
+                      const room = session
+                        ? await findRoomForListing(item.id, session.user.id).catch(() => null)
+                        : null;
+                      if (room) router.push(`/chat/${room}`);
+                      else Alert.alert(t('myListings.noChatYet'));
+                    }}
+                  >
+                    <Text style={[styles.actionText, { color: colors.primary }]}>
+                      {t('myListings.review')}
                     </Text>
                   </Pressable>
                 )}
@@ -179,6 +205,16 @@ const styles = StyleSheet.create({
   },
   back: { fontSize: 32, color: colors.text, lineHeight: 34, width: 24 },
   title: { fontSize: 17, fontWeight: '700', color: colors.text },
+  soldToggle: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.full,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  soldToggleOn: { backgroundColor: colors.primary, borderColor: colors.primary },
+  soldToggleText: { fontSize: 12, fontWeight: '600', color: colors.textSecondary },
+  reviewButton: { backgroundColor: colors.primarySoft },
   row: {
     flexDirection: 'row',
     alignItems: 'center',

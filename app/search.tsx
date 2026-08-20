@@ -24,6 +24,7 @@ import {
   type SearchSort,
 } from '../src/lib/listings';
 import { colors, radius, spacing } from '../src/theme';
+import { BackButton } from '../src/components/BackButton';
 
 const NATIONALITY_CODES = ['CN', 'KR', 'AU', 'IN', 'VN', 'JP', 'MY', 'HK', 'TW', 'OTHER'];
 const RECENTS_KEY = 'recent_searches';
@@ -90,9 +91,7 @@ export default function SearchScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <View style={styles.searchBar}>
-        <Pressable onPress={() => router.back()}>
-          <Text style={styles.back}>‹</Text>
-        </Pressable>
+        <BackButton />
         <TextInput
           style={styles.input}
           placeholder={t('home.searchPlaceholder')}

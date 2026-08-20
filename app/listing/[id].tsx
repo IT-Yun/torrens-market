@@ -47,6 +47,7 @@ import { fetchTrust, type ProfileTrust } from '../../src/lib/reviews';
 import { haversineKm, MAX_LOCAL_DISTANCE_KM, travelEstimate } from '../../src/lib/geo';
 import { getPosition } from '../../src/lib/location';
 import { colors, radius, spacing } from '../../src/theme';
+import { BackButton } from '../../src/components/BackButton';
 
 const { width } = Dimensions.get('window');
 
@@ -169,9 +170,7 @@ export default function ListingDetailScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()}>
-          <Text style={styles.back}>‹</Text>
-        </Pressable>
+        <BackButton />
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
           <Pressable
             onPress={onToggleFavorite}

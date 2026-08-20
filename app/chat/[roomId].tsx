@@ -32,6 +32,7 @@ import { TrustBadge } from '../../src/components/TrustBadge';
 import { fetchTrust, hasReviewed, type ProfileTrust } from '../../src/lib/reviews';
 import { useSession } from '../../src/lib/session';
 import { colors, radius, spacing } from '../../src/theme';
+import { BackButton } from '../../src/components/BackButton';
 
 function ChatImage({ path }: { path: string }) {
   const [url, setUrl] = useState<string | null>(null);
@@ -112,9 +113,7 @@ export default function ChatRoomScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()}>
-          <Text style={styles.back}>‹</Text>
-        </Pressable>
+        <BackButton />
         {header && (
           <Pressable
             style={styles.headerCenter}
@@ -278,17 +277,18 @@ const styles = StyleSheet.create({
   },
   sendText: { color: colors.white, fontWeight: '600' },
   reviewChip: {
+    backgroundColor: colors.primarySoft,
+    justifyContent: 'center',
+    paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
     marginHorizontal: spacing.md,
     marginTop: spacing.sm,
-    paddingVertical: 8,
-    borderWidth: 1,
-    borderColor: colors.border,
+    paddingVertical: 12,
     borderRadius: radius.md,
-    backgroundColor: colors.white,
+    backgroundColor: colors.primarySoft,
   },
   reviewChipText: { color: colors.primary, fontWeight: '700', fontSize: 13 },
 });

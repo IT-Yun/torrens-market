@@ -15,6 +15,7 @@ import { addAlert, fetchAlerts, removeAlert, type KeywordAlert } from '../src/li
 import { registerPushToken } from '../src/lib/notifications';
 import { useSession } from '../src/lib/session';
 import { colors, radius, spacing } from '../src/theme';
+import { BackButton } from '../src/components/BackButton';
 
 export default function KeywordsScreen() {
   const { t } = useTranslation();
@@ -40,9 +41,7 @@ export default function KeywordsScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()}>
-          <Text style={styles.back}>‹</Text>
-        </Pressable>
+        <BackButton />
         <Text style={styles.title}>{t('keywords.title')}</Text>
         <View style={{ width: 24 }} />
       </View>
