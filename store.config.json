@@ -1,0 +1,93 @@
+{
+  "configVersion": 0,
+  "apple": {
+    "info": {
+      "en-AU": {
+        "title": "Torrens Market",
+        "subtitle": "Adelaide's local marketplace",
+        "description": "Torrens Market is Adelaide's secondhand marketplace, built for the city's international communities — with the entire app available in English, Korean, and Chinese.\n\nBUY & SELL LOCALLY\n• Browse listings near you: your suburb, within 5–20 km, or all Adelaide\n• 16 categories with details that matter: furniture dimensions, cosmetics expiry and period-after-opening, car rego and service history\n• Post in under a minute with photos and smart category suggestions\n\nYOUR LANGUAGE, NATIVELY\n• Switch the whole app between English, 한국어 and 中文 anytime\n• Optional nationality on profiles with an opt-in community filter — trade within your community when that feels easier\n\nTRUST YOU CAN SEE\n• Post-trade reviews build an Aussie-animal trust ladder: quokka → bilby → koala → wombat → wallaby → kangaroo\n• Verified-suburb and phone badges, verified-only search filter\n• Report and block on every surface; repeated reports hide a listing automatically\n\nDEAL-MAKING BUILT IN\n• 1:1 chat with photo sharing\n• Send and accept price offers in chat\n• Schedule pickup meetups — accepting reserves the listing, with a reminder before you meet\n• Keyword alerts: get notified the moment something you want is posted\n\nPRIVACY BY DESIGN\n• Locations are rounded to about 1 km on your device — your exact position never leaves your phone\n• No ads, no tracking, free to use\n• Delete your account and all data anytime\n\nMade in Adelaide, for Adelaide. Named after the River Torrens.",
+        "keywords": [
+          "secondhand",
+          "marketplace",
+          "Adelaide",
+          "buy and sell",
+          "used",
+          "local",
+          "korean",
+          "chinese",
+          "classifieds",
+          "당근",
+          "중고거래",
+          "二手"
+        ],
+        "marketingUrl": "https://it-yun.github.io/torrens-market/",
+        "supportUrl": "https://it-yun.github.io/torrens-market/support.html",
+        "privacyPolicyUrl": "https://it-yun.github.io/torrens-market/privacy.html"
+      },
+      "ko": {
+        "title": "Torrens Market",
+        "subtitle": "애들레이드 동네 중고마켓",
+        "description": "토렌스 마켓은 애들레이드의 중고거래 앱입니다. 앱 전체가 한국어·영어·중국어를 지원해요.\n\n동네에서 사고팔기\n• 내 지역, 5–20km, 애들레이드 전체 범위로 매물 탐색\n• 16개 카테고리와 꼭 필요한 상세 정보: 가구 치수, 화장품 유효기간, 자동차 rego·정비 이력\n• 사진과 카테고리 자동 추천으로 1분 안에 등록\n\n보이는 신뢰\n• 거래 후 리뷰로 쌓이는 호주 동물 신뢰 등급: 쿼카 → 빌비 → 코알라 → 웜뱃 → 왈라비 → 캥거루\n• 지역 인증·전화 인증 배지, 인증 판매자만 보기 필터\n• 모든 화면에서 신고·차단 가능\n\n채팅에서 거래 완성\n• 1:1 채팅, 사진 전송\n• 채팅 안에서 가격 제안과 픽업 약속까지\n• 키워드 알림: 원하는 물건이 올라오면 즉시 푸시\n\n프라이버시 우선\n• 위치는 기기에서 약 1km 단위로 반올림 — 정확한 위치는 전송되지 않아요\n• 광고 없음, 추적 없음, 무료\n• 언제든 계정과 데이터 삭제 가능",
+        "keywords": [
+          "중고거래",
+          "애들레이드",
+          "중고마켓",
+          "당근",
+          "호주",
+          "워홀",
+          "유학생",
+          "한인",
+          "직거래"
+        ],
+        "marketingUrl": "https://it-yun.github.io/torrens-market/",
+        "supportUrl": "https://it-yun.github.io/torrens-market/support.html",
+        "privacyPolicyUrl": "https://it-yun.github.io/torrens-market/privacy.html"
+      },
+      "zh-Hans": {
+        "title": "Torrens Market",
+        "subtitle": "阿德莱德本地二手市集",
+        "description": "Torrens Market 是阿德莱德的本地二手交易应用，整个应用支持中文、英文和韩文。\n\n本地买卖\n• 按距离浏览：我的区域、5–20 公里内或全阿德莱德\n• 16 个分类，包含真正有用的细节：家具尺寸、化妆品有效期与开封保质期、汽车 rego 与保养记录\n• 照片 + 智能分类推荐，一分钟发布\n\n看得见的信任\n• 交易后互评累积澳洲动物信任等级：短尾矮袋鼠 → 兔耳袋狸 → 考拉 → 袋熊 → 小袋鼠 → 袋鼠\n• 区域认证与手机认证徽章，可只看认证卖家\n• 每个页面都可举报和屏蔽\n\n聊天里完成交易\n• 一对一聊天，支持图片\n• 聊天中出价、约定自取时间和地点\n• 关键词提醒：心仪物品一上架立刻推送\n\n隐私优先\n• 位置在手机上按约 1 公里取整 — 精确位置绝不上传\n• 无广告、无跟踪、完全免费\n• 随时可删除账号及全部数据",
+        "keywords": [
+          "二手",
+          "阿德莱德",
+          "闲鱼",
+          "留学生",
+          "华人",
+          "本地交易",
+          "跳蚤市场",
+          "澳洲"
+        ],
+        "marketingUrl": "https://it-yun.github.io/torrens-market/",
+        "supportUrl": "https://it-yun.github.io/torrens-market/support.html",
+        "privacyPolicyUrl": "https://it-yun.github.io/torrens-market/privacy.html"
+      }
+    },
+    "categories": [
+      "SHOPPING",
+      "LIFESTYLE"
+    ],
+    "copyright": "2026 Seung Yun Lee",
+    "advisory": {
+      "alcoholTobaccoOrDrugUseOrReferences": "NONE",
+      "contests": "NONE",
+      "gamblingSimulated": "NONE",
+      "horrorOrFearThemes": "NONE",
+      "matureOrSuggestiveThemes": "NONE",
+      "medicalOrTreatmentInformation": "NONE",
+      "profanityOrCrudeHumor": "NONE",
+      "sexualContentGraphicAndNudity": "NONE",
+      "sexualContentOrNudity": "NONE",
+      "violenceCartoonOrFantasy": "NONE",
+      "violenceRealistic": "NONE",
+      "violenceRealisticProlongedGraphicOrSadistic": "NONE",
+      "gambling": false,
+      "unrestrictedWebAccess": false,
+      "kidsAgeBand": null,
+      "ageRatingOverride": "NONE",
+      "koreaAgeRatingOverride": "NONE"
+    },
+    "release": {
+      "automaticRelease": false
+    }
+  }
+}
