@@ -232,7 +232,8 @@
     "received": "받은 후기",
     "empty": "아직 받은 후기가 없어요",
     "reviewsOf": "{{name}}님이 받은 후기",
-    "viewCount": "후기 {{count}}개"
+    "viewCount": "후기 {{count}}개",
+    "anonymous": "익명"
   },
   "meetup": {
     "schedule": "픽업 약속 잡기",

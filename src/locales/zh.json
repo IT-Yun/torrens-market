@@ -232,7 +232,8 @@
     "received": "收到的评价",
     "empty": "还没有收到评价",
     "reviewsOf": "{{name}} 收到的评价",
-    "viewCount": "{{count}}条评价"
+    "viewCount": "{{count}}条评价",
+    "anonymous": "匿名"
   },
   "meetup": {
     "schedule": "约定交易时间",

@@ -232,7 +232,8 @@
     "received": "Reviews received",
     "empty": "No reviews yet",
     "reviewsOf": "{{name}}'s reviews",
-    "viewCount": "Reviews {{count}}"
+    "viewCount": "Reviews {{count}}",
+    "anonymous": "Anonymous"
   },
   "meetup": {
     "schedule": "Schedule pickup",
