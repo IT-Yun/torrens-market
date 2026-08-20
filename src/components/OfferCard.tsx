@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     backgroundColor: colors.surface,
   },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' },
   amount: { fontSize: 16, fontWeight: '800', color: colors.text },
   statusChip: {
     borderRadius: radius.full,
