@@ -72,8 +72,19 @@ Deno.serve(async (req) => {
       .in('user_id', recipients.map((r) => r.user_id));
     if (tokensError) throw tokensError;
 
+    // respect per-user notification preference (default on)
+    const { data: _pf } = await supabase
+      .from('profiles')
+      .select('id, notification_prefs')
+      .in('id', (tokens ?? []).map((t) => t.user_id));
+    const _off = new Set(
+      (_pf ?? [])
+        .filter((p) => (p.notification_prefs as Record<string, boolean>)?.meetups === false)
+        .map((p) => p.id),
+    );
+    const sendTokens = (tokens ?? []).filter((t) => !_off.has(t.user_id));
     const langOf = new Map(recipients.map((r) => [r.user_id, r.profiles?.preferred_language ?? 'en']));
-    const messages = (tokens ?? []).map((row) => {
+    const messages = sendTokens.map((row) => {
       const lang = (langOf.get(row.user_id) ?? 'en') as Lang;
       return {
         to: row.token,

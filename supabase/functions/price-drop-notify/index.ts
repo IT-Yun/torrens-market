@@ -43,6 +43,17 @@ Deno.serve(async (req) => {
       .from('push_tokens')
       .select('user_id, token')
       .in('user_id', favs.map((f) => f.user_id));
+    // respect per-user notification preference (default on)
+    const { data: _pf } = await supabase
+      .from('profiles')
+      .select('id, notification_prefs')
+      .in('id', (tokens ?? []).map((t) => t.user_id));
+    const _off = new Set(
+      (_pf ?? [])
+        .filter((p) => (p.notification_prefs as Record<string, boolean>)?.price_drops === false)
+        .map((p) => p.id),
+    );
+    const sendTokens = (tokens ?? []).filter((t) => !_off.has(t.user_id));
     const langOf = new Map(
       favs.map((f) => [
         f.user_id,
@@ -50,7 +61,7 @@ Deno.serve(async (req) => {
       ]),
     );
     const fmt = (c: number) => (c === 0 ? 'Free' : `$${(c / 100).toLocaleString('en-AU')}`);
-    const messages = (tokens ?? []).map((row) => ({
+    const messages = sendTokens.map((row) => ({
       to: row.token,
       sound: 'default',
       title: TITLES[langOf.get(row.user_id) ?? 'en'],

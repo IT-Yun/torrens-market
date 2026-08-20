@@ -59,9 +59,21 @@ Deno.serve(async (req) => {
       .in('user_id', userIds);
     if (tokensError) throw tokensError;
 
+    // respect per-user notification preference (default on)
+    const { data: _pf } = await supabase
+      .from('profiles')
+      .select('id, notification_prefs')
+      .in('id', (tokens ?? []).map((t) => t.user_id));
+    const _off = new Set(
+      (_pf ?? [])
+        .filter((p) => (p.notification_prefs as Record<string, boolean>)?.keyword_alerts === false)
+        .map((p) => p.id),
+    );
+    const sendTokens = (tokens ?? []).filter((t) => !_off.has(t.user_id));
+
     const price =
       listing.price_cents === 0 ? 'Free' : `$${(listing.price_cents / 100).toLocaleString('en-AU')}`;
-    const messages = (tokens ?? []).map((row) => {
+    const messages = sendTokens.map((row) => {
       const keyword = matched.find((a) => a.user_id === row.user_id)?.keyword ?? '';
       return {
         to: row.token,

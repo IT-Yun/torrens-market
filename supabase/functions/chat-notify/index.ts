@@ -48,6 +48,15 @@ Deno.serve(async (req) => {
     const recipient = room.chat_participants.find((p) => p.user_id !== msg.sender_id);
     if (!recipient) return new Response(JSON.stringify({ notified: 0 }), { status: 200 });
 
+    // respect the recipient's notification preference (default on)
+    const { data: rpref } = await supabase
+      .from('profiles')
+      .select('notification_prefs')
+      .eq('id', recipient.user_id)
+      .single();
+    if ((rpref?.notification_prefs as Record<string, boolean>)?.chat === false)
+      return new Response(JSON.stringify({ notified: 0 }), { status: 200 });
+
     const { data: tokens } = await supabase
       .from('push_tokens')
       .select('token')
