@@ -13,9 +13,13 @@
         "NSLocationWhenInUseUsageDescription": "Torrens Market uses your location to show secondhand listings near you in Adelaide and to verify your suburb. Your exact position is rounded on your device before anything is uploaded.",
         "NSPhotoLibraryUsageDescription": "Torrens Market needs access to your photos so you can add pictures to your listings and to chats.",
         "NSCameraUsageDescription": "Torrens Market needs camera access so you can take photos for your listings.",
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "CFBundleDisplayName": "Torrens"
       },
-      "usesAppleSignIn": true
+      "usesAppleSignIn": true,
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.ityun.torrensmarket",
