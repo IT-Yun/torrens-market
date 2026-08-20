@@ -266,5 +266,15 @@
     "rule4": "举报会被审核，违规内容或账号可能被处理",
     "accept": "同意并开始出售",
     "decline": "暂不"
+  },
+  "feedback": {
+    "title": "报告问题 · 提建议",
+    "hint": "发现了 bug 或有想法？会直接送达开发者。",
+    "kind_bug": "Bug",
+    "kind_suggestion": "建议",
+    "kind_other": "其他",
+    "placeholder": "发生了什么？描述越详细，修复越快。",
+    "submit": "发送",
+    "done": "谢谢！已收到你的反馈。"
   }
 }

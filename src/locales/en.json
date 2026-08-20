@@ -266,5 +266,15 @@
     "rule4": "Reports are reviewed; violations can remove content or accounts",
     "accept": "I agree — start selling",
     "decline": "Not now"
+  },
+  "feedback": {
+    "title": "Report a problem",
+    "hint": "Found a bug or have an idea? It goes straight to the maker.",
+    "kind_bug": "Bug",
+    "kind_suggestion": "Suggestion",
+    "kind_other": "Other",
+    "placeholder": "What happened? The more detail, the faster the fix.",
+    "submit": "Send",
+    "done": "Thanks! Your report is in."
   }
 }

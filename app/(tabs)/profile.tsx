@@ -15,6 +15,7 @@ import {
   Globe,
   LogOut,
   MapPin,
+  MessageSquareWarning,
   Package,
   Pencil,
   ShieldOff,
@@ -159,6 +160,14 @@ export default function ProfileScreen() {
               </Text>
               <ChevronRight size={18} color={colors.textSecondary} />
             </View>
+          </Pressable>
+          <View style={styles.separator} />
+          <Pressable style={styles.menuRow} onPress={() => router.push('/feedback')}>
+            <View style={styles.menuLeft}>
+              <MessageSquareWarning size={18} color={colors.textSecondary} />
+              <Text style={styles.menuText}>{t('feedback.title')}</Text>
+            </View>
+            <ChevronRight size={18} color={colors.textSecondary} />
           </Pressable>
           <View style={styles.separator} />
           <Pressable style={styles.menuRow} onPress={() => router.push('/blocked-users')}>
