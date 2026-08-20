@@ -221,7 +221,9 @@ export default function CreateListingScreen() {
       Alert.alert(t('listingCreate.posted'));
       router.replace(`/listing/${id}`);
     } catch (e) {
-      Alert.alert((e as Error).message);
+      const msg = (e as Error).message ?? '';
+      if (/row-level security|banned/i.test(msg)) Alert.alert(t('common.restricted'));
+      else Alert.alert(msg);
     } finally {
       setBusy(false);
       setUploadProgress(null);

@@ -8,7 +8,8 @@
     "loadError": "Couldn't load — check your connection.",
     "retry": "Retry",
     "free": "Free",
-    "back": "Back"
+    "back": "Back",
+    "restricted": "Your account is restricted. Contact support if you think this is a mistake."
   },
   "onboarding": {
     "chooseLanguage": "Choose your language",
@@ -42,7 +43,8 @@
     "verifyLocation": "Verify suburb with my location",
     "suburbVerified": "Suburb verified",
     "locationMismatch": "You seem to be in {{suburb}} — tap to use it",
-    "locationUnavailable": "Couldn't check your location"
+    "locationUnavailable": "Couldn't check your location",
+    "nameCooldown": "You can change your nickname once every 30 days."
   },
   "tabs": {
     "home": "Home",
@@ -72,7 +74,8 @@
     "deleteAccount": "Delete account",
     "deleteAccountConfirm": "This permanently removes your account, listings, chats and reviews. This cannot be undone.",
     "sellingSection": "Selling now",
-    "viewProfile": "Profile"
+    "viewProfile": "Profile",
+    "joined": "Joined {{date}}"
   },
   "favorites": {
     "empty": "Listings you ♥ will appear here."

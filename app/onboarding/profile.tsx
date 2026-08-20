@@ -77,7 +77,10 @@ export default function ProfileSetupScreen() {
       await refreshProfile();
       router.replace('/(tabs)/home');
     } catch (e) {
-      Alert.alert((e as Error).message);
+      const msg = (e as Error).message ?? '';
+      if (/once every 30 days/i.test(msg)) Alert.alert(t('profileSetup.nameCooldown'));
+      else if (/row-level security|banned/i.test(msg)) Alert.alert(t('common.restricted'));
+      else Alert.alert(msg);
     } finally {
       setBusy(false);
     }

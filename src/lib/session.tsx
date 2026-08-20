@@ -13,6 +13,7 @@ export type Profile = {
   is_phone_verified: boolean;
   tos_accepted_at: string | null;
   notification_prefs: Record<string, boolean> | null;
+  created_at: string;
 };
 
 type SessionContextValue = {

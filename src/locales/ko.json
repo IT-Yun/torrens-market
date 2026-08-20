@@ -8,7 +8,8 @@
     "loadError": "불러오지 못했어요 — 연결을 확인해 주세요.",
     "retry": "다시 시도",
     "free": "나눔",
-    "back": "뒤로"
+    "back": "뒤로",
+    "restricted": "계정이 제한되었어요. 오류라고 생각되면 지원 페이지로 문의해 주세요."
   },
   "onboarding": {
     "chooseLanguage": "언어를 선택하세요",
@@ -42,7 +43,8 @@
     "verifyLocation": "내 위치로 동네 인증하기",
     "suburbVerified": "동네 인증됨",
     "locationMismatch": "지금 위치는 {{suburb}} 같아요 — 눌러서 사용하기",
-    "locationUnavailable": "위치를 확인하지 못했어요"
+    "locationUnavailable": "위치를 확인하지 못했어요",
+    "nameCooldown": "닉네임은 30일에 한 번만 변경할 수 있어요."
   },
   "tabs": {
     "home": "홈",
@@ -72,7 +74,8 @@
     "deleteAccount": "계정 삭제",
     "deleteAccountConfirm": "계정과 매물, 채팅, 후기가 모두 영구 삭제돼요. 되돌릴 수 없어요.",
     "sellingSection": "판매 중인 매물",
-    "viewProfile": "프로필 보기"
+    "viewProfile": "프로필 보기",
+    "joined": "{{date}} 가입"
   },
   "favorites": {
     "empty": "♥ 누른 매물이 여기에 모여요."

@@ -69,7 +69,17 @@ export default function ProfileScreen() {
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                 {profile?.suburb_verified_at && <MapPin size={13} color={colors.primary} />}
                 <Text style={styles.meta}>
-                  {[profile?.suburb]
+                  {[
+                    profile?.suburb,
+                    profile?.created_at
+                      ? t('profile.joined', {
+                          date: new Date(profile.created_at).toLocaleDateString(
+                            i18n.language === 'zh' ? 'zh-CN' : i18n.language,
+                            { year: 'numeric', month: 'short' },
+                          ),
+                        })
+                      : null,
+                  ]
                     .filter(Boolean)
                     .join(' · ') || ' '}
                 </Text>
