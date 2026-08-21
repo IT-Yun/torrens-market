@@ -45,7 +45,8 @@
     "locationMismatch": "지금 위치는 {{suburb}} 같아요 — 눌러서 사용하기",
     "locationUnavailable": "위치를 확인하지 못했어요",
     "nameCooldown": "닉네임은 30일에 한 번만 변경할 수 있어요.",
-    "nameCooldownUntil": "{{date}}부터 다시 변경할 수 있어요."
+    "nameCooldownUntil": "{{date}}부터 다시 변경할 수 있어요.",
+    "presetPick": "또는 호주 캐릭터 아바타 고르기:"
   },
   "tabs": {
     "home": "홈",

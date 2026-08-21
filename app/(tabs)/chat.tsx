@@ -34,6 +34,7 @@ export default function ChatListScreen() {
                 name={item.other.display_name}
                 url={item.other.avatar_url}
                 nationality={item.other.nationality}
+                seed={item.other.id}
                 size={48}
               />
               {item.listing.photo ? (

@@ -316,6 +316,7 @@ export default function ListingDetailScreen() {
               name={listing.profiles.display_name}
               url={listing.profiles.avatar_url}
               nationality={listing.profiles.nationality}
+              seed={listing.seller_id}
               size={44}
             />
             <View style={{ flex: 1, gap: 2 }}>

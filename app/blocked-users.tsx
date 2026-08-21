@@ -38,6 +38,7 @@ export default function BlockedUsersScreen() {
               name={item.profiles?.display_name}
               url={item.profiles?.avatar_url}
               nationality={item.profiles?.nationality}
+              seed={item.blocked_id}
               size={44}
             />
             <Text style={styles.name}>{item.profiles?.display_name ?? '?'}</Text>

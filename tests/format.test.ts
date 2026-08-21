@@ -81,10 +81,11 @@ test('formatDistance: m under 1km, decimals under 10km', () => {
 test('trustTier: quokka floor, thresholds, kangaroo ceiling', () => {
   assert.equal(trustTier(0).slug, 'quokka');
   assert.equal(trustTier(-5).slug, 'quokka');
-  assert.equal(trustTier(3).slug, 'bilby');
-  assert.equal(trustTier(14).slug, 'koala');
-  assert.equal(trustTier(15).slug, 'wombat');
-  assert.equal(trustTier(49).slug, 'wallaby');
+  assert.equal(trustTier(3).slug, 'quokka');
+  assert.equal(trustTier(5).slug, 'bilby');
+  assert.equal(trustTier(15).slug, 'koala');
+  assert.equal(trustTier(30).slug, 'wombat');
+  assert.equal(trustTier(60).slug, 'wallaby');
   assert.equal(trustTier(120).slug, 'kangaroo');
   assert.equal(trustTier(120).level, 6);
 });

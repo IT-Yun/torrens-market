@@ -67,7 +67,7 @@ export default function MyListingsScreen() {
           const photo = [...item.listing_photos].sort((a, b) => a.sort_order - b.sort_order)[0];
           const sold = item.status === 'sold';
           return (
-            <View style={styles.row}>
+            <View style={styles.card}>
               <Pressable
                 style={styles.rowMain}
                 onPress={() => router.push(`/listing/${item.id}`)}
@@ -87,12 +87,28 @@ export default function MyListingsScreen() {
                     {item.title}
                   </Text>
                   <Text style={styles.price}>{formatPrice(item.price_cents, t('common.free'))}</Text>
-                  <Text style={[styles.status, sold && { color: colors.textSecondary }]}>
-                    {t(`myListings.status.${item.status}`)}
-                  </Text>
+                  <View
+                    style={[
+                      styles.statusPill,
+                      item.status === 'active' && styles.pillActive,
+                      item.status === 'reserved' && styles.pillReserved,
+                      sold && styles.pillSold,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.statusPillText,
+                        item.status === 'active' && { color: colors.primary },
+                        item.status === 'reserved' && { color: '#9A6B00' },
+                        sold && { color: colors.textSecondary },
+                      ]}
+                    >
+                      {t(`myListings.status.${item.status}`)}
+                    </Text>
+                  </View>
                 </View>
               </Pressable>
-              <View style={{ gap: 6 }}>
+              <View style={styles.actionsRow}>
                 {item.status === 'active' && (
                   <Pressable
                     style={[styles.actionButton, styles.bumpButton, !canBump(item.bumped_at) && { opacity: 0.4 }]}
@@ -132,13 +148,23 @@ export default function MyListingsScreen() {
                 {(ACTIONS[item.status] ?? []).map((next) => (
                   <Pressable
                     key={next}
-                    style={[styles.actionButton, next === 'active' && styles.actionButtonSecondary]}
+                    style={[
+                      styles.actionButton,
+                      next === 'active' && styles.actionButtonSecondary,
+                      next === 'reserved' && styles.actionButtonAmber,
+                    ]}
                     onPress={async () => {
                       await updateListingStatus(item.id, next).catch(() => {});
                       load();
                     }}
                   >
-                    <Text style={[styles.actionText, next === 'active' && { color: colors.text }]}>
+                    <Text
+                      style={[
+                        styles.actionText,
+                        next === 'active' && { color: colors.text },
+                        next === 'reserved' && { color: '#9A6B00' },
+                      ]}
+                    >
                       {t(ACTION_LABEL[next])}
                     </Text>
                   </Pressable>
@@ -188,7 +214,7 @@ export default function MyListingsScreen() {
             <Text style={styles.emptyText}>{t('myListings.empty')}</Text>
           </View>
         }
-        contentContainerStyle={items.length === 0 ? { flex: 1 } : undefined}
+        contentContainerStyle={items.length === 0 ? { flex: 1 } : { paddingBottom: spacing.xl }}
       />
     </SafeAreaView>
   );
@@ -215,21 +241,35 @@ const styles = StyleSheet.create({
   soldToggleOn: { backgroundColor: colors.primary, borderColor: colors.primary },
   soldToggleText: { fontSize: 12, fontWeight: '600', color: colors.textSecondary },
   reviewButton: { backgroundColor: colors.primarySoft },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  card: {
     gap: spacing.sm,
     padding: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    marginHorizontal: spacing.md,
+    marginTop: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    backgroundColor: colors.white,
   },
+  actionsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  statusPill: {
+    alignSelf: 'flex-start',
+    borderRadius: radius.full,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    backgroundColor: colors.surface,
+  },
+  pillActive: { backgroundColor: colors.primarySoft },
+  pillReserved: { backgroundColor: '#FBF0DA' },
+  pillSold: { backgroundColor: colors.surface },
+  statusPillText: { fontSize: 11, fontWeight: '700', color: colors.textSecondary },
+  actionButtonAmber: { backgroundColor: '#FBF0DA' },
   rowMain: { flex: 1, flexDirection: 'row', gap: spacing.md, alignItems: 'center' },
   thumb: { width: 64, height: 64, borderRadius: radius.md, backgroundColor: colors.surface },
   thumbPlaceholder: { alignItems: 'center', justifyContent: 'center' },
   itemTitle: { fontSize: 15, color: colors.text },
   soldText: { color: colors.textSecondary, textDecorationLine: 'line-through' },
   price: { fontSize: 15, fontWeight: '700', color: colors.text },
-  status: { fontSize: 12, color: colors.primary, fontWeight: '600' },
   actionButton: {
     backgroundColor: colors.primary,
     borderRadius: radius.md,

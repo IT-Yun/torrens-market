@@ -45,7 +45,8 @@
     "locationMismatch": "你现在似乎在 {{suburb}} — 点按使用",
     "locationUnavailable": "无法获取位置",
     "nameCooldown": "昵称每 30 天只能修改一次。",
-    "nameCooldownUntil": "{{date}} 后可再次修改。"
+    "nameCooldownUntil": "{{date}} 后可再次修改。",
+    "presetPick": "或选择一个澳洲风格头像："
   },
   "tabs": {
     "home": "首页",

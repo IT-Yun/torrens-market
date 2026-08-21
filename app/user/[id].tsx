@@ -70,6 +70,7 @@ export default function PublicProfileScreen() {
                   name={profile.display_name}
                   url={profile.avatar_url}
                   nationality={profile.nationality}
+                  seed={profile.id}
                   size={64}
                 />
                 <View style={{ flex: 1, gap: 4 }}>

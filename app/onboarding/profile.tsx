@@ -13,7 +13,7 @@ import {
 import { router } from 'expo-router';
 import type { ImagePickerAsset } from 'expo-image-picker';
 import { BadgeCheck, Camera, ChevronLeft, MapPin } from 'lucide-react-native';
-import { Avatar } from '../../src/components/Avatar';
+import { Avatar, PRESET_ANIMALS, PRESET_BGS } from '../../src/components/Avatar';
 import { SuburbField } from '../../src/components/SuburbField';
 import { Button, Field, Screen } from '../../src/components/ui';
 import i18n from '../../src/lib/i18n';
@@ -43,6 +43,9 @@ export default function ProfileSetupScreen() {
   }, [profile]);
   const [nationality, setNationality] = useState<string | null>(profile?.nationality ?? null);
   const [avatarAsset, setAvatarAsset] = useState<ImagePickerAsset | null>(null);
+  const [avatarPreset, setAvatarPreset] = useState<string | null>(
+    profile?.avatar_url?.startsWith('preset:') ? profile.avatar_url.slice(7) : null,
+  );
   const [busy, setBusy] = useState(false);
   const [suburbCheck, setSuburbCheck] = useState<'idle' | 'checking' | 'ok' | 'mismatch'>(
     profile?.suburb_verified_at && profile?.suburb ? 'ok' : 'idle',
@@ -75,7 +78,7 @@ export default function ProfileSetupScreen() {
     }
     setBusy(true);
     try {
-      let avatarUrl = profile?.avatar_url ?? null;
+      let avatarUrl = avatarPreset && !avatarAsset ? `preset:${avatarPreset}` : profile?.avatar_url ?? null;
       if (avatarAsset) avatarUrl = await uploadAvatar(session.user.id, avatarAsset);
       const patch: Record<string, unknown> = {
         suburb: suburb.trim(),
@@ -124,14 +127,20 @@ export default function ProfileSetupScreen() {
             <Pressable
               onPress={async () => {
                 const asset = await pickAvatar();
-                if (asset) setAvatarAsset(asset);
+                if (asset) {
+                  setAvatarAsset(asset);
+                  setAvatarPreset(null);
+                }
               }}
               accessibilityRole="button"
               accessibilityLabel={t('profileSetup.photo')}
             >
               <Avatar
                 name={displayName || profile?.display_name}
-                url={avatarAsset?.uri ?? profile?.avatar_url}
+                url={
+                  avatarAsset?.uri ??
+                  (avatarPreset ? `preset:${avatarPreset}` : profile?.avatar_url)
+                }
                 nationality={nationality}
                 size={96}
               />
@@ -140,13 +149,41 @@ export default function ProfileSetupScreen() {
               </View>
             </Pressable>
             <Text style={styles.photoHint}>{t('profileSetup.photoHint')}</Text>
+            <Text style={styles.presetLabel}>{t('profileSetup.presetPick')}</Text>
+            <View style={styles.presetRow}>
+              {PRESET_ANIMALS.map((animal, i) => {
+                const bgIdx = i % PRESET_BGS.length;
+                const value = `${animal.key}:${bgIdx}`;
+                const selected = avatarPreset === value && !avatarAsset;
+                return (
+                  <Pressable
+                    key={animal.key}
+                    style={[
+                      styles.presetCircle,
+                      { backgroundColor: PRESET_BGS[bgIdx] },
+                      selected && styles.presetSelected,
+                    ]}
+                    onPress={() => {
+                      setAvatarPreset(value);
+                      setAvatarAsset(null);
+                    }}
+                    accessibilityRole="button"
+                  >
+                    <Text style={{ fontSize: 22 }}>{animal.emoji}</Text>
+                  </Pressable>
+                );
+              })}
+            </View>
           </View>
 
-          <Field
-            label={t('profileSetup.displayName')}
-            value={displayName}
-            onChangeText={setDisplayName}
-          />
+          <View style={{ gap: 4 }}>
+            <Field
+              label={t('profileSetup.displayName')}
+              value={displayName}
+              onChangeText={setDisplayName}
+            />
+            <Text style={styles.note}>{t('profileSetup.nameCooldown')}</Text>
+          </View>
           <SuburbField
             label={t('profileSetup.suburb')}
             placeholder={t('profileSetup.suburbPlaceholder')}
@@ -241,6 +278,18 @@ const styles = StyleSheet.create({
     borderColor: colors.white,
   },
   photoHint: { fontSize: 12, color: colors.textSecondary },
+  presetLabel: { fontSize: 12, color: colors.textSecondary, marginTop: spacing.xs },
+  presetRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, justifyContent: 'center' },
+  presetCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  presetSelected: { borderColor: colors.primary },
   verifyRow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: -4 },
   verifyText: { fontSize: 13, fontWeight: '600', color: colors.primary },
   verifiedText: { fontSize: 13, fontWeight: '600', color: colors.primary },

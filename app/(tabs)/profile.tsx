@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { LANGUAGES, setAppLanguage } from '../../src/lib/i18n';
 import i18n from '../../src/lib/i18n';
 import { signOut } from '../../src/lib/auth';
@@ -39,11 +39,15 @@ export default function ProfileScreen() {
   const [deleteText, setDeleteText] = useState('');
   const [deleting, setDeleting] = useState(false);
 
-  useEffect(() => {
-    if (!session) return;
-    fetchTrust(session.user.id).then(setTrust).catch(() => {});
-    fetchListingStats(session.user.id).then(setStats).catch(() => {});
-  }, [session]);
+  // Refresh on every tab visit — a mount-once effect left the stats stale
+  // after posting/selling (Sean: "매물 올렸는데 여전히 0 0").
+  useFocusEffect(
+    useCallback(() => {
+      if (!session) return;
+      fetchTrust(session.user.id).then(setTrust).catch(() => {});
+      fetchListingStats(session.user.id).then(setStats).catch(() => {});
+    }, [session]),
+  );
 
   async function changeLanguage(lang: 'ko' | 'en' | 'zh') {
     await setAppLanguage(lang);
@@ -62,6 +66,7 @@ export default function ProfileScreen() {
               name={profile?.display_name}
               url={profile?.avatar_url}
               nationality={profile?.nationality}
+              seed={session?.user.id}
               size={64}
             />
             <View style={{ flex: 1, gap: 4 }}>

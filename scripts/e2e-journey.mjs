@@ -429,7 +429,7 @@ await step('meetup-notify edge function responds 200', async () => {
   assert(res.status === 200, `status ${res.status}: ${await res.text()}`);
 });
 
-await step('trust tier progression: +3 points → Bilby thresholds hold', async () => {
+await step('trust tier progression: +3 points → still Quokka (long-term thresholds)', async () => {
   // Seed two more positive reviews via admin (distinct synthetic listings).
   for (let i = 0; i < 2; i++) {
     const { data: l } = await admin
@@ -462,9 +462,9 @@ await step('trust tier progression: +3 points → Bilby thresholds hold', async 
     .single();
   assert(data.trust_points === 3, `points=${data.trust_points}`);
   // mirror of src/lib/trust.ts thresholds
-  const tiers = [['quokka', 0], ['bilby', 3], ['koala', 8], ['wombat', 15], ['wallaby', 30], ['kangaroo', 50]];
+  const tiers = [['quokka', 0], ['bilby', 5], ['koala', 15], ['wombat', 30], ['wallaby', 60], ['kangaroo', 100]];
   const tier = tiers.filter(([, min]) => data.trust_points >= min).pop()[0];
-  assert(tier === 'bilby', `tier=${tier}`);
+  assert(tier === 'quokka', `tier=${tier}`);
 });
 
 await step('buyer: unfavorite → count drops to 0', async () => {
