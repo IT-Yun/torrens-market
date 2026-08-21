@@ -26,6 +26,7 @@ export function ListingRow({
   return (
     <Pressable
       style={({ pressed }) => [styles.card, pressed && { backgroundColor: colors.surface }]}
+      disabled={item.status === 'sold'}
       onPress={() => router.push(`/listing/${item.id}`)}
     >
       <View>
@@ -38,9 +39,13 @@ export function ListingRow({
         )}
         {item.status !== 'active' && (
           <View style={styles.statusOverlay}>
-            <Text style={styles.statusOverlayText}>
-              {t(item.status === 'sold' ? 'listingDetail.sold' : 'listingDetail.reserved')}
-            </Text>
+            {item.status === 'sold' ? (
+              <View style={styles.soldStamp}>
+                <Text style={styles.statusOverlayText}>{t('listingDetail.sold')}</Text>
+              </View>
+            ) : (
+              <Text style={styles.statusOverlayText}>{t('listingDetail.reserved')}</Text>
+            )}
           </View>
         )}
       </View>
@@ -126,5 +131,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   statusOverlayText: { color: colors.white, fontSize: 13, fontWeight: '700' },
+  soldStamp: {
+    borderWidth: 2,
+    borderColor: colors.white,
+    borderRadius: radius.sm,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    transform: [{ rotate: '-8deg' }],
+  },
   likesText: { fontSize: 12, color: colors.textSecondary },
 });

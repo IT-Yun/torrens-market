@@ -196,7 +196,8 @@
     "manageTitle": "Manage listing",
     "showSold": "Show sold",
     "review": "Review",
-    "noChatYet": "No chat for this listing yet."
+    "noChatYet": "No chat for this listing yet.",
+    "changeStatus": "Change status"
   },
   "report": {
     "menuTitle": "Report or block",
@@ -270,7 +271,7 @@
     "title": "Before your first listing",
     "intro": "A quick agreement to keep Torrens Market safe for everyone:",
     "rule1": "Sell only items you own and may legally sell",
-    "rule2": "No prohibited items (weapons, counterfeits, medicines...)",
+    "rule2": "No prohibited items (weapons, counterfeits, medications...)",
     "rule3": "Honest photos & descriptions; meet in public places",
     "rule4": "Reports are reviewed; violations can remove content or accounts",
     "accept": "I agree — start selling",
@@ -300,7 +301,7 @@
     "intro": "Every good trade grows your Aussie animal. Points = good reviews (4–5★) minus bad ones (1–2★) from completed trades.",
     "pointsNeeded": "{{points}}+ points",
     "howTitle": "How to climb",
-    "how1": "· Complete trades and leave the chat once it's done",
+    "how1": "· Finish the trade and mark it sold when it's done",
     "how2": "· Earn 4–5★ post-trade reviews from the other side",
     "how3": "· Keep your listings honest — bad reviews cost points"
   }

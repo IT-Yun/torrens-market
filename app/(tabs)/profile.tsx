@@ -97,15 +97,15 @@ export default function ProfileScreen() {
             </View>
           </View>
           <View style={styles.statStrip}>
-            <View style={styles.statCol}>
+            <Pressable style={styles.statCol} onPress={() => router.push('/my-listings')}>
               <Text style={styles.statValue}>{stats?.active ?? '–'}</Text>
               <Text style={styles.statLabel}>{t('myListings.status.active')}</Text>
-            </View>
+            </Pressable>
             <View style={styles.statDivider} />
-            <View style={styles.statCol}>
+            <Pressable style={styles.statCol} onPress={() => router.push('/my-listings')}>
               <Text style={styles.statValue}>{stats?.sold ?? '–'}</Text>
               <Text style={styles.statLabel}>{t('myListings.status.sold')}</Text>
-            </View>
+            </Pressable>
             <View style={styles.statDivider} />
             <Pressable style={styles.statCol} onPress={() => router.push('/my-reviews')}>
               <TrustBadge trust={trust} compact />

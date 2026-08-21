@@ -16,7 +16,7 @@
     "languageNote": "以后可以随时在个人资料中更改。"
   },
   "auth": {
-    "tagline": "阿德莱德本地二手市集 — 用你的语言",
+    "tagline": "阿德莱德本地二手市集 — 说你的语言",
     "continueWithGoogle": "使用 Google 继续",
     "continueWithApple": "使用 Apple 继续",
     "orEmail": "或使用邮箱",
@@ -39,10 +39,10 @@
     "nationalityNote": "会显示在你的资料上，买家可以按国籍筛选，也可以留空。",
     "done": "开始交易",
     "photo": "头像",
-    "photoHint": "点按添加头像",
+    "photoHint": "轻点添加头像",
     "verifyLocation": "用我的位置验证区域",
     "suburbVerified": "区域已验证",
-    "locationMismatch": "你现在似乎在 {{suburb}} — 点按使用",
+    "locationMismatch": "你现在似乎在 {{suburb}} — 轻点使用",
     "locationUnavailable": "无法获取位置",
     "nameCooldown": "昵称每 30 天只能修改一次。",
     "nameCooldownUntil": "{{date}} 后可再次修改。",
@@ -196,7 +196,8 @@
     "manageTitle": "管理商品",
     "showSold": "显示已售",
     "review": "写评价",
-    "noChatYet": "该商品还没有聊天记录。"
+    "noChatYet": "该商品还没有聊天记录。",
+    "changeStatus": "更改状态"
   },
   "report": {
     "menuTitle": "举报或屏蔽",
@@ -220,7 +221,7 @@
     "bilby": "兔耳袋狸",
     "koala": "考拉",
     "wombat": "袋熊",
-    "wallaby": "小袋鼠",
+    "wallaby": "沙袋鼠",
     "kangaroo": "袋鼠",
     "nextTier": "还差{{count}}分升级到{{name}}",
     "tierLabel": "信用等级",
@@ -240,8 +241,8 @@
     "anonymous": "匿名"
   },
   "meetup": {
-    "schedule": "约定交易时间",
-    "title": "交易约定",
+    "schedule": "约面交时间",
+    "title": "面交约定",
     "placePlaceholder": "例如：Rundle Mall 喷泉前",
     "propose": "发送提议",
     "accept": "接受",
@@ -278,7 +279,7 @@
   },
   "feedback": {
     "title": "报告问题 · 提建议",
-    "hint": "发现了 bug 或有想法？会直接送达开发者。",
+    "hint": "发现了 bug 或有想法？直接发给开发者。",
     "kind_bug": "Bug",
     "kind_suggestion": "建议",
     "kind_other": "其他",
@@ -292,7 +293,7 @@
     "keyword_alerts": "关键词提醒",
     "chat": "聊天消息",
     "offers": "出价",
-    "meetups": "见面约定",
+    "meetups": "面交提醒",
     "price_drops": "收藏商品降价"
   },
   "trustLadder": {

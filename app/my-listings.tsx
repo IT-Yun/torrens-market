@@ -109,66 +109,58 @@ export default function MyListingsScreen() {
                 </View>
               </Pressable>
               <View style={styles.actionsRow}>
-                {item.status === 'active' && (
-                  <Pressable
-                    style={[styles.actionButton, styles.bumpButton, !canBump(item.bumped_at) && { opacity: 0.4 }]}
-                    disabled={!canBump(item.bumped_at)}
-                    onPress={async () => {
-                      try {
-                        await bumpListing(item.id);
-                        Alert.alert(t('myListings.bumped'));
-                        load();
-                      } catch {
-                        Alert.alert(t('myListings.bumpCooldown'));
-                      }
-                    }}
-                  >
-                    <ArrowUp size={13} color={colors.primary} />
-                    <Text style={[styles.actionText, { color: colors.primary }]}>
-                      {t('myListings.bump')}
-                    </Text>
-                  </Pressable>
-                )}
-                {sold && (
-                  <Pressable
-                    style={[styles.actionButton, styles.reviewButton]}
-                    onPress={async () => {
-                      const room = session
-                        ? await findRoomForListing(item.id, session.user.id).catch(() => null)
-                        : null;
-                      if (room) router.push(`/chat/${room}`);
-                      else Alert.alert(t('myListings.noChatYet'));
-                    }}
-                  >
-                    <Text style={[styles.actionText, { color: colors.primary }]}>
-                      {t('myListings.review')}
-                    </Text>
-                  </Pressable>
-                )}
-                {(ACTIONS[item.status] ?? []).map((next) => (
-                  <Pressable
-                    key={next}
-                    style={[
-                      styles.actionButton,
-                      next === 'active' && styles.actionButtonSecondary,
-                      next === 'reserved' && styles.actionButtonAmber,
-                    ]}
-                    onPress={async () => {
-                      await updateListingStatus(item.id, next).catch(() => {});
+                <Pressable
+                  style={[
+                    styles.actionButton,
+                    styles.bumpButton,
+                    (item.status !== 'active' || !canBump(item.bumped_at)) && { opacity: 0.35 },
+                  ]}
+                  disabled={item.status !== 'active' || !canBump(item.bumped_at)}
+                  onPress={async () => {
+                    try {
+                      await bumpListing(item.id);
+                      Alert.alert(t('myListings.bumped'));
                       load();
-                    }}
-                  >
-                    <Text
-                      style={[
-                        styles.actionText,
-                        next === 'active' && { color: colors.text },
-                        next === 'reserved' && { color: '#9A6B00' },
-                      ]}
-                    >
-                      {t(ACTION_LABEL[next])}
-                    </Text>
-                  </Pressable>
-                ))}
+                    } catch {
+                      Alert.alert(t('myListings.bumpCooldown'));
+                    }
+                  }}
+                >
+                  <ArrowUp size={13} color={colors.primary} />
+                  <Text style={[styles.actionText, { color: colors.primary }]}>
+                    {t('myListings.bump')}
+                  </Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.actionButton, styles.actionButtonAmber]}
+                  onPress={() => {
+                    const options: { text: string; style?: 'cancel' | 'destructive'; onPress?: () => void }[] =
+                      (ACTIONS[item.status] ?? []).map((next) => ({
+                        text: t(ACTION_LABEL[next]),
+                        onPress: async () => {
+                          await updateListingStatus(item.id, next).catch(() => {});
+                          load();
+                        },
+                      }));
+                    if (sold)
+                      options.push({
+                        text: t('myListings.review'),
+                        onPress: async () => {
+                          const room = session
+                            ? await findRoomForListing(item.id, session.user.id).catch(() => null)
+                            : null;
+                          if (room) router.push(`/chat/${room}`);
+                          else Alert.alert(t('myListings.noChatYet'));
+                        },
+                      });
+                    options.push({ text: t('common.cancel'), style: 'cancel' });
+                    Alert.alert(t('myListings.changeStatus'), undefined, options);
+                  }}
+                >
+                  <Text style={[styles.actionText, { color: '#9A6B00' }]}>
+                    {t('myListings.changeStatus')}
+                  </Text>
+                </Pressable>
                 <Pressable
                   style={styles.deleteButton}
                   onPress={() =>

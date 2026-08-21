@@ -46,7 +46,7 @@
     "locationUnavailable": "위치를 확인하지 못했어요",
     "nameCooldown": "닉네임은 30일에 한 번만 변경할 수 있어요.",
     "nameCooldownUntil": "{{date}}부터 다시 변경할 수 있어요.",
-    "presetPick": "또는 호주 캐릭터 아바타 고르기:"
+    "presetPick": "아니면 호주 동물 캐릭터를 골라보세요:"
   },
   "tabs": {
     "home": "홈",
@@ -72,7 +72,7 @@
     "sectionTrading": "거래",
     "sectionAlerts": "알림",
     "sectionSettings": "설정",
-    "stats": "판매중 {{active}} · 거래완료 {{sold}}",
+    "stats": "판매중 {{active}} · 판매완료 {{sold}}",
     "deleteAccount": "계정 삭제",
     "deleteAccountConfirm": "계정과 매물, 채팅, 후기가 모두 영구 삭제돼요. 되돌릴 수 없어요.",
     "sellingSection": "판매 중인 매물",
@@ -195,8 +195,9 @@
     "manage": "관리",
     "manageTitle": "매물 관리",
     "showSold": "판매완료 보기",
-    "review": "리뷰 쓰기",
-    "noChatYet": "이 매물의 채팅이 아직 없어요."
+    "review": "후기 쓰기",
+    "noChatYet": "이 매물의 채팅이 아직 없어요.",
+    "changeStatus": "상태 변경"
   },
   "report": {
     "menuTitle": "신고 또는 차단",
@@ -270,7 +271,7 @@
     "title": "첫 판매 전에 확인해 주세요",
     "intro": "모두가 안전한 토렌스 마켓을 위한 약속이에요:",
     "rule1": "본인 소유의, 판매가 허용된 물품만 판매",
-    "rule2": "금지 품목 금지 (무기·가품·의약품 등)",
+    "rule2": "금지 품목은 올릴 수 없어요 (무기·가품·의약품 등)",
     "rule3": "정직한 사진·설명, 공공장소에서 거래",
     "rule4": "신고는 검토되며 위반 시 콘텐츠/계정 제재 가능",
     "accept": "동의하고 판매 시작",

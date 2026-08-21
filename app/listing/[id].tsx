@@ -224,6 +224,13 @@ export default function ListingDetailScreen() {
               </View>
             )}
           </ScrollView>
+          {listing.status === 'sold' && (
+            <View style={styles.soldOverlay} pointerEvents="none">
+              <View style={styles.soldStamp}>
+                <Text style={styles.soldStampText}>{t('listingDetail.sold')}</Text>
+              </View>
+            </View>
+          )}
           {photos.length > 1 && (
             <View style={styles.dots}>
               {photos.map((p, i) => (
@@ -403,6 +410,7 @@ export default function ListingDetailScreen() {
           <View style={{ width: 150 }}>
             <Button
               title={t('listingDetail.chat')}
+              disabled={listing.status === 'sold'}
               onPress={async () => {
                 try {
                   const roomId = await startChat(listing.id);
@@ -474,6 +482,21 @@ export default function ListingDetailScreen() {
 }
 
 const styles = StyleSheet.create({
+  soldOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(20, 20, 20, 0.45)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  soldStamp: {
+    borderWidth: 3,
+    borderColor: colors.white,
+    borderRadius: radius.md,
+    paddingHorizontal: 18,
+    paddingVertical: 6,
+    transform: [{ rotate: '-8deg' }],
+  },
+  soldStampText: { color: colors.white, fontSize: 22, fontWeight: '800' },
   safe: { flex: 1, backgroundColor: colors.background },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   header: {
