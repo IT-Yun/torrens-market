@@ -23,6 +23,7 @@ import { useSession } from '../../src/lib/session';
 import {
   fetchCategories,
   fetchListing,
+  updateListingStatus,
   fetchSellerListings,
   formatPrice,
   photoUrl,
@@ -409,6 +410,33 @@ export default function ListingDetailScreen() {
                 } catch (e) {
                   Alert.alert((e as Error).message);
                 }
+              }}
+            />
+          </View>
+        </View>
+      )}
+      {session?.user.id === listing.seller_id && (
+        <View style={styles.footer}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.footerPrice}>{formatPrice(listing.price_cents, t('common.free'))}</Text>
+            <Text style={styles.footerMeta}>{t(`myListings.status.${listing.status}`)}</Text>
+          </View>
+          <View style={{ width: 110 }}>
+            <Button
+              title={t('myListings.edit')}
+              onPress={() =>
+                router.push({ pathname: '/listing/create', params: { editId: listing.id } })
+              }
+            />
+          </View>
+          <View style={{ width: 130 }}>
+            <Button
+              variant="secondary"
+              title={t(listing.status === 'sold' ? 'myListings.markActive' : 'myListings.markSold')}
+              onPress={async () => {
+                const next = listing.status === 'sold' ? 'active' : 'sold';
+                await updateListingStatus(listing.id, next).catch(() => {});
+                fetchListing(listing.id).then(setListing).catch(() => {});
               }}
             />
           </View>
