@@ -29,7 +29,7 @@ export default function FavoritesScreen() {
         renderItem={({ item }) => <ListingRow item={item} />}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Heart size={44} color={colors.textSecondary} strokeWidth={1.5} />
+            <Text style={{ fontSize: 44 }}>🐨</Text>
             <Text style={styles.text}>{t('favorites.empty')}</Text>
           </View>
         }

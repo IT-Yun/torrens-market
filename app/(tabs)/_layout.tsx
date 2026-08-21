@@ -7,6 +7,7 @@ import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
 import { colors } from '../../src/theme';
 
+
 export default function TabsLayout() {
   const { t } = useTranslation();
   const { session } = useSession();
@@ -45,7 +46,9 @@ export default function TabsLayout() {
         name="home"
         options={{
           title: t('tabs.home'),
-          tabBarIcon: ({ color }) => <Home size={24} color={color} strokeWidth={2} />,
+          tabBarIcon: ({ color, focused }) => (
+            <Home size={24} color={color} strokeWidth={2} fill={focused ? colors.primarySoft : 'none'} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -61,7 +64,9 @@ export default function TabsLayout() {
         name="chat"
         options={{
           title: t('tabs.chat'),
-          tabBarIcon: ({ color }) => <MessageCircle size={24} color={color} strokeWidth={2} />,
+          tabBarIcon: ({ color, focused }) => (
+            <MessageCircle size={24} color={color} strokeWidth={2} fill={focused ? colors.primarySoft : 'none'} />
+          ),
           tabBarBadge: unread > 0 ? unread : undefined,
           tabBarBadgeStyle: { backgroundColor: colors.primary, color: colors.white, fontSize: 11 },
         }}
@@ -70,7 +75,9 @@ export default function TabsLayout() {
         name="profile"
         options={{
           title: t('tabs.profile'),
-          tabBarIcon: ({ color }) => <User size={24} color={color} strokeWidth={2} />,
+          tabBarIcon: ({ color, focused }) => (
+            <User size={24} color={color} strokeWidth={2} fill={focused ? colors.primarySoft : 'none'} />
+          ),
         }}
       />
     </Tabs>

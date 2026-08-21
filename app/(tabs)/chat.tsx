@@ -67,7 +67,7 @@ export default function ChatListScreen() {
         )}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <MessageCircle size={44} color={colors.textSecondary} strokeWidth={1.5} />
+            <Text style={{ fontSize: 44 }}>🦜</Text>
             <Text style={styles.text}>{t('chat.empty')}</Text>
           </View>
         }

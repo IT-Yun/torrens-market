@@ -210,7 +210,7 @@ export default function MyListingsScreen() {
         }}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Package size={40} color={colors.textSecondary} strokeWidth={1.5} />
+            <Text style={{ fontSize: 44 }}>🦘</Text>
             <Text style={styles.emptyText}>{t('myListings.empty')}</Text>
           </View>
         }
