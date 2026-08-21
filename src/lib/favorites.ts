@@ -44,5 +44,7 @@ export async function fetchFavorites(userId: string): Promise<ListingCard[]> {
   if (error) throw error;
   return ((data ?? []) as unknown as { listings: ListingCard }[])
     .map((row) => row.listings)
-    .filter((l) => l && l.status === 'active');
+    // Keep sold/reserved favorites visible (dimmed + stamped in the list)
+    // instead of silently vanishing — only drop deleted listings.
+    .filter((l) => l && l.status !== 'deleted');
 }
