@@ -64,9 +64,11 @@ export default function MyReviewsScreen() {
         renderItem={({ item }) => (
           <View style={styles.card}>
             <View style={styles.cardTop}>
-              <Text style={styles.reviewer}>
-                {isSelf ? item.profiles?.display_name ?? '?' : t('review.anonymous')}
-              </Text>
+              {isSelf ? (
+                <Text style={styles.reviewer}>{item.profiles?.display_name ?? '?'}</Text>
+              ) : (
+                <View style={{ flex: 1 }} />
+              )}
               <View style={styles.stars}>
                 {[1, 2, 3, 4, 5].map((n) => (
                   <Star
