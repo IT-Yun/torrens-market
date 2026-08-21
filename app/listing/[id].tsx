@@ -307,6 +307,7 @@ export default function ListingDetailScreen() {
 
           {listing.description ? <Text style={styles.description}>{listing.description}</Text> : null}
 
+          {session?.user.id !== listing.seller_id && (
           <Pressable
             style={styles.sellerCard}
             onPress={() => router.push(`/user/${listing.seller_id}`)}
@@ -341,8 +342,9 @@ export default function ListingDetailScreen() {
               <Text style={styles.sellerCtaText}>{t('profile.viewProfile')}</Text>
             </View>
           </Pressable>
+          )}
 
-          {otherListings.length > 0 && (
+          {otherListings.length > 0 && session?.user.id !== listing.seller_id && (
             <View style={{ gap: spacing.sm }}>
               <Text style={styles.attrTitle}>
                 {t('listingDetail.moreFromSeller', { name: listing.profiles.display_name })}
