@@ -14,6 +14,7 @@ export type Profile = {
   tos_accepted_at: string | null;
   notification_prefs: Record<string, boolean> | null;
   created_at: string;
+  display_name_changed_at: string | null;
 };
 
 type SessionContextValue = {

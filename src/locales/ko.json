@@ -44,7 +44,8 @@
     "suburbVerified": "동네 인증됨",
     "locationMismatch": "지금 위치는 {{suburb}} 같아요 — 눌러서 사용하기",
     "locationUnavailable": "위치를 확인하지 못했어요",
-    "nameCooldown": "닉네임은 30일에 한 번만 변경할 수 있어요."
+    "nameCooldown": "닉네임은 30일에 한 번만 변경할 수 있어요.",
+    "nameCooldownUntil": "{{date}}부터 다시 변경할 수 있어요."
   },
   "tabs": {
     "home": "홈",
@@ -75,7 +76,9 @@
     "deleteAccountConfirm": "계정과 매물, 채팅, 후기가 모두 영구 삭제돼요. 되돌릴 수 없어요.",
     "sellingSection": "판매 중인 매물",
     "viewProfile": "프로필 보기",
-    "joined": "{{date}} 가입"
+    "joined": "{{date}} 가입",
+    "signOutConfirm": "로그아웃할까요?",
+    "deleteTypePrompt": "확인을 위해 아래에 \"DELETE\"를 입력하세요."
   },
   "favorites": {
     "empty": "♥ 누른 매물이 여기에 모여요."

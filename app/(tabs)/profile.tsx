@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { LANGUAGES, setAppLanguage } from '../../src/lib/i18n';
@@ -35,6 +35,9 @@ export default function ProfileScreen() {
   const { session, profile, refreshProfile } = useSession();
   const [trust, setTrust] = useState<ProfileTrust | null>(null);
   const [stats, setStats] = useState<{ active: number; sold: number } | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteText, setDeleteText] = useState('');
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!session) return;
@@ -52,7 +55,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.card}>
           <View style={styles.cardTop}>
             <Avatar
@@ -207,10 +210,19 @@ export default function ProfileScreen() {
           <View style={styles.separator} />
           <Pressable
             style={styles.menuRow}
-            onPress={async () => {
-              await signOut();
-              router.replace('/');
-            }}
+            onPress={() =>
+              Alert.alert(t('profile.signOut'), t('profile.signOutConfirm'), [
+                { text: t('common.cancel'), style: 'cancel' },
+                {
+                  text: t('profile.signOut'),
+                  style: 'destructive',
+                  onPress: async () => {
+                    await signOut();
+                    router.replace('/');
+                  },
+                },
+              ])
+            }
           >
             <View style={styles.menuLeft}>
               <LogOut size={18} color={colors.textSecondary} />
@@ -220,23 +232,10 @@ export default function ProfileScreen() {
           <View style={styles.separator} />
           <Pressable
             style={styles.menuRow}
-            onPress={() =>
-              Alert.alert(t('profile.deleteAccount'), t('profile.deleteAccountConfirm'), [
-                { text: t('common.cancel'), style: 'cancel' },
-                {
-                  text: t('profile.deleteAccount'),
-                  style: 'destructive',
-                  onPress: async () => {
-                    try {
-                      await deleteAccount();
-                      router.replace('/');
-                    } catch {
-                      Alert.alert(t('auth.error'));
-                    }
-                  },
-                },
-              ])
-            }
+            onPress={() => {
+              setDeleteText('');
+              setDeleteOpen(true);
+            }}
           >
             <View style={styles.menuLeft}>
               <UserX size={18} color="#B4423E" />
@@ -247,13 +246,95 @@ export default function ProfileScreen() {
           </Pressable>
         </View>
       </ScrollView>
+
+      <Modal visible={deleteOpen} transparent animationType="fade">
+        <View style={styles.deleteBackdrop}>
+          <View style={styles.deleteCard}>
+            <Text style={styles.deleteTitle}>{t('profile.deleteAccount')}</Text>
+            <Text style={styles.deleteBody}>{t('profile.deleteAccountConfirm')}</Text>
+            <Text style={styles.deleteBody}>{t('profile.deleteTypePrompt')}</Text>
+            <TextInput
+              style={styles.deleteInput}
+              value={deleteText}
+              onChangeText={setDeleteText}
+              autoCapitalize="characters"
+              autoCorrect={false}
+              placeholder="DELETE"
+              placeholderTextColor={colors.textSecondary}
+            />
+            <View style={styles.deleteActions}>
+              <Pressable
+                style={[styles.deleteBtn, styles.deleteCancel]}
+                onPress={() => setDeleteOpen(false)}
+                disabled={deleting}
+              >
+                <Text style={styles.deleteCancelText}>{t('common.cancel')}</Text>
+              </Pressable>
+              <Pressable
+                style={[
+                  styles.deleteBtn,
+                  styles.deleteConfirm,
+                  (deleteText.trim() !== 'DELETE' || deleting) && { opacity: 0.4 },
+                ]}
+                disabled={deleteText.trim() !== 'DELETE' || deleting}
+                onPress={async () => {
+                  setDeleting(true);
+                  try {
+                    await deleteAccount();
+                    setDeleteOpen(false);
+                    router.replace('/');
+                  } catch {
+                    setDeleting(false);
+                    setDeleteOpen(false);
+                    setTimeout(() => Alert.alert(t('auth.error')), 50);
+                  }
+                }}
+              >
+                <Text style={styles.deleteConfirmText}>{t('profile.deleteAccount')}</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  deleteBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: spacing.lg,
+  },
+  deleteCard: {
+    alignSelf: 'stretch',
+    backgroundColor: colors.background,
+    borderRadius: radius.lg,
+    padding: spacing.lg,
+    gap: spacing.sm,
+  },
+  deleteTitle: { fontSize: 17, fontWeight: '700', color: '#B4423E' },
+  deleteBody: { fontSize: 14, color: colors.text, lineHeight: 20 },
+  deleteInput: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    padding: 12,
+    fontSize: 16,
+    letterSpacing: 2,
+    color: colors.text,
+    backgroundColor: colors.white,
+  },
+  deleteActions: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.xs },
+  deleteBtn: { flex: 1, borderRadius: radius.md, paddingVertical: 12, alignItems: 'center' },
+  deleteCancel: { borderWidth: 1, borderColor: colors.border, backgroundColor: colors.white },
+  deleteCancelText: { fontWeight: '600', color: colors.text },
+  deleteConfirm: { backgroundColor: '#B4423E' },
+  deleteConfirmText: { fontWeight: '700', color: colors.white },
   safe: { flex: 1, backgroundColor: colors.background },
-  container: { padding: spacing.lg, gap: spacing.md },
+  container: { padding: spacing.lg, gap: spacing.md, paddingBottom: 56 },
   card: {
     backgroundColor: colors.surface,
     borderRadius: radius.lg,

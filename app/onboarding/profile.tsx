@@ -58,29 +58,46 @@ export default function ProfileSetupScreen() {
 
   async function save() {
     if (!session) return;
+    const nameChanged = displayName.trim() !== (profile?.display_name ?? '');
+    // Client-side 30-day nickname cooldown — mirrors the DB trigger so the
+    // request never reaches the trigger's error path (which hard-crashed
+    // Hermes when surfaced from the response microtask).
+    if (nameChanged && profile?.display_name_changed_at) {
+      const nextAt = new Date(profile.display_name_changed_at).getTime() + 30 * 24 * 3600 * 1000;
+      if (Date.now() < nextAt) {
+        const date = new Date(nextAt).toLocaleDateString(
+          i18n.language === 'zh' ? 'zh-CN' : i18n.language,
+          { year: 'numeric', month: 'short', day: 'numeric' },
+        );
+        Alert.alert(t('profileSetup.nameCooldown'), t('profileSetup.nameCooldownUntil', { date }));
+        return;
+      }
+    }
     setBusy(true);
     try {
       let avatarUrl = profile?.avatar_url ?? null;
       if (avatarAsset) avatarUrl = await uploadAvatar(session.user.id, avatarAsset);
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          display_name: displayName.trim(),
-          suburb: suburb.trim(),
-          suburb_verified_at: suburbCheck === 'ok' ? new Date().toISOString() : null,
-          nationality,
-          avatar_url: avatarUrl,
-          preferred_language: i18n.language,
-        })
-        .eq('id', session.user.id);
+      const patch: Record<string, unknown> = {
+        suburb: suburb.trim(),
+        suburb_verified_at: suburbCheck === 'ok' ? new Date().toISOString() : null,
+        nationality,
+        avatar_url: avatarUrl,
+        preferred_language: i18n.language,
+      };
+      if (nameChanged) patch.display_name = displayName.trim();
+      const { error } = await supabase.from('profiles').update(patch).eq('id', session.user.id);
       if (error) throw error;
       await refreshProfile();
       router.replace('/(tabs)/home');
     } catch (e) {
       const msg = (e as Error).message ?? '';
-      if (/once every 30 days/i.test(msg)) Alert.alert(t('profileSetup.nameCooldown'));
-      else if (/row-level security|banned/i.test(msg)) Alert.alert(t('common.restricted'));
-      else Alert.alert(msg);
+      // Deferred: alerting synchronously from the rejection microtask
+      // triggered a Hermes segfault on-device.
+      setTimeout(() => {
+        if (/once every 30 days/i.test(msg)) Alert.alert(t('profileSetup.nameCooldown'));
+        else if (/row-level security|banned/i.test(msg)) Alert.alert(t('common.restricted'));
+        else Alert.alert(msg || t('auth.error'));
+      }, 50);
     } finally {
       setBusy(false);
     }
