@@ -23,6 +23,8 @@ import {
   Star,
   UserX,
 } from 'lucide-react-native';
+import Constants from 'expo-constants';
+import * as Updates from 'expo-updates';
 import { Avatar } from '../../src/components/Avatar';
 import { TrustBadge } from '../../src/components/TrustBadge';
 import { fetchListingStats } from '../../src/lib/listings';
@@ -250,6 +252,10 @@ export default function ProfileScreen() {
             </View>
           </Pressable>
         </View>
+        <Text style={styles.versionText}>
+          {`v${Constants.expoConfig?.version ?? '?'} (${Constants.expoConfig?.ios?.buildNumber ?? '5'})`}
+          {Updates.updateId ? ` · ${Updates.updateId.slice(0, 8)}` : ' · embedded'}
+        </Text>
       </ScrollView>
 
       <Modal visible={deleteOpen} transparent animationType="fade">
@@ -306,6 +312,12 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
+  versionText: {
+    textAlign: 'center',
+    fontSize: 11,
+    color: colors.textSecondary,
+    marginTop: spacing.sm,
+  },
   deleteBackdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.45)',
