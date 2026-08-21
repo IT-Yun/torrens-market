@@ -1,0 +1,169 @@
+========================================================
+ TORRENS MARKET — App Store 제출 복붙 시트 (English U.S. 탭)
+========================================================
+빌드: 반드시 1.0.0 (5) 선택 / 게시: Manually release / 언어 탭: English (U.S.)
+각 블록을 해당 칸에 그대로 복사-붙여넣기 하세요.
+
+
+────────────────────────────────────────
+[1] Promotional Text  (170자 제한, 선택사항)
+────────────────────────────────────────
+Adelaide's secondhand marketplace — fully in English, 한국어 and 中文. Buy and sell locally with trust badges, in-chat offers, and pickup scheduling.
+
+
+────────────────────────────────────────
+[2] Description  (4,000자)
+────────────────────────────────────────
+Torrens Market is Adelaide's secondhand marketplace, built for the city's international communities — with the entire app available in English, Korean, and Chinese.
+
+BUY & SELL LOCALLY
+• Browse listings near you: your suburb, within 5–20 km, or all Adelaide
+• 16 categories with details that matter: furniture dimensions, cosmetics expiry and period-after-opening, car rego and service history
+• Post in under a minute with photos and smart category suggestions
+
+YOUR LANGUAGE, NATIVELY
+• Switch the whole app between English, 한국어 and 中文 anytime
+• Optional nationality on profiles with an opt-in community filter — trade within your community when that feels easier
+
+TRUST YOU CAN SEE
+• Post-trade reviews build an Aussie-animal trust ladder: quokka → bilby → koala → wombat → wallaby → kangaroo
+• Verified-suburb and phone badges, verified-only search filter
+• Report and block on every surface; repeated reports hide a listing automatically
+
+DEAL-MAKING BUILT IN
+• 1:1 chat with photo sharing
+• Send and accept price offers in chat
+• Schedule pickup meetups — accepting reserves the listing, with a reminder before you meet
+• Keyword alerts: get notified the moment something you want is posted
+
+PRIVACY BY DESIGN
+• Locations are rounded to about 1 km on your device — your exact position never leaves your phone
+• No ads, no tracking, free to use
+• Delete your account and all data anytime
+
+Made in Adelaide, for Adelaide. Named after the River Torrens.
+
+
+────────────────────────────────────────
+[3] Keywords  (100자, 쉼표로 구분)
+────────────────────────────────────────
+secondhand, marketplace, Adelaide, buy and sell, used, local, korean, chinese, classifieds, 당근, 중고거래, 二手
+
+
+────────────────────────────────────────
+[4] URLs & Copyright
+────────────────────────────────────────
+Support URL:
+https://it-yun.github.io/torrens-market/support.html
+
+Marketing URL:
+https://it-yun.github.io/torrens-market/
+
+Copyright:
+2026 Seungyun Lee
+
+
+────────────────────────────────────────
+[5] Build
+────────────────────────────────────────
+Add Build 클릭 → "1.0.0 (5)" 선택  (⚠️ 4 아님!)
+
+
+────────────────────────────────────────
+[6] App Review Information
+────────────────────────────────────────
+• "Sign-in required" 체크박스 → 체크 해제(OFF) 추천
+  (데모계정 안 줌. 리뷰어가 'Continue with Apple'로 자기 Apple ID 사용)
+• First / Last name, Phone, Email → 본인 실제 연락처
+• Notes 칸에 아래 전체 붙여넣기 ↓
+
+Torrens Market is a free local secondhand marketplace for Adelaide, South Australia, with a fully trilingual UI (English / Korean / Chinese).
+
+SIGN-IN FOR REVIEW (no demo credentials needed)
+This app uses Sign in with Apple (and Google). On the login screen, tap "Continue with Apple" — no username/password required. The marketplace is pre-populated with sample listings, so a fresh account immediately sees a populated feed and can browse, search with filters, open listing details, and start a chat. Account deletion: Profile → Settings → Delete account.
+
+KEY FLOWS TO TEST
+1. Language: the first screen selects English / 한국어 / 中文; every screen switches live (also from Profile → Language).
+2. Browse & search: Home feed → category chips → distance scope (my suburb / 5–20 km / all). Search supports keyword + filters (category, nationality, verified sellers, max price).
+3. Post a listing: + button → photos → choosing a category reveals category-specific fields (e.g. Furniture → dimensions; Cosmetics → expiry date). First post shows our Terms of Service acceptance gate.
+4. Deal-making: open a listing → Chat → send a message; the chat hosts price offers and pickup-meetup scheduling (accepting a meetup reserves the listing).
+5. UGC safety (guideline 1.2): every listing has ⋯ → Report (reason picker) and Block seller. Blocking hides the seller's listings and prevents new chats both ways. Three distinct reports auto-hide a listing pending review. Profile → Settings → Blocked users manages the block list.
+6. Account deletion (5.1.1(v)): Profile → Settings → Delete account — immediate, cascades all user data.
+
+LOCATION USE
+When-in-use only, for showing nearby listings and verifying the user's suburb. Coordinates are rounded to a ~1.1 km grid ON DEVICE before upload — exact GPS never reaches our servers. No background location.
+
+PRIVACY / TRACKING
+No ads, no analytics SDKs, no tracking across apps (no ATT prompt needed).
+Privacy policy: https://it-yun.github.io/torrens-market/privacy.html
+Support: https://it-yun.github.io/torrens-market/support.html
+
+NOTES
+- Payments are settled in person between users; the app processes no payments (no IAP).
+- Sign in with Apple and Google are offered alongside email one-time codes.
+- The marketplace is seeded with genuine-looking demo listings for review; real inventory grows post-launch in Adelaide.
+
+Thank you for reviewing!
+
+
+────────────────────────────────────────
+[7] App Store Version Release
+────────────────────────────────────────
+"Manually release this version" 선택 → 우상단 Save
+
+
+========================================================
+ 이 페이지 저장 후 → 왼쪽 "App Information" 페이지
+========================================================
+• Category: Shopping  (Secondary: Lifestyle)
+• Content Rights: "이 앱은 서드파티 콘텐츠를 포함하지 않음" (No)
+• Age Rating(연령 등급) 설문:
+   - 모든 콘텐츠 질문 = None
+   - 무제한 웹 접근 / 도박 = No
+   - 사용자 생성 콘텐츠(UGC) = Yes (신고·차단·모더레이션 있음)
+   - (신규 앱이라) 소셜미디어 관련 새 질문도 답변
+   → 결과 13+ 예상
+
+
+========================================================
+ 마지막 → 우상단 "Add for Review" → "Submit to App Review"
+========================================================
+제출 직전 뜨는 질문:
+• 수출 규정(암호화) 사용? → Yes
+• 표준 암호화(HTTPS)만 사용 / 면제? → Yes  (문서 불필요)
+• 광고 식별자(IDFA) 사용? → No
+
+→ 상태가 "Waiting for Review(심사 대기)"로 바뀌면 완료! 그 화면 캡처해서 보내주세요.
+
+
+──────────────────────────────────────────────────────
+[참고] 한국어 / 중국어 설명 (나중에 언어 탭 추가할 때만 사용)
+──────────────────────────────────────────────────────
+■ Korean Subtitle: 애들레이드 동네 중고마켓
+■ Korean Keywords: 중고거래, 애들레이드, 중고마켓, 당근, 호주, 워홀, 유학생, 한인, 직거래
+■ Korean Description:
+토렌스 마켓은 애들레이드의 중고거래 앱입니다. 앱 전체가 한국어·영어·중국어를 지원해요.
+
+동네에서 사고팔기
+• 내 지역, 5–20km, 애들레이드 전체 범위로 매물 탐색
+• 16개 카테고리와 꼭 필요한 상세 정보: 가구 치수, 화장품 유효기간, 자동차 rego·정비 이력
+• 사진과 카테고리 자동 추천으로 1분 안에 등록
+
+보이는 신뢰
+• 거래 후 리뷰로 쌓이는 호주 동물 신뢰 등급: 쿼카 → 빌비 → 코알라 → 웜뱃 → 왈라비 → 캥거루
+• 지역 인증·전화 인증 배지, 인증 판매자만 보기 필터
+• 모든 화면에서 신고·차단 가능
+
+채팅에서 거래 완성
+• 1:1 채팅, 사진 전송
+• 채팅 안에서 가격 제안과 픽업 약속까지
+• 키워드 알림: 원하는 물건이 올라오면 즉시 푸시
+
+프라이버시 우선
+• 위치는 기기에서 약 1km 단위로 반올림 — 정확한 위치는 전송되지 않아요
+• 광고 없음, 추적 없음, 무료
+• 언제든 계정과 데이터 삭제 가능
+
+■ Chinese Subtitle: 阿德莱德本地二手市集
+■ Chinese Keywords: 二手, 阿德莱德, 闲鱼, 留学生, 华人, 本地交易, 跳蚤市场, 澳洲
+(중국어 설명 전문은 store-assets/asc-paste-sheet.md 참고)
