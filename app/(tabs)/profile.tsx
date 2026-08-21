@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { LANGUAGES, setAppLanguage } from '../../src/lib/i18n';
@@ -52,7 +52,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.card}>
           <View style={styles.cardTop}>
             <Avatar
@@ -246,14 +246,14 @@ export default function ProfileScreen() {
             </View>
           </Pressable>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
-  container: { flex: 1, padding: spacing.lg, gap: spacing.md },
+  container: { padding: spacing.lg, gap: spacing.md },
   card: {
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
