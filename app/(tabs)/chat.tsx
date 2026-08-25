@@ -8,6 +8,7 @@ import { router, useFocusEffect } from 'expo-router';
 import { timeAgo } from '../../src/components/ListingRow';
 import { fetchRooms, type ChatRoomSummary } from '../../src/lib/chat';
 import { photoUrl } from '../../src/lib/listings';
+import { GuestCta } from '../../src/components/GuestCta';
 import { useSession } from '../../src/lib/session';
 import { colors, radius, spacing } from '../../src/theme';
 
@@ -22,6 +23,8 @@ export default function ChatListScreen() {
     }, [session]),
   );
 
+
+  if (!session) return <GuestCta emoji="🦜" />;
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <FlatList

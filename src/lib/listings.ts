@@ -253,10 +253,13 @@ export async function createListing(input: {
 
 /** Fire-and-forget view counter (definer RPC — no update rights needed). */
 export function recordView(listingId: string): void {
-  supabase.rpc('increment_view', { p_listing_id: listingId }).then(
-    () => {},
-    () => {},
-  );
+  supabase.auth.getSession().then(({ data }) => {
+    if (!data.session) return; // anon EXECUTE deliberately revoked (view-pump defense)
+    supabase.rpc('increment_view', { p_listing_id: listingId }).then(
+      () => {},
+      () => {},
+    );
+  });
 }
 
 /** Active listings by a seller (detail-page strip, public profile). */

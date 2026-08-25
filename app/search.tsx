@@ -23,6 +23,8 @@ import {
   type ListingCard,
   type SearchSort,
 } from '../src/lib/listings';
+import { promptSignIn } from '../src/lib/guard';
+import { useSession } from '../src/lib/session';
 import { colors, radius, spacing } from '../src/theme';
 import { BackButton } from '../src/components/BackButton';
 
@@ -31,6 +33,7 @@ const RECENTS_KEY = 'recent_searches';
 
 export default function SearchScreen() {
   const { t } = useTranslation();
+  const { session } = useSession();
   const lang = i18n.language;
   const [query, setQuery] = useState('');
   const [categories, setCategories] = useState<Category[]>([]);
@@ -220,7 +223,7 @@ export default function SearchScreen() {
             <View style={styles.empty}>
               <SearchX size={44} color={colors.textSecondary} strokeWidth={1.5} />
               <Text style={styles.emptyText}>{t('search.noResults')}</Text>
-              <Pressable style={[styles.keywordCta, styles.iconChip]} onPress={() => router.push('/keywords')}>
+              <Pressable style={[styles.keywordCta, styles.iconChip]} onPress={() => (session ? router.push('/keywords') : promptSignIn())}>
                 <Bell size={15} color={colors.white} />
                 <Text style={styles.keywordCtaText}>{t('search.keywordCta')}</Text>
               </Pressable>

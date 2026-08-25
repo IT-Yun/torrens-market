@@ -23,7 +23,7 @@ export default function Index() {
   }
 
   if (!langChosen) return <Redirect href="/onboarding/language" />;
-  if (!session) return <Redirect href="/auth" />;
-  if (!profile?.suburb) return <Redirect href="/onboarding/profile" />;
+  // Guests browse freely (guideline 5.1.1(v)); sign-in happens at gated actions.
+  if (session && !profile?.suburb) return <Redirect href="/onboarding/profile" />;
   return <Redirect href="/(tabs)/home" />;
 }

@@ -12,6 +12,7 @@ import { ListingRow } from '../../src/components/ListingRow';
 import i18n from '../../src/lib/i18n';
 import { fetchCategories, fetchListings, type Category, type ListingCard } from '../../src/lib/listings';
 import { fetchBlockedIds } from '../../src/lib/moderation';
+import { promptSignIn } from '../../src/lib/guard';
 import { useSession } from '../../src/lib/session';
 import { colors, radius, spacing } from '../../src/theme';
 
@@ -193,7 +194,7 @@ export default function HomeScreen() {
 
       <Pressable
         style={styles.fab}
-        onPress={() => router.push('/listing/create')}
+        onPress={() => (session ? router.push('/listing/create') : promptSignIn())}
         accessibilityRole="button"
         accessibilityLabel={t('listingCreate.title')}
       >

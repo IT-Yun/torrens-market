@@ -28,7 +28,10 @@
     "error": "登录失败，请重试。",
     "resend": "重新发送验证码",
     "resendIn": "{{s}}秒后可重发",
-    "rateLimited": "请求过于频繁 — 请稍后再试。"
+    "rateLimited": "请求过于频繁 — 请稍后再试。",
+    "requiredTitle": "请先登录",
+    "requiredBody": "浏览对所有人开放 — 登录后即可发布、聊天、收藏和出价。",
+    "signIn": "登录 / 注册"
   },
   "profileSetup": {
     "title": "设置个人资料",

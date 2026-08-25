@@ -15,6 +15,7 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import { AdelaideHero } from '../src/components/AdelaideHero';
 import { GoogleLogo } from '../src/components/GoogleLogo';
 import { Button, Field, Screen } from '../src/components/ui';
+import { ChevronLeft } from 'lucide-react-native';
 import { sendEmailCode, signInWithApple, signInWithProvider, verifyEmailCode } from '../src/lib/auth';
 import { colors, spacing } from '../src/theme';
 
@@ -77,6 +78,16 @@ export default function AuthScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
+        {router.canGoBack() && (
+          <Pressable
+            onPress={() => router.back()}
+            hitSlop={10}
+            accessibilityRole="button"
+            style={{ alignSelf: 'flex-start' }}
+          >
+            <ChevronLeft size={28} color={colors.text} />
+          </Pressable>
+        )}
         <AdelaideHero width={280} height={157} />
         <Text style={styles.title}>Torrens Market</Text>
         <Text style={styles.tagline}>{t('auth.tagline')}</Text>

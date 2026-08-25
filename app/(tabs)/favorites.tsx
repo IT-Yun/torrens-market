@@ -7,6 +7,7 @@ import { useFocusEffect } from 'expo-router';
 import { ListingRow } from '../../src/components/ListingRow';
 import { fetchFavorites } from '../../src/lib/favorites';
 import type { ListingCard } from '../../src/lib/listings';
+import { GuestCta } from '../../src/components/GuestCta';
 import { useSession } from '../../src/lib/session';
 import { colors, spacing } from '../../src/theme';
 
@@ -21,6 +22,8 @@ export default function FavoritesScreen() {
     }, [session]),
   );
 
+
+  if (!session) return <GuestCta emoji="🐨" />;
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <FlatList

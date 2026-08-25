@@ -6,6 +6,7 @@ import { router, useFocusEffect } from 'expo-router';
 import { LANGUAGES, setAppLanguage } from '../../src/lib/i18n';
 import i18n from '../../src/lib/i18n';
 import { signOut } from '../../src/lib/auth';
+import { GuestCta } from '../../src/components/GuestCta';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
 import {
@@ -35,6 +36,7 @@ import { colors, radius, spacing } from '../../src/theme';
 export default function ProfileScreen() {
   const { t } = useTranslation();
   const { session, profile, refreshProfile } = useSession();
+  const isGuest = !session;
   const [trust, setTrust] = useState<ProfileTrust | null>(null);
   const [stats, setStats] = useState<{ active: number; sold: number } | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -59,6 +61,8 @@ export default function ProfileScreen() {
     }
   }
 
+
+  if (isGuest) return <GuestCta emoji="🧑‍💻" />;
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>

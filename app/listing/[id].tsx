@@ -19,6 +19,7 @@ import { startChat } from '../../src/lib/chat';
 import { isFavorite, toggleFavorite } from '../../src/lib/favorites';
 import { blockUser, reportListing, type ReportReason } from '../../src/lib/moderation';
 import i18n from '../../src/lib/i18n';
+import { promptSignIn } from '../../src/lib/guard';
 import { useSession } from '../../src/lib/session';
 import {
   fetchCategories,
@@ -93,7 +94,11 @@ export default function ListingDetailScreen() {
   }, [listing?.lat, listing?.lng]);
 
   function openModeration() {
-    if (!session || !listing) return;
+    if (!session) {
+      promptSignIn();
+      return;
+    }
+    if (!listing) return;
     const reasons: [string, ReportReason][] = [
       [t('report.spam'), 'spam'],
       [t('report.scam'), 'scam'],
@@ -134,7 +139,11 @@ export default function ListingDetailScreen() {
   }
 
   async function onToggleFavorite() {
-    if (!session || !id) return;
+    if (!session) {
+      promptSignIn();
+      return;
+    }
+    if (!id) return;
     const next = !liked;
     setLiked(next);
     try {
@@ -412,6 +421,10 @@ export default function ListingDetailScreen() {
               title={t('listingDetail.chat')}
               disabled={listing.status === 'sold'}
               onPress={async () => {
+                if (!session) {
+                  promptSignIn();
+                  return;
+                }
                 try {
                   const roomId = await startChat(listing.id);
                   router.push(`/chat/${roomId}`);
