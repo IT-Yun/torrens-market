@@ -1,0 +1,16 @@
+GUEST ACCESS: No sign-in is required to browse. After the language screen the app opens directly to the public feed — browsing, search, listing details, and seller profiles all work without an account. SIGN-IN (only for account features — favoriting, chat, posting, offers, reviews, reporting): tap any of those and a sign-in prompt appears; use "Continue with Apple" — the reviewer's own Apple ID creates an account immediately, no demo credentials needed. Email one-time-code login also exists as an alternative. The marketplace is pre-seeded with sample listings.
+
+DEVICES TESTED: iPhone 17 Pro, iOS 26.6 — physical device (TestFlight builds 3–6), full end-to-end testing including Sign in with Apple, Google sign-in, push notifications, and location features. iOS Simulator (Xcode 16): iPhone 16 Pro Max and additional screen sizes — a 46-step end-to-end UI test pass in English, Korean, and Chinese.
+
+APP AND AUDIENCE: Torrens Market is a free local secondhand marketplace for Adelaide, South Australia. Users (16+) list used items with photos, browse and search nearby listings, chat, agree on a price, and meet in person to complete the trade. Fully trilingual (English/Korean/Chinese) for Adelaide's international community, with local-trust features (suburb verification, verified-seller badge, post-trade reviews). The app processes no payments; trades settle in person. No paid content, purchases, or subscriptions; no App Tracking Transparency prompt (no tracking).
+
+MAIN FEATURES: Home feed (browse/filters), search tab, + button (post a listing), chat tab (price offers + meetup scheduling), Profile > Settings (language, blocked users, delete account). UGC safety: every listing has Report (reason picker) and Block seller; three distinct reports auto-hide a listing. Account deletion: Profile > Settings > Delete account (type DELETE to confirm).
+
+EXTERNAL SERVICES: Supabase (hosted) — authentication, Postgres database, file storage, edge functions (entire backend). Sign in with Apple and Google Sign-In — federated login only. Expo / EAS (expo.dev) — build pipeline, over-the-air JS updates, Expo Push Notification service (APNs). GitHub Pages — static hosting for the privacy policy and support pages. No payment processors, no ad networks, no analytics SDKs, no AI services.
+
+REGIONAL DIFFERENCES: None — the app functions identically in all regions. UI language (EN/KO/ZH) is a user choice, independent of region. Listings are naturally concentrated in Adelaide, Australia, where the service launches.
+
+REGULATED INDUSTRY / THIRD-PARTY MATERIAL: Not applicable. Consumer-to-consumer secondhand marketplace; no payments processed, no financial/medical/gambling services, no protected third-party material. All content is user-generated with reporting, blocking, and auto-hide moderation built in.
+
+Privacy policy: https://it-yun.github.io/torrens-market/privacy.html
+Support: https://it-yun.github.io/torrens-market/support.html

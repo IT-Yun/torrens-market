@@ -1,0 +1,79 @@
+════════════════════════════════════════
+ 토렌스 마켓 — 재제출 가이드 (빌드 6)
+ 2026-08-21 / appstoreconnect.apple.com
+════════════════════════════════════════
+
+【1단계】 빌드 5 → 6 교체
+----------------------------------------
+1. My Apps → Torrens Market
+2. 왼쪽 "iOS App 1.0.0 Rejected" 클릭
+   (또는 Unresolved Issues 페이지에서 Action: Edit)
+3. 아래로 스크롤 → "Build" 섹션 찾기
+   (지금 1.0.0 (5)가 붙어 있음)
+4. 빌드 줄 옆 빨간 ➖ 클릭 → 빌드 5 제거
+5. 나타나는 ➕ (Add Build) 클릭 → "1.0.0 (6)" 선택 → Done
+6. 우상단 Save
+
+⚠️ 주의
+- 빌드 6이 목록에 없으면 = Apple 처리 중.
+  TestFlight에 빌드 6이 이미 떴다면 처리 완료된
+  것이니 페이지 새로고침.
+- "Unresolved Issues" 페이지의 항목 옆 ➖는
+  절대 누르지 말 것 (제출 항목 전체가 빠짐).
+  ➖는 오직 버전 페이지 안 Build 섹션에서만.
+
+【2단계】 Messages 답장 + 영상 첨부
+----------------------------------------
+1. 버전 페이지 하단 App Review → Messages
+2. Apple 메시지 밑 "Reply" 클릭
+3. 아래 [영문 답변 전문]을 통째로 붙여넣기
+4. 클립(📎) 버튼 → 찍어둔 시연 영상 첨부
+5. Send
+
+【3단계】 Notes란에도 복사
+----------------------------------------
+1. 같은 페이지 App Review Information 섹션
+2. Notes 입력란에 [영문 답변 전문] 중
+   "1. Screen recording" 문단만 빼고
+   2~7번을 붙여넣기
+3. Save
+
+【4단계】 재제출
+----------------------------------------
+페이지 상단 "Resubmit to App Review"
+(또는 Submit for Review) 클릭 → 끝!
+심사 결과 메일 오면 공유해 주세요.
+
+════════════════════════════════════════
+ [영문 답변 전문] — 2단계에서 통째로 붙여넣기
+════════════════════════════════════════
+
+Hello, thank you for the review. Please find the requested information below.
+
+1. Screen recording
+Attached is a screen recording captured on a physical iPhone 17 Pro running iOS 26.6, demonstrating: app launch, Sign in with Apple registration, the location permission prompt, browsing and search, posting a listing (camera/photos permission prompts), in-chat price offers and meetup scheduling, user-generated-content reporting and blocking, and account deletion. The app has no paid content, purchases, or subscriptions, and no App Tracking Transparency prompt (no tracking).
+
+2. Devices and operating systems tested
+- iPhone 17 Pro, iOS 26.6 — physical device (TestFlight builds 3–6): full end-to-end testing including Sign in with Apple, Google sign-in, push notifications, and location features.
+- iOS Simulator (Xcode 16): iPhone 16 Pro Max and additional screen sizes — a 46-step end-to-end UI test pass in all three languages (English, Korean, Chinese).
+
+3. App functions and target audience
+Torrens Market is a free local secondhand marketplace for Adelaide, South Australia. Users (16+) list used items with photos, browse and search nearby listings, chat, agree on a price, and meet in person to complete the trade. The problem it solves: Adelaide's large international community (Korean- and Chinese-speaking students and migrants) is underserved by English-only marketplaces, so the entire product is trilingual (English/Korean/Chinese) with local-trust features such as suburb verification, a verified-seller badge, and post-trade reviews. The app processes no payments; trades settle in person.
+
+4. Setup and access instructions
+No demo credentials are required. On the login screen tap "Continue with Apple" (Sign in with Apple) — the reviewer's own Apple ID creates an account immediately. The marketplace is pre-seeded with sample listings, so a fresh account sees a populated feed at once. Main features: Home feed (browse/filters), search tab, + button (post a listing), chat tab (price offers + meetup scheduling), Profile > Settings (language, blocked users, delete account). Email one-time-code login also exists as an alternative; Sign in with Apple is the recommended review path.
+
+5. External services used
+- Supabase (hosted): authentication, Postgres database, file storage, and edge functions — the entire backend.
+- Sign in with Apple and Google Sign-In: federated login only.
+- Expo / EAS (expo.dev): build pipeline, over-the-air JS updates, and the Expo Push Notification service (APNs delivery).
+- GitHub Pages: static hosting for the privacy policy and support pages.
+No payment processors, no ad networks, no analytics SDKs, and no AI services are used.
+
+6. Regional differences
+None — the app functions identically in all regions. The UI language (English/Korean/Chinese) is a user choice, independent of region. Listing content is naturally concentrated in Adelaide, Australia, where the service launches.
+
+7. Regulated industry / third-party material
+Not applicable. Torrens Market is a consumer-to-consumer secondhand marketplace; it processes no payments, offers no financial, medical, or gambling services, and contains no protected third-party material. All app content is user-generated, with reporting, blocking, and auto-hide moderation built in (demonstrated in the recording).
+
+We have also added this information to the App Review Information Notes field for future submissions. Thank you!

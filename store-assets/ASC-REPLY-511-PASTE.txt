@@ -1,0 +1,19 @@
+Hello, thank you for the detailed review.
+
+We have resolved the Guideline 5.1.1(v) issue in the newly attached build 1.0.0 (7).
+
+WHAT CHANGED
+The app no longer requires registration to access for-sale listings. On first launch, after choosing a language, users land directly on the public home feed as guests. Without any account, users can now:
+- browse the home feed and filter by category and distance,
+- search listings with keywords and filters,
+- open any listing's detail page (photos, price, description, item details, approximate location),
+- view a seller's public profile, trust tier, and reviews.
+
+Registration is now requested only for account-based features, at the moment the user invokes them: favoriting a listing, chatting with a seller, posting a listing, making a price offer, scheduling a meetup, leaving a review, and reporting or blocking. Tapping any of these as a guest shows a sign-in prompt (Sign in with Apple, Google, or email one-time code) and returns the user to where they left off after signing in.
+
+HOW TO VERIFY
+Launch build 7 fresh: after the language screen, the marketplace feed appears with no login step. Browse, search, and open listings freely. Tap the heart on any listing (or the Chat button on a listing page) to see the sign-in prompt appear only at that point.
+
+All information previously provided in this thread (screen recording, tested devices, app description, access instructions, external services, regional notes) still applies to build 7; the App Review Information Notes have been updated to describe guest browsing.
+
+Thank you!
