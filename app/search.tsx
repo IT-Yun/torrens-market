@@ -223,7 +223,7 @@ export default function SearchScreen() {
             <View style={styles.empty}>
               <SearchX size={44} color={colors.textSecondary} strokeWidth={1.5} />
               <Text style={styles.emptyText}>{t('search.noResults')}</Text>
-              <Pressable style={[styles.keywordCta, styles.iconChip]} onPress={() => (session ? router.push('/keywords') : promptSignIn())}>
+              <Pressable style={[styles.keywordCta, styles.iconChip]} onPress={() => (session ? router.push('/keywords') : promptSignIn('gate.reason_keyword'))}>
                 <Bell size={15} color={colors.white} />
                 <Text style={styles.keywordCtaText}>{t('search.keywordCta')}</Text>
               </Pressable>

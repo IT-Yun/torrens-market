@@ -194,7 +194,7 @@ export default function HomeScreen() {
 
       <Pressable
         style={styles.fab}
-        onPress={() => (session ? router.push('/listing/create') : promptSignIn())}
+        onPress={() => (session ? router.push('/listing/create') : promptSignIn('gate.reason_post'))}
         accessibilityRole="button"
         accessibilityLabel={t('listingCreate.title')}
       >

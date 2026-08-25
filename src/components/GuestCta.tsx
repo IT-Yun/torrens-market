@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { router } from 'expo-router';
+import { promptSignIn } from '../lib/guard';
 import { Button } from './ui';
 import { colors, spacing } from '../theme';
 
@@ -13,7 +13,7 @@ export function GuestCta({ emoji }: { emoji: string }) {
       <Text style={styles.title}>{t('auth.requiredTitle')}</Text>
       <Text style={styles.body}>{t('auth.requiredBody')}</Text>
       <View style={{ alignSelf: 'stretch', marginTop: spacing.sm }}>
-        <Button title={t('auth.signIn')} onPress={() => router.push('/auth')} />
+        <Button title={t('auth.signIn')} onPress={() => promptSignIn()} />
       </View>
     </View>
   );

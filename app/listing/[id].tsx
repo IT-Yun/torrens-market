@@ -95,7 +95,7 @@ export default function ListingDetailScreen() {
 
   function openModeration() {
     if (!session) {
-      promptSignIn();
+      promptSignIn('gate.reason_report');
       return;
     }
     if (!listing) return;
@@ -140,7 +140,7 @@ export default function ListingDetailScreen() {
 
   async function onToggleFavorite() {
     if (!session) {
-      promptSignIn();
+      promptSignIn('gate.reason_favorite');
       return;
     }
     if (!id) return;
@@ -422,7 +422,7 @@ export default function ListingDetailScreen() {
               disabled={listing.status === 'sold'}
               onPress={async () => {
                 if (!session) {
-                  promptSignIn();
+                  promptSignIn('gate.reason_chat');
                   return;
                 }
                 try {

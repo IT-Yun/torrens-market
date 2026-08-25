@@ -5,6 +5,7 @@ import * as Notifications from 'expo-notifications';
 import '../src/lib/i18n';
 import { loadStoredLanguage } from '../src/lib/i18n';
 import { registerPushToken } from '../src/lib/notifications';
+import { PromptSheetProvider } from '../src/components/PromptSheet';
 import { SessionProvider, useSession } from '../src/lib/session';
 
 Notifications.setNotificationHandler({
@@ -56,9 +57,11 @@ export default function RootLayout() {
 
   return (
     <SessionProvider>
+      <PromptSheetProvider>
       <PushBridge />
       <StatusBar style="dark" />
       <Stack screenOptions={{ headerShown: false }} />
+    </PromptSheetProvider>
     </SessionProvider>
   );
 }

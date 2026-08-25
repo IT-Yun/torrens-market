@@ -31,7 +31,8 @@
     "rateLimited": "Too many attempts — please wait a bit and try again.",
     "requiredTitle": "Sign in to continue",
     "requiredBody": "Browsing is open to everyone — signing in lets you post, chat, favourite and make offers.",
-    "signIn": "Sign in / Sign up"
+    "signIn": "Sign in / Sign up",
+    "guestBrowse": "Browse as guest"
   },
   "profileSetup": {
     "title": "Set up your profile",
@@ -307,5 +308,15 @@
     "how1": "· Finish the trade and mark it sold when it's done",
     "how2": "· Earn 4–5★ post-trade reviews from the other side",
     "how3": "· Keep your listings honest — bad reviews cost points"
+  },
+  "gate": {
+    "withEmail": "Continue with email",
+    "keepBrowsing": "Keep browsing",
+    "reason_default": "Sign in to use this feature.",
+    "reason_post": "Sign in to post your listing.",
+    "reason_favorite": "Favourites are saved to your account.",
+    "reason_chat": "Chat with sellers using your account.",
+    "reason_report": "Sign in to report or block.",
+    "reason_keyword": "Keyword alerts are saved to your account."
   }
 }

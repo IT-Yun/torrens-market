@@ -31,7 +31,8 @@
     "rateLimited": "요청이 너무 잦아요 — 잠시 후 다시 시도해 주세요.",
     "requiredTitle": "로그인이 필요해요",
     "requiredBody": "둘러보기는 누구나 가능해요. 로그인하면 판매글 올리기, 채팅, 찜, 가격 제안을 할 수 있어요.",
-    "signIn": "로그인 / 가입하기"
+    "signIn": "로그인 / 가입하기",
+    "guestBrowse": "게스트로 둘러보기"
   },
   "profileSetup": {
     "title": "프로필 설정",
@@ -307,5 +308,15 @@
     "how1": "· 거래를 끝까지 완료하기",
     "how2": "· 거래 후 상대에게 4–5★ 후기 받기",
     "how3": "· 정직한 매물 유지 — 나쁜 후기는 포인트가 깎여요"
+  },
+  "gate": {
+    "withEmail": "이메일로 계속하기",
+    "keepBrowsing": "계속 둘러보기",
+    "reason_default": "이 기능은 로그인 후 이용할 수 있어요.",
+    "reason_post": "판매글을 올리려면 로그인해 주세요.",
+    "reason_favorite": "찜은 계정에 저장돼요.",
+    "reason_chat": "판매자와의 채팅은 계정으로 이용해요.",
+    "reason_report": "신고·차단은 로그인 후 가능해요.",
+    "reason_keyword": "키워드 알림은 계정에 저장돼요."
   }
 }

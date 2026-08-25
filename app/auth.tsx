@@ -113,6 +113,14 @@ export default function AuthScreen() {
             />
           )}
 
+          <Pressable
+            style={styles.guestButton}
+            onPress={() => router.replace('/(tabs)/home')}
+            accessibilityRole="button"
+          >
+            <Text style={styles.guestButtonText}>{t('auth.guestBrowse')}</Text>
+          </Pressable>
+
           <Text style={styles.divider}>{t('auth.orEmail')}</Text>
 
           {!codeSent ? (
@@ -169,6 +177,15 @@ export default function AuthScreen() {
 }
 
 const styles = StyleSheet.create({
+  guestButton: {
+    borderWidth: 1.5,
+    borderColor: colors.primary,
+    borderRadius: 12,
+    paddingVertical: 13,
+    alignItems: 'center',
+    backgroundColor: colors.white,
+  },
+  guestButtonText: { fontSize: 16, fontWeight: '700', color: colors.primary },
   container: { flexGrow: 1, alignItems: 'center', justifyContent: 'center' },
   title: { fontSize: 28, fontWeight: '700', color: colors.primary, marginTop: spacing.md },
   tagline: { fontSize: 15, color: colors.textSecondary, marginTop: spacing.sm },

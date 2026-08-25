@@ -31,7 +31,8 @@
     "rateLimited": "请求过于频繁 — 请稍后再试。",
     "requiredTitle": "请先登录",
     "requiredBody": "浏览对所有人开放 — 登录后即可发布、聊天、收藏和出价。",
-    "signIn": "登录 / 注册"
+    "signIn": "登录 / 注册",
+    "guestBrowse": "先逛逛（游客）"
   },
   "profileSetup": {
     "title": "设置个人资料",
@@ -307,5 +308,15 @@
     "how1": "· 完成交易全程",
     "how2": "· 获得对方 4–5★ 的交易后评价",
     "how3": "· 保持诚信 — 差评会扣分"
+  },
+  "gate": {
+    "withEmail": "使用邮箱继续",
+    "keepBrowsing": "继续逛逛",
+    "reason_default": "登录后即可使用此功能。",
+    "reason_post": "登录后即可发布商品。",
+    "reason_favorite": "收藏会保存到你的账号。",
+    "reason_chat": "登录后即可与卖家聊天。",
+    "reason_report": "登录后可举报或屏蔽。",
+    "reason_keyword": "关键词提醒会保存到你的账号。"
   }
 }
