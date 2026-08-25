@@ -16,6 +16,7 @@ import { router } from 'expo-router';
 import { BackButton } from '../src/components/BackButton';
 import { Button } from '../src/components/ui';
 import { submitFeedback, type FeedbackKind } from '../src/lib/feedback';
+import { GuestCta } from '../src/components/GuestCta';
 import { useSession } from '../src/lib/session';
 import { colors, radius, spacing } from '../src/theme';
 
@@ -42,6 +43,8 @@ export default function FeedbackScreen() {
     }
   }
 
+
+  if (!session) return <GuestCta emoji="💬" />;
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>

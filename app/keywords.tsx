@@ -13,6 +13,7 @@ import { Bell, X } from 'lucide-react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { addAlert, fetchAlerts, removeAlert, type KeywordAlert } from '../src/lib/alerts';
 import { registerPushToken } from '../src/lib/notifications';
+import { GuestCta } from '../src/components/GuestCta';
 import { useSession } from '../src/lib/session';
 import { colors, radius, spacing } from '../src/theme';
 import { BackButton } from '../src/components/BackButton';
@@ -38,6 +39,8 @@ export default function KeywordsScreen() {
     load();
   }
 
+
+  if (!session) return <GuestCta emoji="🔔" />;
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <View style={styles.header}>

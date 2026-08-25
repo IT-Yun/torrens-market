@@ -27,6 +27,7 @@ import {
   type Category,
   type FieldDef,
 } from '../../src/lib/listings';
+import { GuestCta } from '../../src/components/GuestCta';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
 import { Camera, MapPin, ShieldCheck, Sparkles, X } from 'lucide-react-native';
@@ -230,6 +231,8 @@ export default function CreateListingScreen() {
     }
   }
 
+
+  if (!session) return <GuestCta emoji="📦" />;
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>

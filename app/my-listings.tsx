@@ -16,6 +16,7 @@ import {
   type ListingCard,
 } from '../src/lib/listings';
 import { findRoomForListing } from '../src/lib/chat';
+import { GuestCta } from '../src/components/GuestCta';
 import { useSession } from '../src/lib/session';
 import { colors, radius, spacing } from '../src/theme';
 import { BackButton } from '../src/components/BackButton';
@@ -44,6 +45,8 @@ export default function MyListingsScreen() {
 
   useFocusEffect(load);
 
+
+  if (!session) return <GuestCta emoji="📦" />;
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <View style={styles.header}>

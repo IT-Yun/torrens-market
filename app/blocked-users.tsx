@@ -6,6 +6,7 @@ import { router, useFocusEffect } from 'expo-router';
 import { ChevronLeft, ShieldOff } from 'lucide-react-native';
 import { Avatar } from '../src/components/Avatar';
 import { fetchBlockedUsers, unblockUser, type BlockedUser } from '../src/lib/moderation';
+import { GuestCta } from '../src/components/GuestCta';
 import { useSession } from '../src/lib/session';
 import { colors, radius, spacing } from '../src/theme';
 
@@ -20,6 +21,8 @@ export default function BlockedUsersScreen() {
 
   useFocusEffect(load);
 
+
+  if (!session) return <GuestCta emoji="🛡️" />;
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <View style={styles.header}>

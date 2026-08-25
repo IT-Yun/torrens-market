@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BackButton } from '../src/components/BackButton';
+import { GuestCta } from '../src/components/GuestCta';
 import { useSession } from '../src/lib/session';
 import { supabase } from '../src/lib/supabase';
 import { colors, radius, spacing } from '../src/theme';
@@ -30,6 +31,8 @@ export default function NotificationSettingsScreen() {
     else refreshProfile().catch(() => {});
   }
 
+
+  if (!session) return <GuestCta emoji="🔔" />;
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <View style={styles.header}>

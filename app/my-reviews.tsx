@@ -7,6 +7,7 @@ import { ChevronLeft, Star } from 'lucide-react-native';
 import { TrustBadge } from '../src/components/TrustBadge';
 import { fetchReviews, fetchTrust, type ProfileTrust, type Review } from '../src/lib/reviews';
 import { timeAgo } from '../src/lib/format';
+import { GuestCta } from '../src/components/GuestCta';
 import { useSession } from '../src/lib/session';
 import { TRUST_TIERS, trustTier } from '../src/lib/trust';
 import { colors, radius, spacing } from '../src/theme';
@@ -36,6 +37,8 @@ export default function MyReviewsScreen() {
   const tier = trustTier(trust?.trust_points ?? 0);
   const nextTier = tier.level < TRUST_TIERS.length ? TRUST_TIERS[tier.level] : null;
 
+
+  if (!profileId && !session) return <GuestCta emoji="⭐" />;
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <View style={styles.header}>
@@ -64,11 +67,7 @@ export default function MyReviewsScreen() {
         renderItem={({ item }) => (
           <View style={styles.card}>
             <View style={styles.cardTop}>
-              {isSelf ? (
-                <Text style={styles.reviewer}>{item.profiles?.display_name ?? '?'}</Text>
-              ) : (
-                <View style={{ flex: 1 }} />
-              )}
+              <View style={{ flex: 1 }} />
               <View style={styles.stars}>
                 {[1, 2, 3, 4, 5].map((n) => (
                   <Star
