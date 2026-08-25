@@ -14,6 +14,8 @@ Registration is now requested only for account-based features, at the moment the
 HOW TO VERIFY
 Launch build 7 fresh: after the language screen, the marketplace feed appears with no login step. Browse, search, and open listings freely. Tap the heart on any listing (or the Chat button on a listing page) to see the sign-in prompt appear only at that point.
 
+A short screen recording is attached demonstrating exactly this on a physical iPhone 17 Pro: fresh launch → language selection → browsing the feed and a listing detail as a guest (no sign-in) → tapping the heart → the sign-in prompt appearing only then.
+
 All information previously provided in this thread (screen recording, tested devices, app description, access instructions, external services, regional notes) still applies to build 7; the App Review Information Notes have been updated to describe guest browsing.
 
 Thank you!
