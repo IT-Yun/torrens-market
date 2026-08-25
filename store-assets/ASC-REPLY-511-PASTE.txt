@@ -1,9 +1,9 @@
 Hello, thank you for the detailed review.
 
-We have resolved the Guideline 5.1.1(v) issue in the newly attached build 1.0.0 (7).
+We have resolved the Guideline 5.1.1(v) issue in the newly attached build 1.0.0 (8).
 
 WHAT CHANGED
-The app no longer requires registration to access for-sale listings. On first launch, after choosing a language, users land directly on the public home feed as guests. Without any account, users can now:
+The app no longer requires registration to access for-sale listings. On first launch, after choosing a language, the welcome screen offers Sign in with Apple, Google, or email — and a prominent "Browse as guest" button. Tapping it opens the public home feed with no account. As a guest, users can:
 - browse the home feed and filter by category and distance,
 - search listings with keywords and filters,
 - open any listing's detail page (photos, price, description, item details, approximate location),
@@ -12,10 +12,10 @@ The app no longer requires registration to access for-sale listings. On first la
 Registration is now requested only for account-based features, at the moment the user invokes them: favoriting a listing, chatting with a seller, posting a listing, making a price offer, scheduling a meetup, leaving a review, and reporting or blocking. Tapping any of these as a guest shows a sign-in prompt (Sign in with Apple, Google, or email one-time code) and returns the user to where they left off after signing in.
 
 HOW TO VERIFY
-Launch build 7 fresh: after the language screen, the marketplace feed appears with no login step. Browse, search, and open listings freely. Tap the heart on any listing (or the Chat button on a listing page) to see the sign-in prompt appear only at that point.
+Launch build 8 fresh: after the language screen, tap "Browse as guest" on the welcome screen. The marketplace feed appears with no login step; browse, search, and open listings freely. Tap the heart on any listing (or the Chat button on a listing page) to see the sign-in sheet appear only at that point — it offers Apple, Google, or email sign-in and can be dismissed to keep browsing.
 
-A short screen recording is attached demonstrating exactly this on a physical iPhone 17 Pro: fresh launch → language selection → browsing the feed and a listing detail as a guest (no sign-in) → tapping the heart → the sign-in prompt appearing only then.
+A short screen recording is attached demonstrating exactly this on a physical iPhone 17 Pro: fresh launch → language selection → "Browse as guest" → browsing the feed and a listing detail with no sign-in → tapping the heart → the sign-in sheet appearing only then.
 
-All information previously provided in this thread (screen recording, tested devices, app description, access instructions, external services, regional notes) still applies to build 7; the App Review Information Notes have been updated to describe guest browsing.
+All information previously provided in this thread (screen recording, tested devices, app description, access instructions, external services, regional notes) still applies to build 8; the App Review Information Notes have been updated to describe guest browsing.
 
 Thank you!

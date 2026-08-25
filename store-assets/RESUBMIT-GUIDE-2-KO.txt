@@ -1,21 +1,24 @@
 ════════════════════════════════════════
- 재제출 가이드 2차 (빌드 7 · 게스트 모드)
+ 재제출 가이드 2차 (빌드 8 · 게스트 모드)
  2026-08-25
 ════════════════════════════════════════
 
-【0】 TestFlight에 빌드 7 뜨면 설치
+【0】 TestFlight에 빌드 8 뜨면 설치 (7은 건너뜀)
 ----------------------------------------
 설치 후 확인: 앱 삭제했다가 새로 깔아도
-로그인 화면 없이 → 언어 선택 → 바로 홈 피드.
+언어 선택 → 로그인 화면에 "게스트로 둘러보기"
+버튼 → 누르면 로그인 없이 홈 피드.
 
 【1】 1분 게스트 영상 촬영 (아이폰)
 ----------------------------------------
 제어센터 ⏺ 켜고, 앱을 삭제→TestFlight 재설치
 상태에서 한 번에:
 1. 앱 실행 → 언어 선택 (English)
+   → "Browse as guest" 버튼 탭
 2. 홈 피드 구경 + 검색 한 번 (로그인 없이!)
 3. 매물 하나 열어서 상세 보기
-4. 하트(찜) 탭 → 로그인 안내창 뜨는 것까지
+4. 하트(찜) 탭 → 로그인 시트(Apple/Google/이메일)
+   뜨는 것까지
 → 여기서 정지. (로그인은 안 해도 됨)
 
 【2】 ASC Messages 답장 + 클립 첨부
@@ -33,8 +36,8 @@ appstoreconnect.apple.com → Torrens Market
 
 【4】 빌드 교체 + 재제출
 ----------------------------------------
-같은 페이지 Build 섹션 → 1.0.0 (6) 옆 ➖ → ➕ →
-"1.0.0 (7)" 선택 → Save → 상단 Resubmit to App Review
+같은 페이지 Build 섹션 → 1.0.0 (6) 옆 ➖ (7이 붙어있으면 7 ➖) → ➕ →
+"1.0.0 (8)" 선택 → Save → 상단 Resubmit to App Review
 
 ════════════════════════════════════════
  [영문 답변] — 2단계에서 붙여넣기
@@ -42,10 +45,10 @@ appstoreconnect.apple.com → Torrens Market
 
 Hello, thank you for the detailed review.
 
-We have resolved the Guideline 5.1.1(v) issue in the newly attached build 1.0.0 (7).
+We have resolved the Guideline 5.1.1(v) issue in the newly attached build 1.0.0 (8).
 
 WHAT CHANGED
-The app no longer requires registration to access for-sale listings. On first launch, after choosing a language, users land directly on the public home feed as guests. Without any account, users can now:
+The app no longer requires registration to access for-sale listings. On first launch, after choosing a language, the welcome screen offers Sign in with Apple, Google, or email — and a prominent "Browse as guest" button. Tapping it opens the public home feed with no account. As a guest, users can:
 - browse the home feed and filter by category and distance,
 - search listings with keywords and filters,
 - open any listing's detail page (photos, price, description, item details, approximate location),
@@ -54,10 +57,10 @@ The app no longer requires registration to access for-sale listings. On first la
 Registration is now requested only for account-based features, at the moment the user invokes them: favoriting a listing, chatting with a seller, posting a listing, making a price offer, scheduling a meetup, leaving a review, and reporting or blocking. Tapping any of these as a guest shows a sign-in prompt (Sign in with Apple, Google, or email one-time code) and returns the user to where they left off after signing in.
 
 HOW TO VERIFY
-Launch build 7 fresh: after the language screen, the marketplace feed appears with no login step. Browse, search, and open listings freely. Tap the heart on any listing (or the Chat button on a listing page) to see the sign-in prompt appear only at that point.
+Launch build 8 fresh: after the language screen, tap "Browse as guest" on the welcome screen. The marketplace feed appears with no login step; browse, search, and open listings freely. Tap the heart on any listing (or the Chat button on a listing page) to see the sign-in sheet appear only at that point — it offers Apple, Google, or email sign-in and can be dismissed to keep browsing.
 
-A short screen recording is attached demonstrating exactly this on a physical iPhone 17 Pro: fresh launch → language selection → browsing the feed and a listing detail as a guest (no sign-in) → tapping the heart → the sign-in prompt appearing only then.
+A short screen recording is attached demonstrating exactly this on a physical iPhone 17 Pro: fresh launch → language selection → "Browse as guest" → browsing the feed and a listing detail with no sign-in → tapping the heart → the sign-in sheet appearing only then.
 
-All information previously provided in this thread (screen recording, tested devices, app description, access instructions, external services, regional notes) still applies to build 7; the App Review Information Notes have been updated to describe guest browsing.
+All information previously provided in this thread (screen recording, tested devices, app description, access instructions, external services, regional notes) still applies to build 8; the App Review Information Notes have been updated to describe guest browsing.
 
 Thank you!
