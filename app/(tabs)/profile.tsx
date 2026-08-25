@@ -62,7 +62,7 @@ export default function ProfileScreen() {
   }
 
 
-  if (isGuest) return <GuestCta emoji="🧑‍💻" />;
+  if (isGuest) return <GuestCta emoji="🦘" />;
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
