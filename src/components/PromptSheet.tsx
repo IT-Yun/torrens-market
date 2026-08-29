@@ -23,14 +23,26 @@ export type SheetAction = {
 
 type SheetRequest =
   | { kind: 'signIn'; reasonKey: string }
-  | { kind: 'confirm'; title: string; body?: string; actions: SheetAction[] };
+  | { kind: 'confirm'; title: string; body?: string; actions: SheetAction[]; dismissLabel?: string };
 
 type SheetApi = {
   showSignIn: (reasonKey?: string) => void;
-  showConfirm: (title: string, body: string | undefined, actions: SheetAction[]) => void;
+  showConfirm: (
+    title: string,
+    body: string | undefined,
+    actions: SheetAction[],
+    dismissLabel?: string,
+  ) => void;
+  showInfo: (title: string, body?: string) => void;
+  showToast: (message: string) => void;
 };
 
-const SheetContext = createContext<SheetApi>({ showSignIn: () => {}, showConfirm: () => {} });
+const SheetContext = createContext<SheetApi>({
+  showSignIn: () => {},
+  showConfirm: () => {},
+  showInfo: () => {},
+  showToast: () => {},
+});
 export const usePromptSheet = () => useContext(SheetContext);
 
 // Module-level bridge so non-component code (guards) can open the sheet.
@@ -44,6 +56,7 @@ export function PromptSheetProvider({ children }: { children: ReactNode }) {
   const insets = useSafeAreaInsets();
   const [request, setRequest] = useState<SheetRequest | null>(null);
   const [busy, setBusy] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
   const close = useCallback(() => {
     if (!busy) setRequest(null);
@@ -51,7 +64,14 @@ export function PromptSheetProvider({ children }: { children: ReactNode }) {
 
   const api: SheetApi = {
     showSignIn: (reasonKey) => setRequest({ kind: 'signIn', reasonKey: reasonKey ?? 'gate.reason_default' }),
-    showConfirm: (title, body, actions) => setRequest({ kind: 'confirm', title, body, actions }),
+    showConfirm: (title, body, actions, dismissLabel) =>
+      setRequest({ kind: 'confirm', title, body, actions, dismissLabel }),
+    showInfo: (title, body) =>
+      setRequest({ kind: 'confirm', title, body, actions: [], dismissLabel: t('common.ok') }),
+    showToast: (message) => {
+      setToast(message);
+      setTimeout(() => setToast((current) => (current === message ? null : current)), 2200);
+    },
   };
 
   useEffect(() => {
@@ -166,13 +186,18 @@ export function PromptSheetProvider({ children }: { children: ReactNode }) {
                   </Pressable>
                 ))}
                 <Pressable style={styles.dismiss} onPress={close}>
-                  <Text style={styles.dismissText}>{t('common.cancel')}</Text>
+                  <Text style={styles.dismissText}>{request.dismissLabel ?? t('common.cancel')}</Text>
                 </Pressable>
               </>
             )}
           </Pressable>
         </Pressable>
       </Modal>
+      {toast && (
+        <View pointerEvents="none" style={[styles.toast, { bottom: insets.bottom + 84 }]}>
+          <Text style={styles.toastText}>{toast}</Text>
+        </View>
+      )}
     </SheetContext.Provider>
   );
 }
@@ -224,6 +249,16 @@ const styles = StyleSheet.create({
   primaryBtn: { backgroundColor: colors.primary },
   destructiveBtn: { backgroundColor: '#B4423E' },
   btnText: { fontSize: 15, fontWeight: '700' },
+  toast: {
+    position: 'absolute',
+    alignSelf: 'center',
+    backgroundColor: 'rgba(20,30,26,0.92)',
+    borderRadius: radius.full,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    maxWidth: '85%',
+  },
+  toastText: { color: colors.white, fontSize: 14, fontWeight: '600', textAlign: 'center' },
   dismiss: { alignItems: 'center', paddingVertical: 10 },
   dismissText: { fontSize: 14, fontWeight: '600', color: colors.textSecondary },
 });

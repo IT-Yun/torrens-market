@@ -19,6 +19,7 @@ import { startChat } from '../../src/lib/chat';
 import { isFavorite, toggleFavorite } from '../../src/lib/favorites';
 import { blockUser, reportListing, type ReportReason } from '../../src/lib/moderation';
 import i18n from '../../src/lib/i18n';
+import { usePromptSheet } from '../../src/components/PromptSheet';
 import { promptSignIn } from '../../src/lib/guard';
 import { useSession } from '../../src/lib/session';
 import {
@@ -57,6 +58,7 @@ export default function ListingDetailScreen() {
   const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { session } = useSession();
+  const sheet = usePromptSheet();
   const [listing, setListing] = useState<ListingDetail | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [liked, setLiked] = useState(false);
@@ -105,36 +107,39 @@ export default function ListingDetailScreen() {
       [t('report.inappropriate'), 'inappropriate'],
       [t('report.other'), 'other'],
     ];
-    Alert.alert(t('report.menuTitle'), undefined, [
+    sheet.showConfirm(t('report.menuTitle'), undefined, [
       {
-        text: t('report.action'),
+        label: t('report.action'),
+        variant: 'secondary',
         onPress: () =>
-          Alert.alert(
-            t('report.reasonTitle'),
-            undefined,
-            reasons
-              .map(([label, reason]) => ({
-                text: label,
-                onPress: async () => {
-                  await reportListing(session.user.id, listing.id, listing.seller_id, reason).catch(
-                    () => {},
-                  );
-                  Alert.alert(t('report.done'));
-                },
-              }))
-              .concat([{ text: t('common.cancel'), onPress: async () => {} }]),
+          setTimeout(
+            () =>
+              sheet.showConfirm(
+                t('report.reasonTitle'),
+                undefined,
+                reasons.map(([label, reason]) => ({
+                  label,
+                  variant: 'secondary' as const,
+                  onPress: async () => {
+                    await reportListing(session.user.id, listing.id, listing.seller_id, reason).catch(
+                      () => {},
+                    );
+                    sheet.showToast(t('report.done'));
+                  },
+                })),
+              ),
+            380,
           ),
       },
       {
-        text: t('block.action'),
-        style: 'destructive',
+        label: t('block.action'),
+        variant: 'destructive',
         onPress: async () => {
           await blockUser(session.user.id, listing.seller_id).catch(() => {});
-          Alert.alert(t('block.done'));
+          sheet.showToast(t('block.done'));
           router.back();
         },
       },
-      { text: t('common.cancel'), style: 'cancel' },
     ]);
   }
 
@@ -429,7 +434,7 @@ export default function ListingDetailScreen() {
                   const roomId = await startChat(listing.id);
                   router.push(`/chat/${roomId}`);
                 } catch (e) {
-                  Alert.alert((e as Error).message);
+                  sheet.showToast((e as Error).message);
                 }
               }}
             />

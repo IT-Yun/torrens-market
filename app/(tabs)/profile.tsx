@@ -7,6 +7,7 @@ import { LANGUAGES, setAppLanguage } from '../../src/lib/i18n';
 import i18n from '../../src/lib/i18n';
 import { signOut } from '../../src/lib/auth';
 import { GuestCta } from '../../src/components/GuestCta';
+import { usePromptSheet } from '../../src/components/PromptSheet';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
 import {
@@ -36,6 +37,7 @@ import { colors, radius, spacing } from '../../src/theme';
 export default function ProfileScreen() {
   const { t } = useTranslation();
   const { session, profile, refreshProfile } = useSession();
+  const sheet = usePromptSheet();
   const isGuest = !session;
   const [trust, setTrust] = useState<ProfileTrust | null>(null);
   const [stats, setStats] = useState<{ active: number; sold: number } | null>(null);
@@ -222,11 +224,10 @@ export default function ProfileScreen() {
           <Pressable
             style={styles.menuRow}
             onPress={() =>
-              Alert.alert(t('profile.signOut'), t('profile.signOutConfirm'), [
-                { text: t('common.cancel'), style: 'cancel' },
+              sheet.showConfirm(t('profile.signOut'), t('profile.signOutConfirm'), [
                 {
-                  text: t('profile.signOut'),
-                  style: 'destructive',
+                  label: t('profile.signOut'),
+                  variant: 'destructive',
                   onPress: async () => {
                     await signOut();
                     router.replace('/');

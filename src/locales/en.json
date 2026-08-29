@@ -9,7 +9,8 @@
     "retry": "Retry",
     "free": "Free",
     "back": "Back",
-    "restricted": "Your account is restricted. Contact support if you think this is a mistake."
+    "restricted": "Your account is restricted. Contact support if you think this is a mistake.",
+    "ok": "OK"
   },
   "onboarding": {
     "chooseLanguage": "Choose your language",

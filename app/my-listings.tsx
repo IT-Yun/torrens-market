@@ -20,6 +20,7 @@ import { GuestCta } from '../src/components/GuestCta';
 import { useSession } from '../src/lib/session';
 import { colors, radius, spacing } from '../src/theme';
 import { BackButton } from '../src/components/BackButton';
+import { usePromptSheet } from '../src/components/PromptSheet';
 
 const ACTIONS: Record<string, ('reserved' | 'sold' | 'active')[]> = {
   active: ['reserved', 'sold'],
@@ -35,6 +36,7 @@ const ACTION_LABEL: Record<string, string> = {
 export default function MyListingsScreen() {
   const { t } = useTranslation();
   const { session } = useSession();
+  const sheet = usePromptSheet();
   const [items, setItems] = useState<ListingCard[]>([]);
   const [showSold, setShowSold] = useState(true);
   const visible = showSold ? items : items.filter((i) => i.status !== 'sold');
@@ -122,10 +124,10 @@ export default function MyListingsScreen() {
                   onPress={async () => {
                     try {
                       await bumpListing(item.id);
-                      Alert.alert(t('myListings.bumped'));
+                      sheet.showToast(t('myListings.bumped'));
                       load();
                     } catch {
-                      Alert.alert(t('myListings.bumpCooldown'));
+                      sheet.showToast(t('myListings.bumpCooldown'));
                     }
                   }}
                 >
@@ -137,27 +139,27 @@ export default function MyListingsScreen() {
                 <Pressable
                   style={[styles.actionButton, styles.actionButtonAmber]}
                   onPress={() => {
-                    const options: { text: string; style?: 'cancel' | 'destructive'; onPress?: () => void }[] =
-                      (ACTIONS[item.status] ?? []).map((next) => ({
-                        text: t(ACTION_LABEL[next]),
-                        onPress: async () => {
-                          await updateListingStatus(item.id, next).catch(() => {});
-                          load();
-                        },
-                      }));
+                    const options = (ACTIONS[item.status] ?? []).map((next) => ({
+                      label: t(ACTION_LABEL[next]),
+                      variant: 'secondary' as const,
+                      onPress: async () => {
+                        await updateListingStatus(item.id, next).catch(() => {});
+                        load();
+                      },
+                    }));
                     if (sold)
                       options.push({
-                        text: t('myListings.review'),
+                        label: t('myListings.review'),
+                        variant: 'secondary' as const,
                         onPress: async () => {
                           const room = session
                             ? await findRoomForListing(item.id, session.user.id).catch(() => null)
                             : null;
                           if (room) router.push(`/chat/${room}`);
-                          else Alert.alert(t('myListings.noChatYet'));
+                          else sheet.showToast(t('myListings.noChatYet'));
                         },
                       });
-                    options.push({ text: t('common.cancel'), style: 'cancel' });
-                    Alert.alert(t('myListings.changeStatus'), undefined, options);
+                    sheet.showConfirm(t('myListings.changeStatus'), undefined, options);
                   }}
                 >
                   <Text style={[styles.actionText, { color: '#9A6B00' }]}>
@@ -167,29 +169,36 @@ export default function MyListingsScreen() {
                 <Pressable
                   style={styles.deleteButton}
                   onPress={() =>
-                    Alert.alert(t('myListings.manageTitle'), undefined, [
+                    sheet.showConfirm(t('myListings.manageTitle'), undefined, [
                       {
-                        text: t('myListings.edit'),
+                        label: t('myListings.edit'),
+                        variant: 'secondary',
                         onPress: () =>
                           router.push({ pathname: '/listing/create', params: { editId: item.id } }),
                       },
                       {
-                        text: t('myListings.delete'),
-                        style: 'destructive',
+                        label: t('myListings.delete'),
+                        variant: 'destructive',
                         onPress: () =>
-                          Alert.alert(t('myListings.deleteTitle'), t('myListings.deleteConfirm'), [
-                            { text: t('common.cancel'), style: 'cancel' },
-                            {
-                              text: t('myListings.delete'),
-                              style: 'destructive',
-                              onPress: async () => {
-                                await updateListingStatus(item.id, 'deleted').catch(() => {});
-                                load();
-                              },
-                            },
-                          ]),
+                          setTimeout(
+                            () =>
+                              sheet.showConfirm(
+                                t('myListings.deleteTitle'),
+                                t('myListings.deleteConfirm'),
+                                [
+                                  {
+                                    label: t('myListings.delete'),
+                                    variant: 'destructive',
+                                    onPress: async () => {
+                                      await updateListingStatus(item.id, 'deleted').catch(() => {});
+                                      load();
+                                    },
+                                  },
+                                ],
+                              ),
+                            380,
+                          ),
                       },
-                      { text: t('common.cancel'), style: 'cancel' },
                     ])
                   }
                   accessibilityRole="button"

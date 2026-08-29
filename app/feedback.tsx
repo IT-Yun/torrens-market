@@ -14,6 +14,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { BackButton } from '../src/components/BackButton';
+import { usePromptSheet } from '../src/components/PromptSheet';
 import { Button } from '../src/components/ui';
 import { submitFeedback, type FeedbackKind } from '../src/lib/feedback';
 import { GuestCta } from '../src/components/GuestCta';
@@ -25,6 +26,7 @@ const KINDS: FeedbackKind[] = ['bug', 'suggestion', 'other'];
 export default function FeedbackScreen() {
   const { t } = useTranslation();
   const { session } = useSession();
+  const sheet = usePromptSheet();
   const [kind, setKind] = useState<FeedbackKind>('bug');
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
@@ -34,7 +36,7 @@ export default function FeedbackScreen() {
     setBusy(true);
     try {
       await submitFeedback(session.user.id, kind, message);
-      Alert.alert(t('feedback.done'));
+      sheet.showToast(t('feedback.done'));
       router.back();
     } catch (e) {
       Alert.alert((e as Error).message);

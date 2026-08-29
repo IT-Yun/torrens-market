@@ -9,7 +9,8 @@
     "retry": "重试",
     "free": "免费",
     "back": "返回",
-    "restricted": "你的账号已被限制。如有疑问请联系支持。"
+    "restricted": "你的账号已被限制。如有疑问请联系支持。",
+    "ok": "好的"
   },
   "onboarding": {
     "chooseLanguage": "选择你的语言",

@@ -19,6 +19,7 @@ import { Button, Field, Screen } from '../../src/components/ui';
 import i18n from '../../src/lib/i18n';
 import { checkSuburbMatch } from '../../src/lib/location';
 import { pickAvatar, uploadAvatar } from '../../src/lib/profile';
+import { usePromptSheet } from '../../src/components/PromptSheet';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
 import { colors, radius, spacing } from '../../src/theme';
@@ -28,6 +29,7 @@ const NATIONALITY_CODES = ['CN', 'KR', 'AU', 'IN', 'VN', 'JP', 'MY', 'HK', 'TW',
 export default function ProfileSetupScreen() {
   const { t } = useTranslation();
   const { session, profile, refreshProfile } = useSession();
+  const sheet = usePromptSheet();
   const [displayName, setDisplayName] = useState(profile?.display_name ?? '');
   const [suburb, setSuburb] = useState(profile?.suburb ?? '');
 
@@ -72,7 +74,7 @@ export default function ProfileSetupScreen() {
           i18n.language === 'zh' ? 'zh-CN' : i18n.language,
           { year: 'numeric', month: 'short', day: 'numeric' },
         );
-        Alert.alert(t('profileSetup.nameCooldown'), t('profileSetup.nameCooldownUntil', { date }));
+        sheet.showInfo(t('profileSetup.nameCooldown'), t('profileSetup.nameCooldownUntil', { date }));
         return;
       }
     }
