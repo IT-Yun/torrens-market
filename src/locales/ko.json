@@ -94,7 +94,9 @@
     "empty": "채팅이 여기에 표시돼요.",
     "typeMessage": "메시지 입력...",
     "send": "전송",
-    "sendImage": "사진 보내기"
+    "sendImage": "사진 보내기",
+    "roleSeller": "내가 판매자예요",
+    "roleBuyer": "내가 구매자예요"
   },
   "listingCreate": {
     "title": "매물 등록",

@@ -25,10 +25,11 @@ import {
   type RoomHeader,
 } from '../../src/lib/chat';
 import { usePromptSheet } from '../../src/components/PromptSheet';
-import { captureImages, ensureCameraPermission, pickImages } from '../../src/lib/listings';
-import { ImagePlus, Star } from 'lucide-react-native';
+import { captureImages, ensureCameraPermission, formatPrice, photoUrl, pickImages } from '../../src/lib/listings';
+import { ImagePlus, Star , BadgeCheck, ChevronRight } from 'lucide-react-native';
 import { MeetupCard } from '../../src/components/MeetupCard';
 import { OfferCard } from '../../src/components/OfferCard';
+import { Avatar } from '../../src/components/Avatar';
 import { TrustBadge } from '../../src/components/TrustBadge';
 import { fetchTrust, hasReviewed, type ProfileTrust } from '../../src/lib/reviews';
 import { useSession } from '../../src/lib/session';
@@ -117,32 +118,83 @@ export default function ChatRoomScreen() {
       <View style={styles.header}>
         <BackButton />
         {header && (
-          <View style={styles.headerCenter}>
-            {/* Name → the other person's profile; listing title → the listing.
-                Previously the whole block routed to the listing (user-reported bug). */}
-            <Pressable
-              hitSlop={6}
-              disabled={!header.otherId}
-              onPress={() => router.push(`/user/${header.otherId}`)}
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
-            >
-              <Text style={styles.headerName}>{header.otherName}</Text>
+          <Pressable
+            style={styles.headerPerson}
+            hitSlop={6}
+            disabled={!header.otherId}
+            onPress={() => router.push(`/user/${header.otherId}`)}
+          >
+            <Avatar
+              name={header.otherName}
+              url={header.otherAvatarUrl}
+              nationality={header.otherNationality}
+              seed={header.otherId}
+              size={36}
+            />
+            <View style={{ flex: 1, gap: 1 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                <Text style={styles.headerName} numberOfLines={1}>
+                  {header.otherName}
+                </Text>
+                {header.otherSuburbVerified && <BadgeCheck size={14} color={colors.primary} />}
+              </View>
               <TrustBadge trust={otherTrust} compact />
-            </Pressable>
-            <Pressable hitSlop={4} onPress={() => router.push(`/listing/${header.listingId}`)}>
-              <Text style={styles.headerListing} numberOfLines={1}>
-                {header.listingTitle}
-              </Text>
-            </Pressable>
-          </View>
+            </View>
+          </Pressable>
         )}
         <View style={{ width: 24 }} />
       </View>
-      {roomId && session && header && (
-        <>
-          <OfferCard roomId={roomId} myId={session.user.id} offersEnabled={header.offersEnabled} />
-          <MeetupCard roomId={roomId} myId={session.user.id} defaultPlace={header.listingSuburb} />
-        </>
+      {header && (
+        <View style={styles.dealBlock}>
+          <Pressable
+            style={[styles.listingStrip, header.listingStatus !== 'active' && { opacity: 0.55 }]}
+            onPress={() => router.push(`/listing/${header.listingId}`)}
+          >
+            {header.listingThumbPath ? (
+              <Image source={{ uri: photoUrl(header.listingThumbPath) }} style={styles.stripThumb} />
+            ) : (
+              <View style={[styles.stripThumb, { alignItems: 'center', justifyContent: 'center' }]}>
+                <Text>📦</Text>
+              </View>
+            )}
+            <View style={{ flex: 1, gap: 2 }}>
+              <Text style={styles.stripTitle} numberOfLines={1}>
+                {header.listingTitle}
+              </Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                <Text style={styles.stripPrice}>
+                  {formatPrice(header.listingPriceCents, t('common.free'))}
+                </Text>
+                <View style={styles.stripChip}>
+                  <Text style={styles.stripChipText}>
+                    {t(`conditions.${header.listingCondition}`)}
+                  </Text>
+                </View>
+                {header.listingStatus !== 'active' && (
+                  <View style={[styles.stripChip, { backgroundColor: '#3A3F3D' }]}>
+                    <Text style={[styles.stripChipText, { color: colors.white }]}>
+                      {t(header.listingStatus === 'sold' ? 'listingDetail.sold' : 'listingDetail.reserved')}
+                    </Text>
+                  </View>
+                )}
+              </View>
+              <Text style={styles.stripRole}>
+                {t(header.iAmSeller ? 'chat.roleSeller' : 'chat.roleBuyer')}
+              </Text>
+            </View>
+            <ChevronRight size={16} color={colors.textSecondary} />
+          </Pressable>
+          {roomId && session && (
+            <>
+              <OfferCard
+                roomId={roomId}
+                myId={session.user.id}
+                offersEnabled={header.offersEnabled && header.listingStatus === 'active'}
+              />
+              <MeetupCard roomId={roomId} myId={session.user.id} defaultPlace={header.listingSuburb} />
+            </>
+          )}
+        </View>
       )}
       {canReview && header?.otherId ? (
         <Pressable
@@ -251,6 +303,36 @@ export default function ChatRoomScreen() {
 }
 
 const styles = StyleSheet.create({
+  headerPerson: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 },
+  dealBlock: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    paddingBottom: spacing.sm,
+    backgroundColor: colors.background,
+  },
+  listingStrip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginHorizontal: spacing.md,
+    marginTop: spacing.xs,
+    padding: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    backgroundColor: colors.surface,
+  },
+  stripThumb: { width: 52, height: 52, borderRadius: radius.sm, backgroundColor: colors.border },
+  stripTitle: { fontSize: 14, fontWeight: '600', color: colors.text },
+  stripPrice: { fontSize: 14, fontWeight: '800', color: colors.text },
+  stripChip: {
+    borderRadius: radius.full,
+    paddingHorizontal: 7,
+    paddingVertical: 1,
+    backgroundColor: colors.primarySoft,
+  },
+  stripChipText: { fontSize: 10, fontWeight: '700', color: colors.primary },
+  stripRole: { fontSize: 11, color: colors.textSecondary },
   safe: { flex: 1, backgroundColor: colors.background },
   header: {
     paddingHorizontal: spacing.md,

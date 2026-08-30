@@ -94,7 +94,9 @@
     "empty": "Your conversations will appear here.",
     "typeMessage": "Type a message...",
     "send": "Send",
-    "sendImage": "Send a photo"
+    "sendImage": "Send a photo",
+    "roleSeller": "You're the seller",
+    "roleBuyer": "You're the buyer"
   },
   "listingCreate": {
     "title": "New listing",

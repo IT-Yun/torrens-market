@@ -94,7 +94,9 @@
     "empty": "你的会话会显示在这里。",
     "typeMessage": "输入消息...",
     "send": "发送",
-    "sendImage": "发送照片"
+    "sendImage": "发送照片",
+    "roleSeller": "你是卖家",
+    "roleBuyer": "你是买家"
   },
   "listingCreate": {
     "title": "发布商品",

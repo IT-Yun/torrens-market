@@ -100,32 +100,70 @@ export async function fetchRooms(userId: string): Promise<ChatRoomSummary[]> {
 export type RoomHeader = {
   otherName: string;
   otherId: string;
+  otherAvatarUrl: string | null;
+  otherNationality: string | null;
+  otherSuburbVerified: boolean;
   listingTitle: string;
   listingId: string;
   listingStatus: string;
   listingSuburb: string;
+  listingPriceCents: number;
+  listingCondition: string;
+  listingThumbPath: string | null;
+  iAmSeller: boolean;
   offersEnabled: boolean;
 };
 
 export async function fetchRoomHeader(roomId: string, myUserId: string): Promise<RoomHeader | null> {
   const { data, error } = await supabase
     .from('chat_rooms')
-    .select('listings (id, title, status, suburb, offers_enabled), chat_participants (user_id, profiles (display_name))')
+    .select(`listings (id, title, status, suburb, offers_enabled, price_cents, condition, seller_id,
+       listing_photos (storage_path, sort_order, section)),
+       chat_participants (user_id, profiles (display_name, avatar_url, nationality, is_phone_verified, suburb_verified_at))`)
     .eq('id', roomId)
     .single();
   if (error) return null;
   const room = data as unknown as {
-    listings: { id: string; title: string; status: string; suburb: string; offers_enabled: boolean };
-    chat_participants: { user_id: string; profiles: { display_name: string } }[];
+    listings: {
+      id: string;
+      title: string;
+      status: string;
+      suburb: string;
+      offers_enabled: boolean;
+      price_cents: number;
+      condition: string;
+      seller_id: string;
+      listing_photos: { storage_path: string; sort_order: number; section?: string }[];
+    };
+    chat_participants: {
+      user_id: string;
+      profiles: {
+        display_name: string;
+        avatar_url: string | null;
+        nationality: string | null;
+        is_phone_verified: boolean;
+        suburb_verified_at: string | null;
+      };
+    }[];
   };
   const other = room.chat_participants.find((p) => p.user_id !== myUserId);
+  const mainThumb = (room.listings?.listing_photos ?? [])
+    .filter((p) => (p.section ?? 'main') === 'main')
+    .sort((a, b) => a.sort_order - b.sort_order)[0];
   return {
     otherName: other?.profiles?.display_name ?? '?',
     otherId: other?.user_id ?? '',
+    otherAvatarUrl: other?.profiles?.avatar_url ?? null,
+    otherNationality: other?.profiles?.nationality ?? null,
+    otherSuburbVerified: Boolean(other?.profiles?.suburb_verified_at),
     listingTitle: room.listings?.title ?? '',
     listingId: room.listings?.id ?? '',
     listingStatus: room.listings?.status ?? 'active',
     listingSuburb: room.listings?.suburb ?? '',
+    listingPriceCents: room.listings?.price_cents ?? 0,
+    listingCondition: room.listings?.condition ?? 'good',
+    listingThumbPath: mainThumb?.storage_path ?? null,
+    iAmSeller: room.listings?.seller_id === myUserId,
     offersEnabled: room.listings?.offers_enabled ?? true,
   };
 }
