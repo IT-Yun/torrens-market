@@ -28,6 +28,7 @@ import {
   type FieldDef,
 } from '../../src/lib/listings';
 import { GuestCta } from '../../src/components/GuestCta';
+import { useAppConfig } from '../../src/lib/appConfig';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
 import { Camera, MapPin, ShieldCheck, Sparkles, X } from 'lucide-react-native';
@@ -100,6 +101,7 @@ function CustomField({
 export default function CreateListingScreen() {
   const { t } = useTranslation();
   const { session, profile, refreshProfile } = useSession();
+  const { maintenanceMode, uploadsEnabled } = useAppConfig();
   const { editId } = useLocalSearchParams<{ editId?: string }>();
 
   // App Store 1.2 / Play UGC: terms acceptance gate before the first post.
@@ -233,6 +235,11 @@ export default function CreateListingScreen() {
 
 
   if (!session) return <GuestCta emoji="📦" />;
+
+  if (maintenanceMode)
+    return (
+      <GuestCtaMaintenance />
+    );
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.header}>
@@ -264,7 +271,8 @@ export default function CreateListingScreen() {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.photoRow}>
             <Pressable
-              style={styles.addPhoto}
+              style={[styles.addPhoto, !uploadsEnabled && { opacity: 0.4 }]}
+              disabled={!uploadsEnabled}
               onPress={async () => {
                 const assets = await pickImages(MAX_PHOTOS - photos.length);
                 setPhotos((prev) => [...prev, ...assets].slice(0, MAX_PHOTOS));
@@ -530,3 +538,21 @@ const styles = StyleSheet.create({
   uploadProgress: { textAlign: 'center', fontSize: 13, color: colors.textSecondary },
   offersHint: { fontSize: 11, color: colors.textSecondary, marginTop: 2 },
 });
+
+
+function GuestCtaMaintenance() {
+  const { t } = useTranslation();
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 32 }}>
+        <Text style={{ fontSize: 44 }}>🛠️</Text>
+        <Text style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>
+          {t('config.maintenanceTitle')}
+        </Text>
+        <Text style={{ fontSize: 14, color: colors.textSecondary, textAlign: 'center', lineHeight: 20 }}>
+          {t('config.maintenanceBody')}
+        </Text>
+      </View>
+    </SafeAreaView>
+  );
+}

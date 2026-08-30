@@ -20,6 +20,7 @@ import { isFavorite, toggleFavorite } from '../../src/lib/favorites';
 import { blockUser, reportListing, type ReportReason } from '../../src/lib/moderation';
 import i18n from '../../src/lib/i18n';
 import { usePromptSheet } from '../../src/components/PromptSheet';
+import { useAppConfig } from '../../src/lib/appConfig';
 import { promptSignIn } from '../../src/lib/guard';
 import { useSession } from '../../src/lib/session';
 import {
@@ -59,6 +60,7 @@ export default function ListingDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { session } = useSession();
   const sheet = usePromptSheet();
+  const { maintenanceMode } = useAppConfig();
   const [listing, setListing] = useState<ListingDetail | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [liked, setLiked] = useState(false);
@@ -424,7 +426,7 @@ export default function ListingDetailScreen() {
           <View style={{ width: 150 }}>
             <Button
               title={t('listingDetail.chat')}
-              disabled={listing.status === 'sold'}
+              disabled={listing.status === 'sold' || maintenanceMode}
               onPress={async () => {
                 if (!session) {
                   promptSignIn('gate.reason_chat');

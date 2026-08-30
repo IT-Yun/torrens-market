@@ -319,5 +319,12 @@
     "reason_chat": "Chat with sellers using your account.",
     "reason_report": "Sign in to report or block.",
     "reason_keyword": "Keyword alerts are saved to your account."
+  },
+  "config": {
+    "maintenanceTitle": "Under maintenance",
+    "maintenanceBody": "Torrens Market is in maintenance — browsing works, posting and chat are paused briefly.",
+    "updateTitle": "Update required",
+    "updateBody": "This version is no longer supported. Please update Torrens Market from the App Store.",
+    "updateCta": "Open the App Store"
   }
 }

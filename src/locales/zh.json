@@ -319,5 +319,12 @@
     "reason_chat": "登录后即可与卖家聊天。",
     "reason_report": "登录后可举报或屏蔽。",
     "reason_keyword": "关键词提醒会保存到你的账号。"
+  },
+  "config": {
+    "maintenanceTitle": "维护中",
+    "maintenanceBody": "Torrens Market 正在维护 — 可以继续浏览，发布和聊天暂时停用。",
+    "updateTitle": "需要更新",
+    "updateBody": "此版本已不再受支持。请前往 App Store 更新 Torrens Market。",
+    "updateCta": "打开 App Store"
   }
 }

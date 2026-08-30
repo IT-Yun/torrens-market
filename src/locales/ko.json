@@ -319,5 +319,12 @@
     "reason_chat": "판매자와의 채팅은 계정으로 이용해요.",
     "reason_report": "신고·차단은 로그인 후 가능해요.",
     "reason_keyword": "키워드 알림은 계정에 저장돼요."
+  },
+  "config": {
+    "maintenanceTitle": "점검 중이에요",
+    "maintenanceBody": "지금은 점검 중이에요 — 둘러보기는 가능하고, 글쓰기·채팅은 잠시 쉬어가요.",
+    "updateTitle": "업데이트가 필요해요",
+    "updateBody": "이 버전은 더 이상 지원되지 않아요. App Store에서 Torrens Market을 업데이트해 주세요.",
+    "updateCta": "App Store 열기"
   }
 }

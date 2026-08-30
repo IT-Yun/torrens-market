@@ -15,6 +15,7 @@ import { HandCoins, X } from 'lucide-react-native';
 import { formatPrice } from '../lib/format';
 import { fetchOffer, proposeOffer, setOfferStatus, type Offer } from '../lib/offers';
 import { supabase } from '../lib/supabase';
+import { useAppConfig } from '../lib/appConfig';
 import { colors, radius, spacing } from '../theme';
 
 /**
@@ -30,6 +31,7 @@ export function OfferCard({
   myId: string;
   offersEnabled?: boolean;
 }) {
+  const { maintenanceMode } = useAppConfig();
   const { t } = useTranslation();
   const [offer, setOffer] = useState<Offer | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -124,7 +126,7 @@ export function OfferCard({
             )}
           </View>
         </View>
-      ) : offersEnabled ? (
+      ) : offersEnabled && !maintenanceMode ? (
         <Pressable style={styles.makeBtn} onPress={() => setModalOpen(true)}>
           <HandCoins size={15} color={colors.primary} />
           <Text style={styles.makeText}>{t('offer.make')}</Text>

@@ -12,6 +12,7 @@ import { ListingRow } from '../../src/components/ListingRow';
 import i18n from '../../src/lib/i18n';
 import { fetchCategories, fetchListings, type Category, type ListingCard } from '../../src/lib/listings';
 import { fetchBlockedIds } from '../../src/lib/moderation';
+import { ConfigBanner, useAppConfig } from '../../src/lib/appConfig';
 import { promptSignIn } from '../../src/lib/guard';
 import { useSession } from '../../src/lib/session';
 import { colors, radius, spacing } from '../../src/theme';
@@ -22,6 +23,7 @@ const SCOPE_STORAGE_KEY = 'feed_scope';
 export default function HomeScreen() {
   const { t } = useTranslation();
   const { session, profile } = useSession();
+  const { maintenanceMode } = useAppConfig();
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [listings, setListings] = useState<ListingCard[]>([]);
@@ -114,6 +116,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
+      <ConfigBanner />
       {/* Karrot pattern: your neighbourhood first */}
       <View style={styles.header}>
         <Pressable
@@ -192,6 +195,7 @@ export default function HomeScreen() {
         contentContainerStyle={visibleListings.length === 0 ? { flex: 1 } : undefined}
       />
 
+      {!maintenanceMode && (
       <Pressable
         style={styles.fab}
         onPress={() => (session ? router.push('/listing/create') : promptSignIn('gate.reason_post'))}
@@ -200,6 +204,7 @@ export default function HomeScreen() {
       >
         <Plus size={26} color={colors.white} strokeWidth={2.4} />
       </Pressable>
+      )}
     </SafeAreaView>
   );
 }

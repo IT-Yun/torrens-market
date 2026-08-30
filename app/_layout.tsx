@@ -7,6 +7,7 @@ import * as Notifications from 'expo-notifications';
 import '../src/lib/i18n';
 import { loadStoredLanguage } from '../src/lib/i18n';
 import { registerPushToken } from '../src/lib/notifications';
+import { AppConfigProvider, ForceUpdateGate } from '../src/lib/appConfig';
 import { PromptSheetProvider } from '../src/components/PromptSheet';
 import { SessionProvider, useSession } from '../src/lib/session';
 
@@ -60,6 +61,8 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
     <BottomSheetModalProvider>
+    <AppConfigProvider>
+    <ForceUpdateGate>
     <SessionProvider>
       <PromptSheetProvider>
       <PushBridge />
@@ -67,6 +70,8 @@ export default function RootLayout() {
       <Stack screenOptions={{ headerShown: false }} />
     </PromptSheetProvider>
     </SessionProvider>
+    </ForceUpdateGate>
+    </AppConfigProvider>
     </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
