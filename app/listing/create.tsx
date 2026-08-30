@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
+  Linking,
   Image,
   KeyboardAvoidingView,
   Modal,
@@ -22,12 +23,15 @@ import {
   createListing,
   fetchCategories,
   fetchListing,
+  captureImages,
+  ensureCameraPermission,
   pickImages,
   updateListing,
   type Category,
   type FieldDef,
 } from '../../src/lib/listings';
 import { GuestCta } from '../../src/components/GuestCta';
+import { usePromptSheet } from '../../src/components/PromptSheet';
 import { useAppConfig } from '../../src/lib/appConfig';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
@@ -102,6 +106,7 @@ export default function CreateListingScreen() {
   const { t } = useTranslation();
   const { session, profile, refreshProfile } = useSession();
   const { maintenanceMode, uploadsEnabled } = useAppConfig();
+  const sheet = usePromptSheet();
   const { editId } = useLocalSearchParams<{ editId?: string }>();
 
   // App Store 1.2 / Play UGC: terms acceptance gate before the first post.
@@ -285,7 +290,40 @@ export default function CreateListingScreen() {
             <Pressable
               style={[styles.addPhoto, !uploadsEnabled && { opacity: 0.4 }]}
               disabled={!uploadsEnabled}
-              onPress={async () => {
+              onPress={() => {
+                const remaining = MAX_PHOTOS - photos.length;
+                sheet.showConfirm(t('listingCreate.addPhotos'), undefined, [
+                  {
+                    label: t('photoSource.camera'),
+                    variant: 'primary',
+                    onPress: async () => {
+                      if (!(await ensureCameraPermission())) {
+                        sheet.showConfirm(t('photoSource.cameraDenied'), t('photoSource.cameraDeniedBody'), [
+                          {
+                            label: t('photoSource.openSettings'),
+                            variant: 'primary',
+                            onPress: () => Linking.openSettings(),
+                          },
+                        ]);
+                        return;
+                      }
+                      await captureImages(remaining, (asset, taken) => {
+                        setPhotos((prev) => [...prev, asset]);
+                        sheet.showToast(t('photoSource.shotAdded', { n: taken, total: remaining }));
+                      });
+                    },
+                  },
+                  {
+                    label: t('photoSource.library'),
+                    variant: 'secondary',
+                    onPress: async () => {
+                      const assets = await pickImages(remaining);
+                      if (assets.length) setPhotos((prev) => [...prev, ...assets]);
+                    },
+                  },
+                ]);
+              }}
+              onLongPress={async () => {
                 const assets = await pickImages(MAX_PHOTOS - photos.length);
                 setPhotos((prev) => [...prev, ...assets].slice(0, MAX_PHOTOS));
               }}

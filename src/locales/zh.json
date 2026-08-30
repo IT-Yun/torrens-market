@@ -92,7 +92,8 @@
   "chat": {
     "empty": "你的会话会显示在这里。",
     "typeMessage": "输入消息...",
-    "send": "发送"
+    "send": "发送",
+    "sendImage": "发送照片"
   },
   "listingCreate": {
     "title": "发布商品",
@@ -356,5 +357,13 @@
     "kind_review": "收到新的交易评价",
     "kind_favorite": "{{name}}收藏了你的商品",
     "kind_system": "通知"
+  },
+  "photoSource": {
+    "camera": "拍照",
+    "library": "从相册选择",
+    "shotAdded": "已添加 {{n}}/{{total}} 张",
+    "cameraDenied": "需要相机权限",
+    "cameraDeniedBody": "请在设置中允许相机访问以拍照。",
+    "openSettings": "打开设置"
   }
 }

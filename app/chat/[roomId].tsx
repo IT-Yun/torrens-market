@@ -24,7 +24,8 @@ import {
   type Message,
   type RoomHeader,
 } from '../../src/lib/chat';
-import { pickImages } from '../../src/lib/listings';
+import { usePromptSheet } from '../../src/components/PromptSheet';
+import { captureImages, ensureCameraPermission, pickImages } from '../../src/lib/listings';
 import { ImagePlus, Star } from 'lucide-react-native';
 import { MeetupCard } from '../../src/components/MeetupCard';
 import { OfferCard } from '../../src/components/OfferCard';
@@ -48,6 +49,7 @@ function ChatImage({ path }: { path: string }) {
 
 export default function ChatRoomScreen() {
   const { t } = useTranslation();
+  const sheet = usePromptSheet();
   const { roomId } = useLocalSearchParams<{ roomId: string }>();
   const { session } = useSession();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -197,12 +199,31 @@ export default function ChatRoomScreen() {
         />
         <View style={styles.inputRow}>
           <Pressable
-            onPress={async () => {
+            onPress={() => {
               if (!roomId || !session) return;
-              const assets = await pickImages(1);
-              if (assets[0]) {
-                await sendImageMessage(roomId, session.user.id, assets[0]).catch(() => {});
-              }
+              const send = async (asset: Parameters<typeof sendImageMessage>[2]) => {
+                await sendImageMessage(roomId, session.user.id, asset).catch(() => {});
+              };
+              sheet.showConfirm(t('chat.sendImage'), undefined, [
+                {
+                  label: t('photoSource.camera'),
+                  variant: 'primary',
+                  onPress: async () => {
+                    if (!(await ensureCameraPermission())) return;
+                    await captureImages(1, (asset) => {
+                      send(asset);
+                    });
+                  },
+                },
+                {
+                  label: t('photoSource.library'),
+                  variant: 'secondary',
+                  onPress: async () => {
+                    const assets = await pickImages(1);
+                    if (assets[0]) send(assets[0]);
+                  },
+                },
+              ]);
             }}
             hitSlop={8}
             accessibilityRole="button"

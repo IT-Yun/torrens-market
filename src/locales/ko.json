@@ -92,7 +92,8 @@
   "chat": {
     "empty": "채팅이 여기에 표시돼요.",
     "typeMessage": "메시지 입력...",
-    "send": "전송"
+    "send": "전송",
+    "sendImage": "사진 보내기"
   },
   "listingCreate": {
     "title": "매물 등록",
@@ -356,5 +357,13 @@
     "kind_review": "새 거래 후기가 도착했어요",
     "kind_favorite": "{{name}}님이 매물을 찜했어요",
     "kind_system": "안내"
+  },
+  "photoSource": {
+    "camera": "사진 찍기",
+    "library": "앨범에서 선택",
+    "shotAdded": "{{n}}/{{total}}장 추가됨",
+    "cameraDenied": "카메라 권한이 필요해요",
+    "cameraDeniedBody": "사진을 찍으려면 설정에서 카메라 접근을 허용해 주세요.",
+    "openSettings": "설정 열기"
   }
 }

@@ -92,7 +92,8 @@
   "chat": {
     "empty": "Your conversations will appear here.",
     "typeMessage": "Type a message...",
-    "send": "Send"
+    "send": "Send",
+    "sendImage": "Send a photo"
   },
   "listingCreate": {
     "title": "New listing",
@@ -356,5 +357,13 @@
     "kind_review": "You received a new review",
     "kind_favorite": "{{name}} favourited your listing",
     "kind_system": "Notice"
+  },
+  "photoSource": {
+    "camera": "Take photo",
+    "library": "Choose from library",
+    "shotAdded": "Added {{n}}/{{total}}",
+    "cameraDenied": "Camera access needed",
+    "cameraDeniedBody": "Allow camera access in Settings to take photos.",
+    "openSettings": "Open Settings"
   }
 }

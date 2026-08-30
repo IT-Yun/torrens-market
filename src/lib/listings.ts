@@ -190,6 +190,30 @@ export async function pickImages(max: number): Promise<ImagePicker.ImagePickerAs
   return result.canceled ? [] : result.assets;
 }
 
+/** 'granted' | 'denied' for the camera (asks on first call). */
+export async function ensureCameraPermission(): Promise<boolean> {
+  const { status } = await ImagePicker.requestCameraPermissionsAsync();
+  return status === 'granted';
+}
+
+/**
+ * Rapid capture loop (Sean's flow): shoot → append → camera reopens
+ * immediately; ends on cancel or when `max` shots are taken.
+ */
+export async function captureImages(
+  max: number,
+  onShot: (asset: ImagePicker.ImagePickerAsset, taken: number) => void,
+): Promise<number> {
+  let taken = 0;
+  while (taken < max) {
+    const result = await ImagePicker.launchCameraAsync({ mediaTypes: 'images', quality: 0.8 });
+    if (result.canceled) break;
+    taken += 1;
+    onShot(result.assets[0], taken);
+  }
+  return taken;
+}
+
 async function uploadPhoto(userId: string, asset: ImagePicker.ImagePickerAsset): Promise<string> {
   const compressed = await compressForUpload(asset);
   const path = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
