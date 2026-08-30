@@ -376,6 +376,7 @@
     "addLabel": "瑕疵照片",
     "noteLabel": "瑕疵说明",
     "notePlaceholder": "划痕、污渍、缺件等 — 越诚实越可信。",
-    "defectiveNudge": "已选择\\u201c有瑕疵\\u201d — 补充瑕疵照片或说明能让买家更放心。"
+    "defectiveNudge": "已选择\\u201c有瑕疵\\u201d — 补充瑕疵照片或说明能让买家更放心。",
+    "toggle": "有瑕疵"
   }
 }

@@ -177,7 +177,7 @@ export default function ListingDetailScreen() {
 
   const photos = mainPhotos([...listing.listing_photos]).sort((a, b) => a.sort_order - b.sort_order);
   const flaws = flawPhotosOf([...listing.listing_photos]).sort((a, b) => a.sort_order - b.sort_order);
-  const hasFlaws = flaws.length > 0 || !!listing.flaw_note;
+  const hasFlaws = Boolean(listing.has_flaws) || flaws.length > 0 || !!listing.flaw_note;
   const attributeRows = (category?.field_template ?? [])
     .filter((f) => f.type !== 'photo' && listing.attributes[f.key] != null && listing.attributes[f.key] !== '')
     .map((f) => ({

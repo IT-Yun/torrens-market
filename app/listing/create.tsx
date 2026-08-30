@@ -43,7 +43,7 @@ import { getApproxPosition } from '../../src/lib/location';
 import { colors, radius, spacing } from '../../src/theme';
 
 const MAX_PHOTOS = 10;
-const CONDITIONS = ['new', 'like_new', 'good', 'worn', 'defective'];
+const CONDITIONS = ['new', 'like_new', 'good', 'worn'];
 const PICKUP_MODES = ['pickup_only', 'seller_delivers', 'buyer_collects'];
 const PAYMENT_METHODS = ['any', 'cash_only', 'bank_transfer'];
 
@@ -159,6 +159,7 @@ export default function CreateListingScreen() {
   const [suburb, setSuburb] = useState(profile?.suburb ?? '');
   const [attributes, setAttributes] = useState<Record<string, unknown>>({});
   const [busy, setBusy] = useState(false);
+  const [hasFlaws, setHasFlaws] = useState(false);
   const [flawShots, setFlawShots] = useState<ImagePickerAsset[]>([]);
   const [flawNote, setFlawNote] = useState('');
   const [uploadProgress, setUploadProgress] = useState<[number, number] | null>(null);
@@ -172,7 +173,8 @@ export default function CreateListingScreen() {
         setTitle(l.title);
         setPrice(l.price_cents === 0 ? '0' : String(l.price_cents / 100));
         setDescription(l.description);
-        setCondition(l.condition);
+        setCondition(l.condition === 'defective' ? 'worn' : l.condition);
+        setHasFlaws(Boolean(l.has_flaws) || l.condition === 'defective');
         setFlawNote(l.flaw_note ?? '');
         setPickupMode(l.pickup_mode);
         setPaymentMethod(l.payment_method ?? 'any');
@@ -219,7 +221,8 @@ export default function CreateListingScreen() {
           description: description.trim(),
           price_cents: Math.round(parseFloat(price || '0') * 100),
           condition,
-          flaw_note: flawNote.trim() || null,
+          flaw_note: hasFlaws ? flawNote.trim() || null : null,
+          has_flaws: hasFlaws,
           pickup_mode: pickupMode,
           payment_method: paymentMethod,
           offers_enabled: offersEnabled,
@@ -239,8 +242,9 @@ export default function CreateListingScreen() {
           description: description.trim(),
           priceCents: Math.round(parseFloat(price || '0') * 100),
           condition,
-          flawNote: flawNote.trim() || null,
-          flawPhotos: flawShots,
+          flawNote: hasFlaws ? flawNote.trim() || null : null,
+          flawPhotos: hasFlaws ? flawShots : [],
+          hasFlaws,
           pickupMode,
           paymentMethod,
           offersEnabled: price.trim() === '0' ? false : offersEnabled,
@@ -404,7 +408,7 @@ export default function CreateListingScreen() {
           </>
         )}
 
-        {!editId && (
+        {!editId && hasFlaws && (
           <>
             <Text style={styles.sectionTitle}>
               {t('flaws.addLabel')} ({flawShots.length}/5)
@@ -455,12 +459,14 @@ export default function CreateListingScreen() {
                 ))}
               </View>
             </ScrollView>
-            {condition === 'defective' && flawShots.length === 0 && !flawNote.trim() && (
+            {flawShots.length === 0 && !flawNote.trim() && (
               <Text style={styles.flawNudge}>{t('flaws.defectiveNudge')}</Text>
             )}
           </>
         )}
 
+        {hasFlaws && (
+          <>
         <Text style={styles.sectionTitle}>{t('flaws.noteLabel')}</Text>
         <TextInput
           style={styles.flawNoteInput}
@@ -471,6 +477,8 @@ export default function CreateListingScreen() {
           maxLength={500}
           multiline
         />
+          </>
+        )}
 
         {/* category */}
         <Text style={styles.sectionTitle}>{t('listingCreate.category')}</Text>
@@ -559,6 +567,11 @@ export default function CreateListingScreen() {
               onPress={() => setCondition(c)}
             />
           ))}
+          <Chip
+            label={t('flaws.toggle')}
+            selected={hasFlaws}
+            onPress={() => setHasFlaws((v) => !v)}
+          />
         </View>
 
         <Text style={styles.sectionTitle}>{t('listingCreate.pickupMode')}</Text>

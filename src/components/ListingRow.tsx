@@ -43,7 +43,7 @@ export function ListingRow({
 }) {
   const { t } = useTranslation();
   const photo = mainPhotos([...item.listing_photos]).sort((a, b) => a.sort_order - b.sort_order)[0];
-  const hasFlaws = flawPhotos(item.listing_photos).length > 0 || !!item.flaw_note;
+  const hasFlaws = Boolean(item.has_flaws) || flawPhotos(item.listing_photos).length > 0 || !!item.flaw_note;
   const distance =
     viewerPos && item.lat != null && item.lng != null
       ? formatDistance(haversineKm(viewerPos.lat, viewerPos.lng, item.lat, item.lng))

@@ -169,7 +169,7 @@ export default function SearchScreen() {
           })}
         </ScrollView>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
-          {['new', 'like_new', 'good', 'worn', 'defective'].map((c) => (
+          {['new', 'like_new', 'good', 'worn'].map((c) => (
             <Pressable
               key={c}
               style={[styles.chip, condition === c && styles.chipSelected]}
