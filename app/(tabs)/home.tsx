@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ChevronDown, MapPin, Plus, Search, WifiOff } from 'lucide-react-native';
+import { Bell, ChevronDown, MapPin, Plus, Search, WifiOff } from 'lucide-react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { haversineKm } from '../../src/lib/geo';
 import { getPosition, getPositionIfGranted } from '../../src/lib/location';
@@ -12,6 +12,7 @@ import { ListingRow } from '../../src/components/ListingRow';
 import i18n from '../../src/lib/i18n';
 import { fetchCategories, fetchListings, type Category, type ListingCard } from '../../src/lib/listings';
 import { fetchBlockedIds } from '../../src/lib/moderation';
+import { fetchUnreadActivityCount, subscribeActivities } from '../../src/lib/activity';
 import { ConfigBanner, useAppConfig } from '../../src/lib/appConfig';
 import { promptSignIn } from '../../src/lib/guard';
 import { useSession } from '../../src/lib/session';
@@ -24,6 +25,18 @@ export default function HomeScreen() {
   const { t } = useTranslation();
   const { session, profile } = useSession();
   const { maintenanceMode } = useAppConfig();
+  const [activityUnread, setActivityUnread] = useState(0);
+
+  useEffect(() => {
+    if (!session) {
+      setActivityUnread(0);
+      return;
+    }
+    const refresh = () => fetchUnreadActivityCount().then(setActivityUnread).catch(() => {});
+    refresh();
+    const unsubscribe = subscribeActivities(session.user.id, refresh);
+    return unsubscribe;
+  }, [session]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [listings, setListings] = useState<ListingCard[]>([]);
@@ -129,14 +142,27 @@ export default function HomeScreen() {
           <Text style={styles.suburb}>{scopeLabel}</Text>
           <ChevronDown size={16} color={colors.textSecondary} />
         </Pressable>
-        <Pressable
-          onPress={() => router.push('/search')}
-          hitSlop={8}
-          accessibilityRole="button"
-          accessibilityLabel={t('home.searchPlaceholder')}
-        >
-          <Search size={22} color={colors.text} strokeWidth={2.2} />
-        </Pressable>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+          {session && (
+            <Pressable
+              onPress={() => router.push('/notifications')}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel={t('notifCenter.title')}
+            >
+              <Bell size={22} color={colors.text} strokeWidth={2.2} />
+              {activityUnread > 0 && <View style={styles.bellDot} />}
+            </Pressable>
+          )}
+          <Pressable
+            onPress={() => router.push('/search')}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel={t('home.searchPlaceholder')}
+          >
+            <Search size={22} color={colors.text} strokeWidth={2.2} />
+          </Pressable>
+        </View>
       </View>
 
       <View>
@@ -210,6 +236,17 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  bellDot: {
+    position: 'absolute',
+    right: -2,
+    top: -2,
+    width: 9,
+    height: 9,
+    borderRadius: 5,
+    backgroundColor: '#D64545',
+    borderWidth: 1.5,
+    borderColor: colors.background,
+  },
   safe: { flex: 1, backgroundColor: colors.background },
   header: {
     paddingHorizontal: spacing.md,

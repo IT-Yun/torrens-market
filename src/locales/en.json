@@ -344,5 +344,17 @@
     "otaAction": "Restart now",
     "otaFailed": "Could not apply the update. It will be applied next time you open the app.",
     "later": "Later"
+  },
+  "notifCenter": {
+    "title": "Notifications",
+    "markAll": "Mark all as read",
+    "empty": "Nothing yet — activity on your listings shows up here.",
+    "someone": "Someone",
+    "kind_message": "New message from {{name}}",
+    "kind_offer": "{{name}} offered {{price}}",
+    "kind_meetup": "{{name}} proposed a meetup",
+    "kind_review": "You received a new review",
+    "kind_favorite": "{{name}} favourited your listing",
+    "kind_system": "Notice"
   }
 }

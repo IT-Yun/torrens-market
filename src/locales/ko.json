@@ -344,5 +344,17 @@
     "otaAction": "지금 다시 시작",
     "otaFailed": "업데이트를 적용하지 못했어요. 다음에 앱을 열 때 적용돼요.",
     "later": "나중에"
+  },
+  "notifCenter": {
+    "title": "알림",
+    "markAll": "모두 읽음",
+    "empty": "아직 없어요 — 내 매물에 생기는 소식이 여기에 모여요.",
+    "someone": "누군가",
+    "kind_message": "{{name}}님의 새 메시지",
+    "kind_offer": "{{name}}님이 {{price}} 제안했어요",
+    "kind_meetup": "{{name}}님이 직거래를 제안했어요",
+    "kind_review": "새 거래 후기가 도착했어요",
+    "kind_favorite": "{{name}}님이 매물을 찜했어요",
+    "kind_system": "안내"
   }
 }

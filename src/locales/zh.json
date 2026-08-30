@@ -344,5 +344,17 @@
     "otaAction": "立即重启",
     "otaFailed": "无法应用更新，下次打开应用时会自动应用。",
     "later": "稍后"
+  },
+  "notifCenter": {
+    "title": "通知",
+    "markAll": "全部标为已读",
+    "empty": "还没有通知 — 与你相关的动态会显示在这里。",
+    "someone": "有人",
+    "kind_message": "{{name}}发来新消息",
+    "kind_offer": "{{name}}出价 {{price}}",
+    "kind_meetup": "{{name}}提议面交",
+    "kind_review": "收到新的交易评价",
+    "kind_favorite": "{{name}}收藏了你的商品",
+    "kind_system": "通知"
   }
 }
