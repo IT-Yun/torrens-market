@@ -11,13 +11,28 @@ export async function deleteAccount(): Promise<void> {
 
 /** Pick a single square-cropped avatar image, or null if cancelled. */
 export async function pickAvatar(): Promise<ImagePicker.ImagePickerAsset | null> {
-  const result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: 'images',
-    allowsEditing: true,
-    aspect: [1, 1],
-    quality: 0.7,
-  });
-  return result.canceled ? null : result.assets[0];
+  // Circular crop overlay (avatars render in a circle — the square iOS
+  // cropper confused people; Sean's 8/21 request, shipped with 1.0.1).
+  try {
+    const ImageCropPicker = (await import('react-native-image-crop-picker')).default;
+    const img = await ImageCropPicker.openPicker({
+      mediaType: 'photo',
+      cropping: true,
+      cropperCircleOverlay: true,
+      width: 512,
+      height: 512,
+      compressImageQuality: 0.8,
+      forceJpg: true,
+    });
+    return {
+      uri: img.path,
+      width: img.width,
+      height: img.height,
+      mimeType: img.mime ?? 'image/jpeg',
+    } as ImagePicker.ImagePickerAsset;
+  } catch {
+    return null; // cancelled (E_PICKER_CANCELLED) or picker unavailable
+  }
 }
 
 /** Upload the avatar to storage and return its public URL. */

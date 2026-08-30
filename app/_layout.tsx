@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { router, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as Notifications from 'expo-notifications';
@@ -56,6 +58,8 @@ export default function RootLayout() {
   if (!i18nReady) return null;
 
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+    <BottomSheetModalProvider>
     <SessionProvider>
       <PromptSheetProvider>
       <PushBridge />
@@ -63,5 +67,7 @@ export default function RootLayout() {
       <Stack screenOptions={{ headerShown: false }} />
     </PromptSheetProvider>
     </SessionProvider>
+    </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 }
