@@ -26,6 +26,8 @@ import { useSession } from '../../src/lib/session';
 import {
   fetchCategories,
   fetchListing,
+  flawPhotos as flawPhotosOf,
+  mainPhotos,
   updateListingStatus,
   fetchSellerListings,
   formatPrice,
@@ -173,7 +175,9 @@ export default function ListingDetailScreen() {
     );
   }
 
-  const photos = [...listing.listing_photos].sort((a, b) => a.sort_order - b.sort_order);
+  const photos = mainPhotos([...listing.listing_photos]).sort((a, b) => a.sort_order - b.sort_order);
+  const flaws = flawPhotosOf([...listing.listing_photos]).sort((a, b) => a.sort_order - b.sort_order);
+  const hasFlaws = flaws.length > 0 || !!listing.flaw_note;
   const attributeRows = (category?.field_template ?? [])
     .filter((f) => f.type !== 'photo' && listing.attributes[f.key] != null && listing.attributes[f.key] !== '')
     .map((f) => ({
@@ -277,6 +281,11 @@ export default function ListingDetailScreen() {
               <View style={styles.chip}>
                 <Text style={styles.chipText}>{t(`conditions.${listing.condition}`)}</Text>
               </View>
+              {hasFlaws && (
+                <View style={[styles.chip, { backgroundColor: '#FBF0DA' }]}>
+                  <Text style={[styles.chipText, { color: '#9A6B00' }]}>{t('flaws.marker')}</Text>
+                </View>
+              )}
               <View style={styles.chip}>
                 <Text style={styles.chipText}>{t(`pickupModes.${listing.pickup_mode}`)}</Text>
               </View>
@@ -319,6 +328,28 @@ export default function ListingDetailScreen() {
 
           {/* Description first, then the category attribute card (brand, warranty, ...) as supporting info */}
           {listing.description ? <Text style={styles.description}>{listing.description}</Text> : null}
+
+          {hasFlaws && (
+            <View style={styles.flawBlock}>
+              <Text style={styles.flawTitle}>{t('flaws.title')}</Text>
+              {flaws.length > 0 && (
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <View style={{ flexDirection: 'row', gap: 8 }}>
+                    {flaws.map((p) => (
+                      <Image
+                        key={p.storage_path}
+                        source={{ uri: photoUrl(p.storage_path) }}
+                        style={styles.flawThumb}
+                      />
+                    ))}
+                  </View>
+                </ScrollView>
+              )}
+              {listing.flaw_note ? (
+                <Text style={styles.flawNote}>{listing.flaw_note}</Text>
+              ) : null}
+            </View>
+          )}
 
           {attributeRows.length > 0 && (
             <View style={styles.attrCard}>
@@ -503,6 +534,15 @@ export default function ListingDetailScreen() {
 }
 
 const styles = StyleSheet.create({
+  flawBlock: {
+    backgroundColor: '#FBF6EA',
+    borderRadius: radius.md,
+    padding: spacing.md,
+    gap: spacing.sm,
+  },
+  flawTitle: { fontSize: 14, fontWeight: '700', color: '#9A6B00' },
+  flawThumb: { width: 84, height: 84, borderRadius: radius.sm, backgroundColor: colors.surface },
+  flawNote: { fontSize: 14, color: colors.text, lineHeight: 20 },
   soldOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(20, 20, 20, 0.45)',

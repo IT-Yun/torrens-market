@@ -37,7 +37,7 @@ export async function fetchFavorites(userId: string): Promise<ListingCard[]> {
     .select(
       `created_at,
        listings (id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes,
-                 listing_photos (storage_path, sort_order))`,
+                 listing_photos (storage_path, sort_order, section))`,
     )
     .eq('user_id', userId)
     .order('created_at', { ascending: false });

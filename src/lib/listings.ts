@@ -34,7 +34,8 @@ export type ListingCard = {
   payment_method?: string | null;
   bumped_at?: string | null;
   favorites_count?: number;
-  listing_photos: { storage_path: string; sort_order: number }[];
+  flaw_note?: string | null;
+  listing_photos: { storage_path: string; sort_order: number; section?: 'main' | 'flaw' }[];
 };
 
 /** Karrot-style bump (ADR 010): server-time stamp; DB enforces 24h cooldown. */
@@ -93,7 +94,7 @@ export async function fetchListings(categoryId?: number | null): Promise<Listing
   let query = supabase
     .from('listings')
     .select(
-      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, payment_method, bumped_at, listing_photos (storage_path, sort_order)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, payment_method, bumped_at, flaw_note, listing_photos (storage_path, sort_order, section)',
     )
     .eq('status', 'active')
     .order('sort_ts', { ascending: false })
@@ -112,6 +113,7 @@ export type SearchFilters = {
   nationality?: string | null;
   verifiedOnly?: boolean;
   maxPriceCents?: number | null;
+  condition?: string | null;
   sort?: SearchSort;
 };
 
@@ -136,7 +138,7 @@ export async function searchListings(filters: SearchFilters): Promise<ListingCar
     .from('listings')
     .select(
       `id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes,
-       listing_photos (storage_path, sort_order),
+       listing_photos (storage_path, sort_order, section),
        profiles!listings_seller_id_fkey!inner (nationality, is_phone_verified)`,
     )
     .eq('status', 'active')
@@ -155,6 +157,7 @@ export async function searchListings(filters: SearchFilters): Promise<ListingCar
   if (filters.nationality) query = query.eq('profiles.nationality', filters.nationality);
   if (filters.verifiedOnly) query = query.eq('profiles.is_phone_verified', true);
   if (filters.maxPriceCents != null) query = query.lte('price_cents', filters.maxPriceCents);
+  if (filters.condition) query = query.eq('condition', filters.condition);
 
   const { data, error } = await query;
   if (error) throw error;
@@ -166,8 +169,8 @@ export async function fetchListing(id: string): Promise<ListingDetail | null> {
     .from('listings')
     .select(
       `id, title, description, price_cents, suburb, status, created_at, category_id, attributes,
-       lat, lng, condition, pickup_mode, payment_method, offers_enabled, seller_id, view_count,
-       listing_photos (storage_path, sort_order),
+       lat, lng, condition, pickup_mode, payment_method, offers_enabled, seller_id, view_count, flaw_note,
+       listing_photos (storage_path, sort_order, section),
        profiles!listings_seller_id_fkey (display_name, avatar_url, suburb, nationality, is_phone_verified)`,
     )
     .eq('id', id)
@@ -178,6 +181,18 @@ export async function fetchListing(id: string): Promise<ListingDetail | null> {
 
 export function photoUrl(storagePath: string): string {
   return supabase.storage.from('listing-photos').getPublicUrl(storagePath).data.publicUrl;
+}
+
+type PhotoRow = { storage_path: string; sort_order: number; section?: 'main' | 'flaw' };
+
+/** Gallery photos only (legacy rows without section count as main). */
+export function mainPhotos<T extends PhotoRow>(photos: T[]): T[] {
+  return photos.filter((p) => (p.section ?? 'main') === 'main');
+}
+
+/** Disclosed-flaw photos. */
+export function flawPhotos<T extends PhotoRow>(photos: T[]): T[] {
+  return photos.filter((p) => p.section === 'flaw');
 }
 
 export async function pickImages(max: number): Promise<ImagePicker.ImagePickerAsset[]> {
@@ -241,6 +256,8 @@ export async function createListing(input: {
   lng?: number | null;
   attributes: Record<string, unknown>;
   photos: ImagePicker.ImagePickerAsset[];
+  flawNote?: string | null;
+  flawPhotos?: ImagePicker.ImagePickerAsset[];
 }, onProgress?: (uploaded: number, total: number) => void): Promise<string> {
   const { data, error } = await supabase
     .from('listings')
@@ -258,21 +275,32 @@ export async function createListing(input: {
       lat: input.lat ?? null,
       lng: input.lng ?? null,
       attributes: input.attributes,
+      flaw_note: input.flawNote?.trim() || null,
     })
     .select('id')
     .single();
   if (error) throw error;
   const listingId = (data as { id: string }).id;
 
+  const flaws = input.flawPhotos ?? [];
+  const total = input.photos.length + flaws.length;
   for (let i = 0; i < input.photos.length; i++) {
-    onProgress?.(i, input.photos.length);
+    onProgress?.(i, total);
     const path = await uploadPhoto(input.sellerId, input.photos[i]);
     const { error: photoError } = await supabase
       .from('listing_photos')
-      .insert({ listing_id: listingId, storage_path: path, sort_order: i });
+      .insert({ listing_id: listingId, storage_path: path, sort_order: i, section: 'main' });
     if (photoError) throw photoError;
   }
-  onProgress?.(input.photos.length, input.photos.length);
+  for (let i = 0; i < flaws.length; i++) {
+    onProgress?.(input.photos.length + i, total);
+    const path = await uploadPhoto(input.sellerId, flaws[i]);
+    const { error: photoError } = await supabase
+      .from('listing_photos')
+      .insert({ listing_id: listingId, storage_path: path, sort_order: i, section: 'flaw' });
+    if (photoError) throw photoError;
+  }
+  onProgress?.(total, total);
   return listingId;
 }
 
@@ -295,7 +323,7 @@ export async function fetchSellerListings(
   let query = supabase
     .from('listings')
     .select(
-      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, payment_method, bumped_at, listing_photos (storage_path, sort_order)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, payment_method, bumped_at, flaw_note, listing_photos (storage_path, sort_order, section)',
     )
     .eq('seller_id', sellerId)
     .eq('status', 'active')
@@ -311,7 +339,7 @@ export async function fetchMyListings(userId: string): Promise<ListingCard[]> {
   const { data, error } = await supabase
     .from('listings')
     .select(
-      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, payment_method, bumped_at, listing_photos (storage_path, sort_order)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, payment_method, bumped_at, flaw_note, listing_photos (storage_path, sort_order, section)',
     )
     .eq('seller_id', userId)
     .neq('status', 'deleted')
@@ -333,6 +361,7 @@ export async function updateListing(
     offers_enabled: boolean;
     suburb: string;
     attributes: Record<string, unknown>;
+    flaw_note?: string | null;
   },
 ): Promise<void> {
   const { error } = await supabase.from('listings').update(fields).eq('id', listingId);

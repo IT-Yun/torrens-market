@@ -141,7 +141,10 @@
   "conditions": {
     "new": "全新",
     "like_new": "几乎全新",
-    "used": "二手"
+    "used": "轻微使用痕迹",
+    "good": "轻微使用痕迹",
+    "worn": "明显使用痕迹",
+    "defective": "有瑕疵"
   },
   "pickupModes": {
     "pickup_only": "仅自取",
@@ -365,5 +368,13 @@
     "cameraDenied": "需要相机权限",
     "cameraDeniedBody": "请在设置中允许相机访问以拍照。",
     "openSettings": "打开设置"
+  },
+  "flaws": {
+    "title": "瑕疵/损坏",
+    "marker": "已注明瑕疵",
+    "addLabel": "瑕疵照片",
+    "noteLabel": "瑕疵说明",
+    "notePlaceholder": "划痕、污渍、缺件等 — 越诚实越可信。",
+    "defectiveNudge": "已选择\\u201c有瑕疵\\u201d — 补充瑕疵照片或说明能让买家更放心。"
   }
 }

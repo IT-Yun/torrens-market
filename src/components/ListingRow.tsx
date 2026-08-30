@@ -2,7 +2,7 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Heart, Package } from 'lucide-react-native';
 import { router } from 'expo-router';
-import { photoUrl, type ListingCard } from '../lib/listings';
+import { flawPhotos, mainPhotos, photoUrl, type ListingCard } from '../lib/listings';
 import { formatPrice, timeAgo } from '../lib/format';
 import { formatDistance, haversineKm } from '../lib/geo';
 
@@ -42,7 +42,8 @@ export function ListingRow({
   viewerPos?: { lat: number; lng: number } | null;
 }) {
   const { t } = useTranslation();
-  const photo = [...item.listing_photos].sort((a, b) => a.sort_order - b.sort_order)[0];
+  const photo = mainPhotos([...item.listing_photos]).sort((a, b) => a.sort_order - b.sort_order)[0];
+  const hasFlaws = flawPhotos(item.listing_photos).length > 0 || !!item.flaw_note;
   const distance =
     viewerPos && item.lat != null && item.lng != null
       ? formatDistance(haversineKm(viewerPos.lat, viewerPos.lng, item.lat, item.lng))
@@ -106,6 +107,13 @@ export function ListingRow({
 }
 
 const styles = StyleSheet.create({
+  flawBadge: {
+    borderRadius: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    backgroundColor: '#FBF0DA',
+  },
+  flawBadgeText: { fontSize: 10, fontWeight: '700', color: '#9A6B00' },
   card: {
     flexDirection: 'row',
     gap: spacing.md,

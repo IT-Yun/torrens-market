@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   Alert,
   Linking,
+  TextInput,
   Image,
   KeyboardAvoidingView,
   Modal,
@@ -42,7 +43,7 @@ import { getApproxPosition } from '../../src/lib/location';
 import { colors, radius, spacing } from '../../src/theme';
 
 const MAX_PHOTOS = 10;
-const CONDITIONS = ['used', 'like_new', 'new'];
+const CONDITIONS = ['new', 'like_new', 'good', 'worn', 'defective'];
 const PICKUP_MODES = ['pickup_only', 'seller_delivers', 'buyer_collects'];
 const PAYMENT_METHODS = ['any', 'cash_only', 'bank_transfer'];
 
@@ -143,13 +144,15 @@ export default function CreateListingScreen() {
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
-  const [condition, setCondition] = useState('used');
+  const [condition, setCondition] = useState('good');
   const [pickupMode, setPickupMode] = useState('pickup_only');
   const [paymentMethod, setPaymentMethod] = useState('any');
   const [offersEnabled, setOffersEnabled] = useState(true);
   const [suburb, setSuburb] = useState(profile?.suburb ?? '');
   const [attributes, setAttributes] = useState<Record<string, unknown>>({});
   const [busy, setBusy] = useState(false);
+  const [flawShots, setFlawShots] = useState<ImagePickerAsset[]>([]);
+  const [flawNote, setFlawNote] = useState('');
   const [uploadProgress, setUploadProgress] = useState<[number, number] | null>(null);
 
   useEffect(() => {
@@ -162,6 +165,7 @@ export default function CreateListingScreen() {
         setPrice(l.price_cents === 0 ? '0' : String(l.price_cents / 100));
         setDescription(l.description);
         setCondition(l.condition);
+        setFlawNote(l.flaw_note ?? '');
         setPickupMode(l.pickup_mode);
         setPaymentMethod(l.payment_method ?? 'any');
         setOffersEnabled(l.offers_enabled ?? true);
@@ -207,6 +211,7 @@ export default function CreateListingScreen() {
           description: description.trim(),
           price_cents: Math.round(parseFloat(price || '0') * 100),
           condition,
+          flaw_note: flawNote.trim() || null,
           pickup_mode: pickupMode,
           payment_method: paymentMethod,
           offers_enabled: offersEnabled,
@@ -226,6 +231,8 @@ export default function CreateListingScreen() {
           description: description.trim(),
           priceCents: Math.round(parseFloat(price || '0') * 100),
           condition,
+          flawNote: flawNote.trim() || null,
+          flawPhotos: flawShots,
           pickupMode,
           paymentMethod,
           offersEnabled: price.trim() === '0' ? false : offersEnabled,
@@ -389,6 +396,74 @@ export default function CreateListingScreen() {
           </>
         )}
 
+        {!editId && (
+          <>
+            <Text style={styles.sectionTitle}>
+              {t('flaws.addLabel')} ({flawShots.length}/5)
+            </Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <View style={styles.photoRow}>
+                <Pressable
+                  style={[styles.addPhoto, !uploadsEnabled && { opacity: 0.4 }]}
+                  disabled={!uploadsEnabled || flawShots.length >= 5}
+                  onPress={() => {
+                    const remaining = 5 - flawShots.length;
+                    sheet.showConfirm(t('flaws.addLabel'), undefined, [
+                      {
+                        label: t('photoSource.camera'),
+                        variant: 'primary',
+                        onPress: async () => {
+                          if (!(await ensureCameraPermission())) return;
+                          await captureImages(remaining, (asset) => {
+                            setFlawShots((prev) => [...prev, asset]);
+                          });
+                        },
+                      },
+                      {
+                        label: t('photoSource.library'),
+                        variant: 'secondary',
+                        onPress: async () => {
+                          const assets = await pickImages(remaining);
+                          if (assets.length) setFlawShots((prev) => [...prev, ...assets]);
+                        },
+                      },
+                    ]);
+                  }}
+                >
+                  <Camera size={22} color={colors.textSecondary} />
+                  <Text style={styles.addPhotoText}>{t('flaws.addLabel')}</Text>
+                </Pressable>
+                {flawShots.map((p, idx) => (
+                  <View key={p.assetId ?? p.uri} style={styles.photoCell}>
+                    <Image source={{ uri: p.uri }} style={styles.photo} />
+                    <Pressable
+                      style={styles.photoRemove}
+                      hitSlop={6}
+                      onPress={() => setFlawShots((prev) => prev.filter((_, i) => i !== idx))}
+                    >
+                      <X size={12} color={colors.white} strokeWidth={2.5} />
+                    </Pressable>
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
+            {condition === 'defective' && flawShots.length === 0 && !flawNote.trim() && (
+              <Text style={styles.flawNudge}>{t('flaws.defectiveNudge')}</Text>
+            )}
+          </>
+        )}
+
+        <Text style={styles.sectionTitle}>{t('flaws.noteLabel')}</Text>
+        <TextInput
+          style={styles.flawNoteInput}
+          placeholder={t('flaws.notePlaceholder')}
+          placeholderTextColor={colors.textSecondary}
+          value={flawNote}
+          onChangeText={setFlawNote}
+          maxLength={500}
+          multiline
+        />
+
         {/* category */}
         <Text style={styles.sectionTitle}>{t('listingCreate.category')}</Text>
         <ScrollView
@@ -547,6 +622,18 @@ export default function CreateListingScreen() {
 }
 
 const styles = StyleSheet.create({
+  flawNudge: { fontSize: 12, color: '#9A6B00', marginTop: -4 },
+  flawNoteInput: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    padding: 12,
+    fontSize: 15,
+    color: colors.text,
+    minHeight: 70,
+    backgroundColor: colors.white,
+    textAlignVertical: 'top',
+  },
   tosBackdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.45)',

@@ -40,6 +40,7 @@ export default function SearchScreen() {
   const [categoryId, setCategoryId] = useState<number | null>(null);
   const [nationality, setNationality] = useState<string | null>(null);
   const [verifiedOnly, setVerifiedOnly] = useState(false);
+  const [condition, setCondition] = useState<string | null>(null);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
   const [sort, setSort] = useState<SearchSort>('recent');
   const [results, setResults] = useState<ListingCard[]>([]);
@@ -77,6 +78,7 @@ export default function SearchScreen() {
         categoryId,
         nationality,
         verifiedOnly,
+        condition,
         maxPriceCents: maxPrice,
         sort,
       });
@@ -84,12 +86,12 @@ export default function SearchScreen() {
       setSearched(true);
       if (term.trim()) saveRecent(term.trim());
     },
-    [query, categoryId, nationality, verifiedOnly, maxPrice, sort, recents],
+    [query, categoryId, nationality, verifiedOnly, condition, maxPrice, sort, recents],
   );
 
   useEffect(() => {
     run().catch(() => {});
-  }, [categoryId, nationality, verifiedOnly, maxPrice, sort]);
+  }, [categoryId, nationality, verifiedOnly, condition, maxPrice, sort]);
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
@@ -165,6 +167,19 @@ export default function SearchScreen() {
               </Pressable>
             );
           })}
+        </ScrollView>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
+          {['new', 'like_new', 'good', 'worn', 'defective'].map((c) => (
+            <Pressable
+              key={c}
+              style={[styles.chip, condition === c && styles.chipSelected]}
+              onPress={() => setCondition(condition === c ? null : c)}
+            >
+              <Text style={[styles.chipText, condition === c && { color: colors.white }]}>
+                {t(`conditions.${c}`)}
+              </Text>
+            </Pressable>
+          ))}
         </ScrollView>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
           {(['recent', 'cheap', 'expensive'] as const).map((s) => {

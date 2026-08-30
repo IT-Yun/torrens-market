@@ -141,7 +141,10 @@
   "conditions": {
     "new": "New",
     "like_new": "Like new",
-    "used": "Used"
+    "used": "Lightly used",
+    "good": "Lightly used",
+    "worn": "Visible wear",
+    "defective": "Has flaws"
   },
   "pickupModes": {
     "pickup_only": "Pickup only",
@@ -365,5 +368,13 @@
     "cameraDenied": "Camera access needed",
     "cameraDeniedBody": "Allow camera access in Settings to take photos.",
     "openSettings": "Open Settings"
+  },
+  "flaws": {
+    "title": "Flaws / damage",
+    "marker": "Flaws disclosed",
+    "addLabel": "Flaw photos",
+    "noteLabel": "What is the flaw?",
+    "notePlaceholder": "Scratches, stains, missing parts… honesty builds trust.",
+    "defectiveNudge": "Marked as having flaws — adding flaw photos or a note helps buyers trust the listing."
   }
 }
