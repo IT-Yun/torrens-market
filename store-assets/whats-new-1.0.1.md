@@ -11,6 +11,7 @@ A smoother, more polished Torrens Market:
 - Pickup and payment conditions (e.g. pickup only, cash only) now shown on every listing in the feed
 - Listing page shows the description first, then item details
 - In chat, tapping the other person's name opens their profile
+- A gentle notice when a new version is available, shown once per update
 - Small fixes and performance improvements
 
 ## 한국어 (ko)
@@ -24,6 +25,7 @@ A smoother, more polished Torrens Market:
 - 목록에서 바로 보이는 거래 조건 표시 (픽업만 가능, 현금만 등)
 - 매물 상세에서 설명을 먼저, 상품 정보를 그 아래에
 - 채팅에서 상대방 이름을 누르면 프로필로 이동
+- 새 버전이 나오면 한 번만 안내 팝업 표시
 - 자잘한 수정과 성능 개선
 
 ## 简体中文 (zh-Hans)
@@ -37,4 +39,5 @@ A smoother, more polished Torrens Market:
 - 列表中直接显示交易条件（仅自取、仅现金等）
 - 物品详情先显示描述，再显示物品信息
 - 聊天中点击对方昵称可打开其个人主页
+- 有新版本时仅提示一次
 - 若干修复与性能优化
