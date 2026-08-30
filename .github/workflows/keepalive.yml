@@ -22,5 +22,8 @@ jobs:
           ANON: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwYWpkaGhnZnpzZGxlaHFuZG5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MzcwNDMsImV4cCI6MjEwMjMxMzA0M30.H41QTu8qGFRkMbmLLVtPnDbwZiiOSbNqYjbp2XRsPy8
       - name: Auth health ping
         run: |
-          code=$(curl -s -o /dev/null -w '%{http_code}' "https://lpajdhhgfzsdlehqndni.supabase.co/auth/v1/health")
+          code=$(curl -s -o /dev/null -w '%{http_code}' -H "apikey: ${ANON}" \
+            "https://lpajdhhgfzsdlehqndni.supabase.co/auth/v1/health")
           echo "auth=$code"; test "$code" = "200"
+        env:
+          ANON: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwYWpkaGhnZnpzZGxlaHFuZG5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MzcwNDMsImV4cCI6MjEwMjMxMzA0M30.H41QTu8qGFRkMbmLLVtPnDbwZiiOSbNqYjbp2XRsPy8
