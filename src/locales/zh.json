@@ -124,7 +124,8 @@
     "offersEnabled": "接受出价",
     "offersHint": "关闭后为一口价，买家无法出价。",
     "cover": "封面",
-    "photoOrderTip": "点击照片设为封面。用箭头调整顺序，买家将按此顺序看到照片。"
+    "photoOrderTip": "点击照片设为封面。用箭头调整顺序，买家将按此顺序看到照片。",
+    "optionalHint": "不确定可留空"
   },
   "listingDetail": {
     "chat": "联系卖家",

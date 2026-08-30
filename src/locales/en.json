@@ -124,7 +124,8 @@
     "offersEnabled": "Accept price offers",
     "offersHint": "Off = firm price; buyers can't send offers.",
     "cover": "Cover",
-    "photoOrderTip": "Tap a photo to make it the cover. Use the arrows to reorder; buyers see photos in this order."
+    "photoOrderTip": "Tap a photo to make it the cover. Use the arrows to reorder; buyers see photos in this order.",
+    "optionalHint": "Leave blank if unsure"
   },
   "listingDetail": {
     "chat": "Chat with seller",

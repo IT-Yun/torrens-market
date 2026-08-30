@@ -96,7 +96,15 @@ function CustomField({
     <Field
       label={def.unit ? `${label} (${def.unit})` : label}
       keyboardType={def.type === 'number' ? 'numeric' : 'default'}
-      placeholder={def.type === 'date' ? 'YYYY-MM' : def.type === 'dimensions' ? '120×80×75' : ''}
+      placeholder={
+        def.type === 'date'
+          ? 'YYYY-MM'
+          : def.type === 'dimensions'
+            ? '120×80×75'
+            : def.required
+              ? ''
+              : t('listingCreate.optionalHint')
+      }
       value={value == null ? '' : String(value)}
       onChangeText={(text) => onChange(def.type === 'number' ? text.replace(/[^0-9.]/g, '') : text)}
     />
