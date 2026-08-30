@@ -7,3 +7,5 @@ export const ago = (iso: string) => {
   if (s < 86400) return `${Math.round(s / 3600)}h ago`;
   return `${Math.round(s / 86400)}d ago`;
 };
+export const mb = (n?: number | null) => (n == null ? '—' : n < 1048576 ? `${(n / 1024).toFixed(0)} KB` : `${(n / 1048576).toFixed(1)} MB`);
+export const pct = (n: number, d: number) => (d ? `${Math.round((100 * n) / d)}%` : '0%');

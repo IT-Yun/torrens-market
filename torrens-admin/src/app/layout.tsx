@@ -5,8 +5,10 @@ import './globals.css';
 export const metadata: Metadata = { title: 'Torrens Admin', description: 'Local operations console' };
 
 const nav = [
-  ['/', 'Dashboard'], ['/members', 'Members'], ['/listings', 'Listings'],
-  ['/reports', 'Reports'], ['/feedback', 'Feedback'], ['/audit', 'Audit log'],
+  ['/', 'Dashboard'], ['/analytics', 'Analytics'],
+  ['/members', 'Members'], ['/listings', 'Listings'], ['/chats', 'Chats'], ['/reviews', 'Reviews'],
+  ['/reports', 'Reports'], ['/feedback', 'Feedback'],
+  ['/config', 'Kill switches'], ['/infra', 'Infra & releases'], ['/audit', 'Audit log'],
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
