@@ -26,7 +26,7 @@ export default async function Config() {
           <div className="mb-2 text-sm font-semibold">Banner (empty = hidden)</div>
           {(['en', 'ko', 'zh'] as const).map((l) => <label key={l} className="mb-2 block text-xs uppercase text-stone-500">{l}<input name={`banner_${l}`} defaultValue={c.banner?.[l] ?? ''} className="mt-1 w-full rounded-md border border-stone-300 px-2 py-1 text-sm normal-case" placeholder={l === 'en' ? 'e.g. Scheduled maintenance tonight 11pm–12am' : l === 'ko' ? '예: 오늘 밤 11시~12시 점검' : '例：今晚 11 点至 12 点维护'} /></label>)}
         </Card>
-        <div><Btn tone="teal" type="submit">Save switches</Btn> <span className="ml-2 text-xs text-stone-500">App-side reader ships with 1.0.1 (app lane); until then these are recorded but not enforced.</span></div>
+        <div><Btn tone="teal" type="submit">Save switches</Btn> <span className="ml-2 text-xs text-stone-500">Enforced by the app reader (1.0.1 embedded + the next OTA for build-8 users); re-checked on every foreground. ⚠ Raise <b>min app version</b> to 1.0.1 only after 1.0.1 is live on the App Store — otherwise every current user is force-updated into a version that doesn't exist yet.</span></div>
       </form>
     </>
   );
