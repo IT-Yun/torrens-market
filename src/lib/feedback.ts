@@ -9,9 +9,7 @@ export async function submitFeedback(
   kind: FeedbackKind,
   message: string,
 ): Promise<void> {
-  const appVersion = `${Constants.expoConfig?.version ?? '?'} (${
-    Constants.expoConfig?.ios?.buildNumber ?? Constants.expoConfig?.runtimeVersion ?? '?'
-  })`;
+  const appVersion = `${Constants.expoConfig?.version ?? '?'} (${Constants.nativeBuildVersion ?? '?'})`;
   const { error } = await supabase.from('feedback').insert({
     user_id: userId,
     kind,
