@@ -178,17 +178,8 @@ export default function ProfileSetupScreen() {
                   </Pressable>
                 );
               })}
-              <Pressable style={styles.chip} onPress={() => setPickerOpen(true)}>
-                <Text style={styles.chipText}>{t('countryPicker.searchChip')}</Text>
-              </Pressable>
             </View>
           </View>
-
-          <CountryPicker
-            visible={pickerOpen}
-            onClose={() => setPickerOpen(false)}
-            onSelect={(code) => setNationality(code)}
-          />
 
           <View style={{ gap: 4 }}>
             <Field
@@ -273,8 +264,17 @@ export default function ProfileSetupScreen() {
                   </Pressable>
                 );
               })}
+              <Pressable style={styles.chip} onPress={() => setPickerOpen(true)}>
+                <Text style={styles.chipText}>{t('countryPicker.searchChip')}</Text>
+              </Pressable>
             </View>
           </View>
+
+          <CountryPicker
+            visible={pickerOpen}
+            onClose={() => setPickerOpen(false)}
+            onSelect={(code) => setNationality(code)}
+          />
 
           <Button
             title={t('profileSetup.done')}

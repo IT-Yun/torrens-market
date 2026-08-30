@@ -9,7 +9,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Search, X } from 'lucide-react-native';
 import countries from '../data/countries.json';
 import { flagEmoji } from '../lib/format';
@@ -43,6 +43,7 @@ export function CountryPicker({
 }) {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
+  const insets = useSafeAreaInsets();
 
   const rows = useMemo(() => {
     const lang = i18n.language as keyof CountryNames;
@@ -65,7 +66,7 @@ export function CountryPicker({
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
-      <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+      <View style={[styles.safe, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
         <View style={styles.header}>
           <Text style={styles.title}>{t('countryPicker.title')}</Text>
           <Pressable onPress={onClose} hitSlop={10} accessibilityRole="button">
@@ -107,7 +108,7 @@ export function CountryPicker({
             <Text style={styles.empty}>{t('countryPicker.empty')}</Text>
           }
         />
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 }
