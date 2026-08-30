@@ -1,12 +1,12 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Modal, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Animated, Modal, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Apple, Mail } from 'lucide-react-native';
 import { signInWithApple, signInWithProvider } from '../lib/auth';
 import { GoogleLogo } from './GoogleLogo';
-import { colors, radius, spacing } from '../theme';
+import { colors, motion, radius, shadows, spacing } from '../theme';
 
 /**
  * Branded bottom sheet used for all in-app prompts (replaces bare system
@@ -57,10 +57,36 @@ export function PromptSheetProvider({ children }: { children: ReactNode }) {
   const [request, setRequest] = useState<SheetRequest | null>(null);
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const anim = useState(() => new Animated.Value(0))[0];
+  const toastAnim = useState(() => new Animated.Value(0))[0];
+
+  useEffect(() => {
+    if (request) {
+      Animated.spring(anim, { toValue: 1, useNativeDriver: true, ...motion.spring }).start();
+    }
+  }, [request, anim]);
+
+  useEffect(() => {
+    Animated.timing(toastAnim, {
+      toValue: toast ? 1 : 0,
+      duration: motion.fast,
+      useNativeDriver: true,
+    }).start();
+  }, [toast, toastAnim]);
+
+  const hide = useCallback(
+    (after?: () => void) => {
+      Animated.timing(anim, { toValue: 0, duration: motion.fast, useNativeDriver: true }).start(() => {
+        setRequest(null);
+        after?.();
+      });
+    },
+    [anim],
+  );
 
   const close = useCallback(() => {
-    if (!busy) setRequest(null);
-  }, [busy]);
+    if (!busy) hide();
+  }, [busy, hide]);
 
   const api: SheetApi = {
     showSignIn: (reasonKey) => setRequest({ kind: 'signIn', reasonKey: reasonKey ?? 'gate.reason_default' }),
@@ -86,11 +112,11 @@ export function PromptSheetProvider({ children }: { children: ReactNode }) {
     setBusy(true);
     try {
       await fn();
-      setRequest(null);
+      hide();
     } catch (e) {
       const msg = (e as Error).message ?? '';
       if (msg !== 'auth_cancelled') {
-        setRequest(null);
+        hide();
         setTimeout(() => showSignInSheetError(t), 250);
       }
     } finally {
@@ -101,10 +127,22 @@ export function PromptSheetProvider({ children }: { children: ReactNode }) {
   return (
     <SheetContext.Provider value={api}>
       {children}
-      <Modal visible={request != null} transparent animationType="slide" onRequestClose={close}>
+      <Modal visible={request != null} transparent animationType="none" onRequestClose={close}>
+        <Animated.View style={[styles.backdropFill, { opacity: anim }]} />
         <Pressable style={styles.backdrop} onPress={close}>
+          <Animated.View
+            style={{
+              transform: [
+                { translateY: anim.interpolate({ inputRange: [0, 1], outputRange: [420, 0] }) },
+              ],
+            }}
+          >
           <Pressable
-            style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, spacing.md) + spacing.sm }]}
+            style={[
+              styles.sheet,
+              shadows.sheet,
+              { paddingBottom: Math.max(insets.bottom, spacing.md) + spacing.sm },
+            ]}
             onPress={() => {}}
           >
             <View style={styles.handle} />
@@ -137,10 +175,7 @@ export function PromptSheetProvider({ children }: { children: ReactNode }) {
                 <Pressable
                   style={[styles.btn, styles.emailBtn]}
                   disabled={busy}
-                  onPress={() => {
-                    setRequest(null);
-                    router.push('/auth');
-                  }}
+                  onPress={() => hide(() => router.push('/auth'))}
                 >
                   <Mail size={17} color={colors.primary} />
                   <Text style={[styles.btnText, { color: colors.primary }]}>
@@ -167,10 +202,7 @@ export function PromptSheetProvider({ children }: { children: ReactNode }) {
                           ? styles.googleBtn
                           : styles.primaryBtn,
                     ]}
-                    onPress={() => {
-                      setRequest(null);
-                      action.onPress();
-                    }}
+                    onPress={() => hide(action.onPress)}
                   >
                     <Text
                       style={[
@@ -191,12 +223,25 @@ export function PromptSheetProvider({ children }: { children: ReactNode }) {
               </>
             )}
           </Pressable>
+          </Animated.View>
         </Pressable>
       </Modal>
       {toast && (
-        <View pointerEvents="none" style={[styles.toast, { bottom: insets.bottom + 84 }]}>
+        <Animated.View
+          pointerEvents="none"
+          style={[
+            styles.toast,
+            {
+              bottom: insets.bottom + 84,
+              opacity: toastAnim,
+              transform: [
+                { translateY: toastAnim.interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) },
+              ],
+            },
+          ]}
+        >
           <Text style={styles.toastText}>{toast}</Text>
-        </View>
+        </Animated.View>
       )}
     </SheetContext.Provider>
   );
@@ -210,7 +255,8 @@ function showSignInSheetError(t: (k: string) => string): void {
 }
 
 const styles = StyleSheet.create({
-  backdrop: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(15,23,20,0.5)' },
+  backdrop: { flex: 1, justifyContent: 'flex-end' },
+  backdropFill: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(15,23,20,0.5)' },
   sheet: {
     backgroundColor: colors.background,
     borderTopLeftRadius: 24,

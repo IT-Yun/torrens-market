@@ -14,3 +14,28 @@ export const colors = {
 
 export const spacing = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 };
 export const radius = { sm: 8, md: 12, lg: 20, full: 999 };
+
+/** Elevation tokens — one shadow language for cards and overlays. */
+export const shadows = {
+  card: {
+    shadowColor: '#101614',
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
+  },
+  sheet: {
+    shadowColor: '#101614',
+    shadowOpacity: 0.18,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: -6 },
+    elevation: 12,
+  },
+} as const;
+
+/** Motion tokens — durations/springs shared by sheets, toasts, transitions. */
+export const motion = {
+  fast: 160,
+  base: 240,
+  spring: { damping: 24, stiffness: 290, mass: 0.9 },
+} as const;

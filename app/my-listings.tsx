@@ -18,7 +18,7 @@ import {
 import { findRoomForListing } from '../src/lib/chat';
 import { GuestCta } from '../src/components/GuestCta';
 import { useSession } from '../src/lib/session';
-import { colors, radius, spacing } from '../src/theme';
+import { colors, radius, shadows, spacing } from '../src/theme';
 import { BackButton } from '../src/components/BackButton';
 import { usePromptSheet } from '../src/components/PromptSheet';
 
@@ -254,6 +254,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: radius.md,
     backgroundColor: colors.white,
+    ...shadows.card,
   },
   actionsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   statusPill: {
