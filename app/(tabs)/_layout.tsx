@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Heart, Home, MessageCircle, User } from 'lucide-react-native';
-import { fetchUnreadCount } from '../../src/lib/chat';
+import { AppState } from 'react-native';
+import { fetchUnreadCount, onUnreadChanged } from '../../src/lib/chat';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
 import { colors } from '../../src/theme';
@@ -22,7 +23,15 @@ export default function TabsLayout() {
 
   useEffect(() => {
     refreshUnread();
-    if (!session) return;
+    const offLocal = onUnreadChanged(refreshUnread);
+    const appState = AppState.addEventListener('change', (state) => {
+      if (state === 'active') refreshUnread();
+    });
+    if (!session)
+      return () => {
+        offLocal();
+        appState.remove();
+      };
     const channel = supabase
       .channel('unread-badge')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, refreshUnread)
@@ -33,6 +42,8 @@ export default function TabsLayout() {
       )
       .subscribe();
     return () => {
+      offLocal();
+      appState.remove();
       supabase.removeChannel(channel);
     };
   }, [session, refreshUnread]);

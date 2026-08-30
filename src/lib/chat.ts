@@ -173,9 +173,20 @@ export function subscribeToRoom(
     .subscribe();
 }
 
+const unreadListeners = new Set<() => void>();
+
+/** Subscribe to local unread-state changes (returns unsubscribe). */
+export function onUnreadChanged(listener: () => void): () => void {
+  unreadListeners.add(listener);
+  return () => unreadListeners.delete(listener);
+}
+
 export async function markRead(roomId: string, _userId: string): Promise<void> {
   // Server-time stamp (mark_read RPC) — client clocks can lag the DB.
   await supabase.rpc('mark_read', { p_room_id: roomId });
+  // The tab badge can't rely on a chat_participants UPDATE event arriving —
+  // nudge listeners directly once the server confirms the read.
+  unreadListeners.forEach((listener) => listener());
 }
 
 /** Number of rooms with unread messages — used for the chat tab badge. */
