@@ -326,5 +326,11 @@
     "updateTitle": "需要更新",
     "updateBody": "此版本已不再受支持。请前往 App Store 更新 Torrens Market。",
     "updateCta": "打开 App Store"
+  },
+  "countryPicker": {
+    "title": "选择国家/地区",
+    "placeholder": "搜索国家（任意语言）",
+    "empty": "没有匹配的国家",
+    "searchChip": "🔍 更多国家"
   }
 }

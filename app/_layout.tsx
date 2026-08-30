@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { router, Stack } from 'expo-router';
+import { router, Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as Notifications from 'expo-notifications';
 import '../src/lib/i18n';
@@ -24,6 +24,25 @@ function routeFromNotification(data: unknown) {
   const d = (data ?? {}) as { roomId?: string; listingId?: string };
   if (d.roomId) router.push(`/chat/${d.roomId}`);
   else if (d.listingId) router.push(`/listing/${d.listingId}`);
+}
+
+/**
+ * First-time users (including social sign-ins from the in-context gate
+ * sheet) must pass profile setup exactly once: whenever a session exists
+ * but the profile has no suburb, route to onboarding.
+ */
+function OnboardingRedirect() {
+  const { session, profile } = useSession();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (!session || !profile) return;
+    if (profile.suburb) return;
+    if (pathname.startsWith('/onboarding') || pathname === '/auth') return;
+    router.replace('/onboarding/profile');
+  }, [session, profile, pathname]);
+
+  return null;
 }
 
 /** Registers the push token on sign-in and routes notification taps. */
@@ -65,6 +84,7 @@ export default function RootLayout() {
     <ForceUpdateGate>
     <SessionProvider>
       <PromptSheetProvider>
+      <OnboardingRedirect />
       <PushBridge />
       <StatusBar style="dark" />
       <Stack screenOptions={{ headerShown: false }} />

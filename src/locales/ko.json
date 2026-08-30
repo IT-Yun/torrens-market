@@ -326,5 +326,11 @@
     "updateTitle": "업데이트가 필요해요",
     "updateBody": "이 버전은 더 이상 지원되지 않아요. App Store에서 Torrens Market을 업데이트해 주세요.",
     "updateCta": "App Store 열기"
+  },
+  "countryPicker": {
+    "title": "국가 선택",
+    "placeholder": "국가 검색 (어떤 언어든 가능)",
+    "empty": "일치하는 국가가 없어요",
+    "searchChip": "🔍 다른 나라 찾기"
   }
 }

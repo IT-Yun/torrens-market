@@ -14,9 +14,11 @@ import { router } from 'expo-router';
 import type { ImagePickerAsset } from 'expo-image-picker';
 import { BadgeCheck, Camera, ChevronLeft, MapPin } from 'lucide-react-native';
 import { Avatar, PRESET_ANIMALS, PRESET_BGS } from '../../src/components/Avatar';
+import { CountryPicker, countryName } from '../../src/components/CountryPicker';
 import { SuburbField } from '../../src/components/SuburbField';
 import { Button, Field, Screen } from '../../src/components/ui';
 import i18n from '../../src/lib/i18n';
+import { flagEmoji } from '../../src/lib/format';
 import { checkSuburbMatch } from '../../src/lib/location';
 import { pickAvatar, uploadAvatar } from '../../src/lib/profile';
 import { usePromptSheet } from '../../src/components/PromptSheet';
@@ -53,6 +55,7 @@ export default function ProfileSetupScreen() {
     profile?.suburb_verified_at && profile?.suburb ? 'ok' : 'idle',
   );
   const [detected, setDetected] = useState<string | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   async function verifySuburb() {
     setSuburbCheck('checking');
@@ -175,8 +178,17 @@ export default function ProfileSetupScreen() {
                   </Pressable>
                 );
               })}
+              <Pressable style={styles.chip} onPress={() => setPickerOpen(true)}>
+                <Text style={styles.chipText}>{t('countryPicker.searchChip')}</Text>
+              </Pressable>
             </View>
           </View>
+
+          <CountryPicker
+            visible={pickerOpen}
+            onClose={() => setPickerOpen(false)}
+            onSelect={(code) => setNationality(code)}
+          />
 
           <View style={{ gap: 4 }}>
             <Field
@@ -237,6 +249,16 @@ export default function ProfileSetupScreen() {
             <Text style={styles.label}>{t('profileSetup.nationality')}</Text>
             <Text style={styles.note}>{t('profileSetup.nationalityNote')}</Text>
             <View style={styles.chips}>
+              {nationality && !NATIONALITY_CODES.includes(nationality) && (
+                <Pressable
+                  style={[styles.chip, styles.chipSelected]}
+                  onPress={() => setNationality(null)}
+                >
+                  <Text style={[styles.chipText, { color: colors.white }]}>
+                    {`${flagEmoji(nationality) ?? ''} ${countryName(nationality) ?? nationality}`.trim()}
+                  </Text>
+                </Pressable>
+              )}
               {NATIONALITY_CODES.map((codeKey) => {
                 const selected = nationality === codeKey;
                 return (
