@@ -123,7 +123,18 @@ export default function CreateListingScreen() {
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoryId, setCategoryId] = useState<number | null>(null);
-  const [photos, setPhotos] = useState<ImagePickerAsset[]>([]);
+  const [photos, setPhotos] = useState<ImagePickerAsset[]>(() => {
+    // Dev-only: preload sample photos for simulator screenshots (EXPO_PUBLIC_QA_PHOTOS = JSON array of
+    // {uri,width,height,assetId}). Inlined at bundle time; never set in EAS builds, __DEV__ false in release.
+    if (__DEV__ && process.env.EXPO_PUBLIC_QA_PHOTOS) {
+      try {
+        return JSON.parse(process.env.EXPO_PUBLIC_QA_PHOTOS) as ImagePickerAsset[];
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');

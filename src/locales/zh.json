@@ -334,5 +334,15 @@
     "placeholder": "搜索国家（任意语言）",
     "empty": "没有匹配的国家",
     "searchChip": "🔍 更多国家"
+  },
+  "update": {
+    "storeTitle": "{{version}} 版本已上线",
+    "storeBody": "App Store 上有包含改进与修复的新版本，更新即可使用最新功能。",
+    "storeAction": "前往 App Store 更新",
+    "otaTitle": "更新已准备好",
+    "otaBody": "已下载一个小更新，重新启动应用即可生效，只需片刻。",
+    "otaAction": "立即重启",
+    "otaFailed": "无法应用更新，下次打开应用时会自动应用。",
+    "later": "稍后"
   }
 }

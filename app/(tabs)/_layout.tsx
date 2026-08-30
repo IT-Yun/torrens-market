@@ -6,12 +6,15 @@ import { fetchUnreadCount } from '../../src/lib/chat';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
 import { colors } from '../../src/theme';
+import { useUpdatePrompt } from '../../src/components/UpdatePrompt';
 
 
 export default function TabsLayout() {
   const { t } = useTranslation();
   const { session } = useSession();
   const [unread, setUnread] = useState(0);
+  // Once-per-version "new version available" / "restart to apply" prompt (see UpdatePrompt.tsx).
+  useUpdatePrompt();
 
   const refreshUnread = useCallback(() => {
     if (session) fetchUnreadCount(session.user.id).then(setUnread).catch(() => {});

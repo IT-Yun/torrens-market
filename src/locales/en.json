@@ -334,5 +334,15 @@
     "placeholder": "Search countries (any language)",
     "empty": "No matching country",
     "searchChip": "🔍 More countries"
+  },
+  "update": {
+    "storeTitle": "Version {{version}} is available",
+    "storeBody": "A new version of Torrens Market is on the App Store with improvements and fixes. Update to get the latest features.",
+    "storeAction": "Update on the App Store",
+    "otaTitle": "An update is ready",
+    "otaBody": "A small update has been downloaded. Restart the app to apply it. It only takes a moment.",
+    "otaAction": "Restart now",
+    "otaFailed": "Could not apply the update. It will be applied next time you open the app.",
+    "later": "Later"
   }
 }
