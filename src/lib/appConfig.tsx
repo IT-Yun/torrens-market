@@ -34,7 +34,7 @@ const DEFAULTS: AppConfig = {
   banner: {},
 };
 
-const AppConfigContext = createContext<AppConfig>(DEFAULTS);
+const AppConfigContext = createContext<AppConfig & { reload: () => void }>({ ...DEFAULTS, reload: () => {} });
 export const useAppConfig = () => useContext(AppConfigContext);
 
 /** true when a < b (semver-ish, numeric segments). */
@@ -76,13 +76,15 @@ export function AppConfigProvider({ children }: { children: ReactNode }) {
     return () => sub.remove();
   }, [load]);
 
-  return <AppConfigContext.Provider value={config}>{children}</AppConfigContext.Provider>;
+  return (
+    <AppConfigContext.Provider value={{ ...config, reload: load }}>{children}</AppConfigContext.Provider>
+  );
 }
 
 /** Full-screen gate shown when the installed version is below the minimum. */
 export function ForceUpdateGate({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
-  const { minAppVersion } = useAppConfig();
+  const { minAppVersion, reload } = useAppConfig();
   const current = Constants.expoConfig?.version ?? '0.0.0';
 
   if (!versionLt(current, minAppVersion)) return <>{children}</>;
@@ -99,6 +101,9 @@ export function ForceUpdateGate({ children }: { children: ReactNode }) {
           }
         />
       </View>
+      <Text style={styles.updateRecheck} onPress={reload}>
+        {t('config.updateRecheck')}
+      </Text>
     </View>
   );
 }
@@ -128,6 +133,7 @@ const styles = StyleSheet.create({
   },
   updateTitle: { fontSize: 18, fontWeight: '800', color: colors.text },
   updateBody: { fontSize: 14, color: colors.textSecondary, textAlign: 'center', lineHeight: 20 },
+  updateRecheck: { fontSize: 13, color: colors.primary, fontWeight: '600', padding: 8 },
   bannerWrap: {
     backgroundColor: '#FBF0DA',
     paddingHorizontal: spacing.md,

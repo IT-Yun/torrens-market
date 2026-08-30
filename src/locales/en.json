@@ -332,7 +332,8 @@
     "maintenanceBody": "Torrens Market is in maintenance — browsing works, posting and chat are paused briefly.",
     "updateTitle": "Update required",
     "updateBody": "This version is no longer supported. Please update Torrens Market from the App Store.",
-    "updateCta": "Open the App Store"
+    "updateCta": "Open the App Store",
+    "updateRecheck": "Already updated? Check again"
   },
   "countryPicker": {
     "title": "Choose your country",

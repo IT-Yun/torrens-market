@@ -332,7 +332,8 @@
     "maintenanceBody": "Torrens Market 正在维护 — 可以继续浏览，发布和聊天暂时停用。",
     "updateTitle": "需要更新",
     "updateBody": "此版本已不再受支持。请前往 App Store 更新 Torrens Market。",
-    "updateCta": "打开 App Store"
+    "updateCta": "打开 App Store",
+    "updateRecheck": "已更新？重新检查"
   },
   "countryPicker": {
     "title": "选择国家/地区",
