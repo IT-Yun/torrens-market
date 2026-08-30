@@ -12,6 +12,10 @@ A smoother, more polished Torrens Market:
 - Listing page shows the description first, then item details
 - In chat, tapping the other person's name opens their profile
 - A gentle notice when a new version is available, shown once per update
+- Activity bell: see chats, offers, meetups, reviews and favorites on your listings in one place
+- Take photos with the camera while posting — shoot, use, shoot again
+- Clearer item condition (4 levels) plus an optional "has flaws" section with its own photos and note
+- Skip fields you're unsure about — only the essentials are required
 - Small fixes and performance improvements
 
 ## 한국어 (ko)
@@ -26,6 +30,10 @@ A smoother, more polished Torrens Market:
 - 매물 상세에서 설명을 먼저, 상품 정보를 그 아래에
 - 채팅에서 상대방 이름을 누르면 프로필로 이동
 - 새 버전이 나오면 한 번만 안내 팝업 표시
+- 활동 알림(종): 내 매물에 온 채팅·가격 제안·약속·후기·찜을 한곳에서
+- 매물 올릴 때 카메라로 바로 촬영 — 찍고, 사용하고, 또 찍기
+- 물건 상태 4단계 + 선택 가능한 "하자 있음" 섹션(하자 사진·설명)
+- 잘 모르는 항목은 비워도 등록 가능 — 필수 항목은 최소화
 - 자잘한 수정과 성능 개선
 
 ## 简体中文 (zh-Hans)
@@ -40,4 +48,8 @@ A smoother, more polished Torrens Market:
 - 物品详情先显示描述，再显示物品信息
 - 聊天中点击对方昵称可打开其个人主页
 - 有新版本时仅提示一次
+- 活动铃铛：我的商品收到的聊天、出价、约定、评价和收藏，一处查看
+- 发布时可直接用相机拍照 —— 拍、用、再拍
+- 更清晰的成色（4 档）+ 可选的"有瑕疵"栏目（瑕疵照片与说明）
+- 不确定的字段可留空 —— 只保留必填项
 - 若干修复与性能优化

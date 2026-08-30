@@ -1,12 +1,12 @@
 ════════════════════════════════════════
  1.0.1 앱 업데이트 — ASC 제출 가이드
- (빌드 12 · TestFlight 처리 완료 후)
+ (빌드 14 · TestFlight 처리 완료 후)
 ════════════════════════════════════════
 
-【0】 (선택) TestFlight에서 빌드 12 설치해 한 바퀴
+【0】 (선택) TestFlight에서 빌드 14 설치해 한 바퀴
 ----------------------------------------
 시트 드래그로 닫기 · 햅틱 · 원형 크롭 · 국가 검색 선택
-+ 국기 · 사진 순서/대표 지정 · 카드 조건 배너 · 프로필 맨 아래 "v1.0.1 (12)"
++ 국기 · 사진 순서/대표 · 카메라 연속 촬영 · 하자 토글 · 종 알림함 · 채팅 배지 소멸 · 프로필 맨 아래 "v1.0.1 (14)"
 
 【1】 새 버전 만들기
 ----------------------------------------
@@ -15,7 +15,7 @@ appstoreconnect.apple.com → My Apps → Torrens Market
 
 【2】 빌드 선택
 ----------------------------------------
-1.0.1 페이지 → Build 섹션 → ➕ → "1.0.1 (12)" 선택 → Done
+1.0.1 페이지 → Build 섹션 → ➕ → "1.0.1 (14)" 선택 → Done
 (9, 10, 11이 보여도 12를 고를 것 — 12에 사진 툴·배너·채팅 헤더·업데이트 안내가 들어 있음)
 
 【3】 "새로운 기능" (What's New) 붙여넣기
@@ -34,6 +34,10 @@ A smoother, more polished Torrens Market:
 - Listing page shows the description first, then item details
 - In chat, tapping the other person's name opens their profile
 - A gentle notice when a new version is available, shown once per update
+- Activity bell: see chats, offers, meetups, reviews and favorites on your listings in one place
+- Take photos with the camera while posting — shoot, use, shoot again
+- Clearer item condition (4 levels) plus an optional "has flaws" section with its own photos and note
+- Skip fields you're unsure about — only the essentials are required
 - Small fixes and performance improvements
 
 [한국어]
@@ -48,6 +52,10 @@ A smoother, more polished Torrens Market:
 - 매물 상세에서 설명을 먼저, 상품 정보를 그 아래에
 - 채팅에서 상대방 이름을 누르면 프로필로 이동
 - 새 버전이 나오면 한 번만 안내 팝업 표시
+- 활동 알림(종): 내 매물에 온 채팅·가격 제안·약속·후기·찜을 한곳에서
+- 매물 올릴 때 카메라로 바로 촬영 — 찍고, 사용하고, 또 찍기
+- 물건 상태 4단계 + 선택 가능한 "하자 있음" 섹션(하자 사진·설명)
+- 잘 모르는 항목은 비워도 등록 가능 — 필수 항목은 최소화
 - 자잘한 수정과 성능 개선
 
 [简体中文]
@@ -62,13 +70,17 @@ A smoother, more polished Torrens Market:
 - 物品详情先显示描述，再显示物品信息
 - 聊天中点击对方昵称可打开其个人主页
 - 有新版本时仅提示一次
+- 活动铃铛：我的商品收到的聊天、出价、约定、评价和收藏，一处查看
+- 发布时可直接用相机拍照 —— 拍、用、再拍
+- 更清晰的成色（4 档）+ 可选的"有瑕疵"栏目（瑕疵照片与说明）
+- 不确定的字段可留空 —— 只保留必填项
 - 若干修复与性能优化
 
 【4】 나머지 확인
 ----------------------------------------
 - 스크린샷/설명: 그대로 (변경 불필요)
 - App Review Information → Notes: 기존 GUEST ACCESS 내용 유지 + 맨 위에 한 줄 추가:
-  "1.0.1 is a visual/interaction update (sheets, haptics, avatar crop, country picker, photo ordering, in-app update notice); no new data collection."
+  "1.0.1 is a visual/interaction update (sheets, haptics, avatar crop, country picker, photo ordering, camera capture, activity bell, condition/flaws fields, in-app update notice); no new data collection."
 - 암호화 질문: 안 뜸 (플래그 내장)
 - Version Release: "Manually release this version" 선택 (승인 후 직접 게시)
 
