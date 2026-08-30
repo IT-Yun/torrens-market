@@ -378,6 +378,12 @@
     "noteLabel": "어떤 하자인가요?",
     "notePlaceholder": "기스, 얼룩, 부속 누락 등 — 솔직할수록 신뢰가 쌓여요.",
     "defectiveNudge": "하자 있음으로 선택했어요 — 하자 사진이나 설명을 남기면 구매자가 믿고 거래할 수 있어요.",
-    "toggle": "하자 있음"
+    "toggle": "하자 있음",
+    "movePhoto": "사진 이동",
+    "moveToFlaws": "하자 사진으로 이동",
+    "moveToMain": "대표 사진으로 이동",
+    "none": "하자 없음 — 이 섹션 비우기",
+    "flawFull": "하자 사진이 가득 찼어요 (5장)",
+    "mainFull": "대표 사진이 가득 찼어요 (10장)"
   }
 }

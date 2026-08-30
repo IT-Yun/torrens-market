@@ -378,6 +378,12 @@
     "noteLabel": "What is the flaw?",
     "notePlaceholder": "Scratches, stains, missing parts… honesty builds trust.",
     "defectiveNudge": "Marked as having flaws — adding flaw photos or a note helps buyers trust the listing.",
-    "toggle": "Has flaws"
+    "toggle": "Has flaws",
+    "movePhoto": "Move photo",
+    "moveToFlaws": "Move to flaw photos",
+    "moveToMain": "Move to main photos",
+    "none": "No flaws — clear this section",
+    "flawFull": "Flaw photos are full (5)",
+    "mainFull": "Main photos are full (10)"
   }
 }

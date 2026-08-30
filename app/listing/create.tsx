@@ -358,6 +358,24 @@ export default function CreateListingScreen() {
                   onPress={() =>
                     setPhotos((prev) => (idx === 0 ? prev : [prev[idx], ...prev.filter((_, i) => i !== idx)]))
                   }
+                  onLongPress={() =>
+                    sheet.showConfirm(t('flaws.movePhoto'), undefined, [
+                      {
+                        label: t('flaws.moveToFlaws'),
+                        variant: 'secondary',
+                        onPress: () => {
+                          if (flawShots.length >= 5) {
+                            sheet.showToast(t('flaws.flawFull'));
+                            return;
+                          }
+                          const asset = photos[idx];
+                          setPhotos((prev) => prev.filter((_, i) => i !== idx));
+                          setFlawShots((prev) => [...prev, asset]);
+                          setHasFlaws(true);
+                        },
+                      },
+                    ])
+                  }
                 >
                   <Image source={{ uri: p.uri }} style={[styles.photo, idx === 0 && styles.photoCover]} />
                   <View style={[styles.photoIndex, idx === 0 && styles.photoIndexCover]}>
@@ -447,7 +465,27 @@ export default function CreateListingScreen() {
                 </Pressable>
                 {flawShots.map((p, idx) => (
                   <View key={p.assetId ?? p.uri} style={styles.photoCell}>
-                    <Image source={{ uri: p.uri }} style={styles.photo} />
+                    <Pressable
+                      onLongPress={() =>
+                        sheet.showConfirm(t('flaws.movePhoto'), undefined, [
+                          {
+                            label: t('flaws.moveToMain'),
+                            variant: 'secondary',
+                            onPress: () => {
+                              if (photos.length >= MAX_PHOTOS) {
+                                sheet.showToast(t('flaws.mainFull'));
+                                return;
+                              }
+                              const asset = flawShots[idx];
+                              setFlawShots((prev) => prev.filter((_, i) => i !== idx));
+                              setPhotos((prev) => [...prev, asset]);
+                            },
+                          },
+                        ])
+                      }
+                    >
+                      <Image source={{ uri: p.uri }} style={styles.photo} />
+                    </Pressable>
                     <Pressable
                       style={styles.photoRemove}
                       hitSlop={6}
@@ -459,6 +497,17 @@ export default function CreateListingScreen() {
                 ))}
               </View>
             </ScrollView>
+            <Pressable
+              style={styles.flawNone}
+              onPress={() => {
+                setFlawShots([]);
+                setFlawNote('');
+                setHasFlaws(false);
+              }}
+              accessibilityRole="button"
+            >
+              <Text style={styles.flawNoneText}>{t('flaws.none')}</Text>
+            </Pressable>
             {flawShots.length === 0 && !flawNote.trim() && (
               <Text style={styles.flawNudge}>{t('flaws.defectiveNudge')}</Text>
             )}
@@ -644,6 +693,8 @@ export default function CreateListingScreen() {
 
 const styles = StyleSheet.create({
   flawNudge: { fontSize: 12, color: '#9A6B00', marginTop: -4 },
+  flawNone: { alignSelf: 'flex-start', paddingVertical: 4 },
+  flawNoneText: { fontSize: 13, fontWeight: '600', color: colors.textSecondary, textDecorationLine: 'underline' },
   flawNoteInput: {
     borderWidth: 1,
     borderColor: colors.border,

@@ -378,6 +378,12 @@
     "noteLabel": "瑕疵说明",
     "notePlaceholder": "划痕、污渍、缺件等 — 越诚实越可信。",
     "defectiveNudge": "已选择\\u201c有瑕疵\\u201d — 补充瑕疵照片或说明能让买家更放心。",
-    "toggle": "有瑕疵"
+    "toggle": "有瑕疵",
+    "movePhoto": "移动照片",
+    "moveToFlaws": "移到瑕疵照片",
+    "moveToMain": "移到主图",
+    "none": "无瑕疵 — 清空此栏",
+    "flawFull": "瑕疵照片已满（5张）",
+    "mainFull": "主图已满（10张）"
   }
 }
