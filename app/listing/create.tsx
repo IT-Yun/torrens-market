@@ -160,6 +160,8 @@ export default function CreateListingScreen() {
   const [attributes, setAttributes] = useState<Record<string, unknown>>({});
   const [busy, setBusy] = useState(false);
   const [hasFlaws, setHasFlaws] = useState(false);
+  const [arrangeMode, setArrangeMode] = useState(false);
+  const [arrangeSel, setArrangeSel] = useState<string[]>([]);
   const [flawShots, setFlawShots] = useState<ImagePickerAsset[]>([]);
   const [flawNote, setFlawNote] = useState('');
   const [uploadProgress, setUploadProgress] = useState<[number, number] | null>(null);
@@ -299,13 +301,41 @@ export default function CreateListingScreen() {
         {/* photos (unchanged in edit mode) */}
         {!editId && (
           <>
-        <Text style={styles.sectionTitle}>
-          {t('listingCreate.photos')} ({photos.length}/{MAX_PHOTOS})
-        </Text>
+        <View style={styles.photoHeaderRow}>
+          <Text style={styles.sectionTitle}>
+            {t('listingCreate.photos')} ({photos.length}/{MAX_PHOTOS})
+          </Text>
+          {photos.length > 1 && (
+            <Pressable
+              style={[styles.arrangeBtn, arrangeMode && styles.arrangeBtnActive]}
+              onPress={() => {
+                if (arrangeMode) {
+                  setPhotos((prev) => {
+                    const keyOf = (p: ImagePickerAsset) => p.assetId ?? p.uri;
+                    const chosen = arrangeSel
+                      .map((k) => prev.find((p) => keyOf(p) === k))
+                      .filter(Boolean) as ImagePickerAsset[];
+                    const rest = prev.filter((p) => !arrangeSel.includes(keyOf(p)));
+                    return [...chosen, ...rest];
+                  });
+                  setArrangeMode(false);
+                  setArrangeSel([]);
+                } else {
+                  setArrangeMode(true);
+                  setArrangeSel([]);
+                }
+              }}
+              accessibilityRole="button"
+            >
+              <Text style={[styles.arrangeBtnText, arrangeMode && { color: colors.white }]}>
+                {t(arrangeMode ? 'common.done' : 'listingCreate.arrange')}
+              </Text>
+            </Pressable>
+          )}
+        </View>
         <Text style={styles.photoTip}>{t('listingCreate.photoTip')}</Text>
         {photos.length > 1 && <Text style={styles.photoTip}>{t('listingCreate.photoOrderTip')}</Text>}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={styles.photoRow}>
+        <View style={styles.photoGrid}>
             <Pressable
               style={[styles.addPhoto, !uploadsEnabled && { opacity: 0.4 }]}
               disabled={!uploadsEnabled}
@@ -352,12 +382,23 @@ export default function CreateListingScreen() {
             </Pressable>
             {/* Photo order = upload order = what buyers see. Index 0 is the cover.
                 Tap = make cover, arrows = move one step, X = remove. */}
-            {photos.map((p, idx) => (
-              <View key={p.assetId ?? p.uri} style={styles.photoCell}>
+            {photos.map((p, idx) => {
+              const cellKey = p.assetId ?? p.uri;
+              const selIdx = arrangeSel.indexOf(cellKey);
+              return (
+              <View key={cellKey} style={styles.photoCell}>
                 <Pressable
-                  onPress={() =>
-                    setPhotos((prev) => (idx === 0 ? prev : [prev[idx], ...prev.filter((_, i) => i !== idx)]))
-                  }
+                  onPress={() => {
+                    if (arrangeMode) {
+                      setArrangeSel((prev) =>
+                        prev.includes(cellKey)
+                          ? prev.filter((k) => k !== cellKey)
+                          : [...prev, cellKey],
+                      );
+                      return;
+                    }
+                    setPhotos((prev) => (idx === 0 ? prev : [prev[idx], ...prev.filter((_, i) => i !== idx)]));
+                  }}
                   onLongPress={() =>
                     sheet.showConfirm(t('flaws.movePhoto'), undefined, [
                       {
@@ -377,11 +418,25 @@ export default function CreateListingScreen() {
                     ])
                   }
                 >
-                  <Image source={{ uri: p.uri }} style={[styles.photo, idx === 0 && styles.photoCover]} />
-                  <View style={[styles.photoIndex, idx === 0 && styles.photoIndexCover]}>
-                    <Text style={styles.photoIndexText}>{idx === 0 ? t('listingCreate.cover') : idx + 1}</Text>
-                  </View>
+                  <Image
+                    source={{ uri: p.uri }}
+                    style={[
+                      styles.photo,
+                      idx === 0 && !arrangeMode && styles.photoCover,
+                      arrangeMode && selIdx >= 0 && styles.photoArranged,
+                    ]}
+                  />
+                  {arrangeMode ? (
+                    <View style={[styles.arrangeBadge, selIdx >= 0 && styles.arrangeBadgeOn]}>
+                      {selIdx >= 0 && <Text style={styles.arrangeBadgeText}>{selIdx + 1}</Text>}
+                    </View>
+                  ) : (
+                    <View style={[styles.photoIndex, idx === 0 && styles.photoIndexCover]}>
+                      <Text style={styles.photoIndexText}>{idx === 0 ? t('listingCreate.cover') : idx + 1}</Text>
+                    </View>
+                  )}
                 </Pressable>
+                {!arrangeMode && (
                 <Pressable
                   style={styles.photoRemove}
                   hitSlop={6}
@@ -389,40 +444,11 @@ export default function CreateListingScreen() {
                 >
                   <X size={12} color={colors.white} strokeWidth={2.5} />
                 </Pressable>
-                <View style={styles.photoMoveRow}>
-                  <Pressable
-                    style={[styles.photoMove, idx === 0 && styles.photoMoveDisabled]}
-                    disabled={idx === 0}
-                    hitSlop={4}
-                    onPress={() =>
-                      setPhotos((prev) => {
-                        const next = [...prev];
-                        [next[idx - 1], next[idx]] = [next[idx], next[idx - 1]];
-                        return next;
-                      })
-                    }
-                  >
-                    <ChevronLeft size={14} color={colors.text} strokeWidth={2.5} />
-                  </Pressable>
-                  <Pressable
-                    style={[styles.photoMove, idx === photos.length - 1 && styles.photoMoveDisabled]}
-                    disabled={idx === photos.length - 1}
-                    hitSlop={4}
-                    onPress={() =>
-                      setPhotos((prev) => {
-                        const next = [...prev];
-                        [next[idx], next[idx + 1]] = [next[idx + 1], next[idx]];
-                        return next;
-                      })
-                    }
-                  >
-                    <ChevronRight size={14} color={colors.text} strokeWidth={2.5} />
-                  </Pressable>
-                </View>
+                )}
               </View>
-            ))}
-          </View>
-        </ScrollView>
+              );
+            })}
+        </View>
           </>
         )}
 
@@ -431,8 +457,7 @@ export default function CreateListingScreen() {
             <Text style={styles.sectionTitle}>
               {t('flaws.addLabel')} ({flawShots.length}/5)
             </Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View style={styles.photoRow}>
+            <View style={styles.photoGrid}>
                 <Pressable
                   style={[styles.addPhoto, !uploadsEnabled && { opacity: 0.4 }]}
                   disabled={!uploadsEnabled || flawShots.length >= 5}
@@ -495,8 +520,7 @@ export default function CreateListingScreen() {
                     </Pressable>
                   </View>
                 ))}
-              </View>
-            </ScrollView>
+            </View>
             <Pressable
               style={styles.flawNone}
               onPress={() => {
@@ -693,6 +717,34 @@ export default function CreateListingScreen() {
 
 const styles = StyleSheet.create({
   flawNudge: { fontSize: 12, color: '#9A6B00', marginTop: -4 },
+  photoHeaderRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  photoGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
+  arrangeBtn: {
+    borderWidth: 1,
+    borderColor: colors.primary,
+    borderRadius: radius.full,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    backgroundColor: colors.white,
+  },
+  arrangeBtnActive: { backgroundColor: colors.primary },
+  arrangeBtnText: { fontSize: 12, fontWeight: '700', color: colors.primary },
+  photoArranged: { borderWidth: 3, borderColor: colors.primary },
+  arrangeBadge: {
+    position: 'absolute',
+    left: 6,
+    top: 6,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: colors.white,
+    backgroundColor: 'rgba(20,30,26,0.45)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  arrangeBadgeOn: { backgroundColor: colors.primary },
+  arrangeBadgeText: { color: colors.white, fontSize: 12, fontWeight: '800' },
   flawNone: { alignSelf: 'flex-start', paddingVertical: 4 },
   flawNoneText: { fontSize: 13, fontWeight: '600', color: colors.textSecondary, textDecorationLine: 'underline' },
   flawNoteInput: {

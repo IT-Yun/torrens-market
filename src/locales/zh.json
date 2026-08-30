@@ -10,7 +10,8 @@
     "free": "免费",
     "back": "返回",
     "restricted": "你的账号已被限制。如有疑问请联系支持。",
-    "ok": "好的"
+    "ok": "好的",
+    "done": "完成"
   },
   "onboarding": {
     "chooseLanguage": "选择你的语言",
@@ -124,8 +125,9 @@
     "offersEnabled": "接受出价",
     "offersHint": "关闭后为一口价，买家无法出价。",
     "cover": "封面",
-    "photoOrderTip": "点击照片设为封面。用箭头调整顺序，买家将按此顺序看到照片。",
-    "optionalHint": "不确定可留空"
+    "photoOrderTip": "点按 = 封面 · 排序 = 按想要的顺序点按 · 长按移到瑕疵照片",
+    "optionalHint": "不确定可留空",
+    "arrange": "排序"
   },
   "listingDetail": {
     "chat": "联系卖家",

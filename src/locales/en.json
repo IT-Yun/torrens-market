@@ -10,7 +10,8 @@
     "free": "Free",
     "back": "Back",
     "restricted": "Your account is restricted. Contact support if you think this is a mistake.",
-    "ok": "OK"
+    "ok": "OK",
+    "done": "Done"
   },
   "onboarding": {
     "chooseLanguage": "Choose your language",
@@ -124,8 +125,9 @@
     "offersEnabled": "Accept price offers",
     "offersHint": "Off = firm price; buyers can't send offers.",
     "cover": "Cover",
-    "photoOrderTip": "Tap a photo to make it the cover. Use the arrows to reorder; buyers see photos in this order.",
-    "optionalHint": "Leave blank if unsure"
+    "photoOrderTip": "Tap = cover · Arrange = tap photos in your order · long-press to move to flaws",
+    "optionalHint": "Leave blank if unsure",
+    "arrange": "Arrange"
   },
   "listingDetail": {
     "chat": "Chat with seller",
