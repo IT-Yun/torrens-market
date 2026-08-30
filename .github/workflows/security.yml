@@ -17,13 +17,18 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0 # full history so a secret in any past commit is caught
+      # Run the gitleaks binary directly: the marketplace action requires a paid
+      # license for organization-owned repos (IT-Yun), the CLI does not.
       - name: gitleaks
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: 'false'
+        run: |
+          set -euo pipefail
+          VER=$(curl -fsSL https://api.github.com/repos/gitleaks/gitleaks/releases/latest | sed -n 's/.*"tag_name": *"v\([^"]*\)".*/\1/p')
+          curl -fsSL "https://github.com/gitleaks/gitleaks/releases/download/v${VER}/gitleaks_${VER}_linux_x64.tar.gz" | tar -xz gitleaks
+          ./gitleaks version
+          ./gitleaks git --config .gitleaks.toml --redact --verbose --exit-code 1 .
 
   codeql:
     name: CodeQL (JS/TS)
@@ -32,8 +37,8 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: github/codeql-action/init@v3
+      - uses: actions/checkout@v5
+      - uses: github/codeql-action/init@v4
         with:
           languages: javascript-typescript
-      - uses: github/codeql-action/analyze@v3
+      - uses: github/codeql-action/analyze@v4
