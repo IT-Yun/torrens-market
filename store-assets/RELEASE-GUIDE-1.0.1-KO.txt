@@ -1,12 +1,12 @@
 ════════════════════════════════════════
  1.0.1 앱 업데이트 — ASC 제출 가이드
- (빌드 10 · TestFlight 처리 완료 후)
+ (빌드 12 · TestFlight 처리 완료 후)
 ════════════════════════════════════════
 
-【0】 (선택) TestFlight에서 빌드 10 설치해 한 바퀴
+【0】 (선택) TestFlight에서 빌드 12 설치해 한 바퀴
 ----------------------------------------
 시트 드래그로 닫기 · 햅틱 · 원형 크롭 · 국가 검색 선택
-+ 국기 · 프로필 맨 아래 "v1.0.1 (10)"
++ 국기 · 사진 순서/대표 지정 · 카드 조건 배너 · 프로필 맨 아래 "v1.0.1 (12)"
 
 【1】 새 버전 만들기
 ----------------------------------------
@@ -68,7 +68,7 @@ A smoother, more polished Torrens Market:
 ----------------------------------------
 - 스크린샷/설명: 그대로 (변경 불필요)
 - App Review Information → Notes: 기존 GUEST ACCESS 내용 유지 + 맨 위에 한 줄 추가:
-  "1.0.1 is a visual/interaction update (sheets, haptics, avatar crop, country picker); no new data collection."
+  "1.0.1 is a visual/interaction update (sheets, haptics, avatar crop, country picker, photo ordering, in-app update notice); no new data collection."
 - 암호화 질문: 안 뜸 (플래그 내장)
 - Version Release: "Manually release this version" 선택 (승인 후 직접 게시)
 
