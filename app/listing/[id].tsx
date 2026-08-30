@@ -68,6 +68,8 @@ export default function ListingDetailScreen() {
   const [liked, setLiked] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
   const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerSection, setViewerSection] = useState<'main' | 'flaw'>('main');
+  const [viewerStart, setViewerStart] = useState(0);
   const [distanceKm, setDistanceKm] = useState<number | null>(null);
   const [sellerTrust, setSellerTrust] = useState<ProfileTrust | null>(null);
   const [otherListings, setOtherListings] = useState<ListingCard[]>([]);
@@ -232,7 +234,11 @@ export default function ListingDetailScreen() {
               photos.map((p) => (
                 <Pressable
                   key={p.storage_path}
-                  onPress={() => setViewerOpen(true)}
+                  onPress={() => {
+                    setViewerSection('main');
+                    setViewerStart(photoIndex);
+                    setViewerOpen(true);
+                  }}
                   accessibilityRole="imagebutton"
                 >
                   <Image source={{ uri: photoUrl(p.storage_path) }} style={styles.photo} />
@@ -335,12 +341,21 @@ export default function ListingDetailScreen() {
               {flaws.length > 0 && (
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <View style={{ flexDirection: 'row', gap: 8 }}>
-                    {flaws.map((p) => (
-                      <Image
+                    {flaws.map((p, i) => (
+                      <Pressable
                         key={p.storage_path}
-                        source={{ uri: photoUrl(p.storage_path) }}
-                        style={styles.flawThumb}
-                      />
+                        onPress={() => {
+                          setViewerSection('flaw');
+                          setViewerStart(i);
+                          setViewerOpen(true);
+                        }}
+                        accessibilityRole="imagebutton"
+                      >
+                        <Image
+                          source={{ uri: photoUrl(p.storage_path) }}
+                          style={styles.flawThumb}
+                        />
+                      </Pressable>
                     ))}
                   </View>
                 </ScrollView>
@@ -508,9 +523,9 @@ export default function ListingDetailScreen() {
             horizontal
             pagingEnabled
             showsHorizontalScrollIndicator={false}
-            contentOffset={{ x: photoIndex * width, y: 0 }}
+            contentOffset={{ x: viewerStart * width, y: 0 }}
           >
-            {photos.map((p) => (
+            {(viewerSection === 'flaw' ? flaws : photos).map((p) => (
               <Image
                 key={p.storage_path}
                 source={{ uri: photoUrl(p.storage_path) }}
