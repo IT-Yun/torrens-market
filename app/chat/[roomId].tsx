@@ -115,18 +115,24 @@ export default function ChatRoomScreen() {
       <View style={styles.header}>
         <BackButton />
         {header && (
-          <Pressable
-            style={styles.headerCenter}
-            onPress={() => router.push(`/listing/${header.listingId}`)}
-          >
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <View style={styles.headerCenter}>
+            {/* Name → the other person's profile; listing title → the listing.
+                Previously the whole block routed to the listing (user-reported bug). */}
+            <Pressable
+              hitSlop={6}
+              disabled={!header.otherId}
+              onPress={() => router.push(`/user/${header.otherId}`)}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
+            >
               <Text style={styles.headerName}>{header.otherName}</Text>
               <TrustBadge trust={otherTrust} compact />
-            </View>
-            <Text style={styles.headerListing} numberOfLines={1}>
-              {header.listingTitle}
-            </Text>
-          </Pressable>
+            </Pressable>
+            <Pressable hitSlop={4} onPress={() => router.push(`/listing/${header.listingId}`)}>
+              <Text style={styles.headerListing} numberOfLines={1}>
+                {header.listingTitle}
+              </Text>
+            </Pressable>
+          </View>
         )}
         <View style={{ width: 24 }} />
       </View>

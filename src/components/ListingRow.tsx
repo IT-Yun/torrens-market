@@ -3,11 +3,36 @@ import { useTranslation } from 'react-i18next';
 import { Heart, Package } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { photoUrl, type ListingCard } from '../lib/listings';
-import { attributeSnippet, formatPrice, timeAgo } from '../lib/format';
+import { formatPrice, timeAgo } from '../lib/format';
 import { formatDistance, haversineKm } from '../lib/geo';
 
 export { timeAgo };
 import { colors, radius, spacing } from '../theme';
+
+/**
+ * Deal-condition banners shown under the title on every card, so a buyer can see
+ * "pickup only" / "cash only" before opening the listing. Each condition has its own
+ * colour so they read at a glance (pickup = teal, delivery = blue, collect = purple,
+ * cash = amber, bank transfer = grey). `any` payment shows nothing.
+ */
+const BADGE_COLORS: Record<string, { bg: string; fg: string }> = {
+  pickup_only: { bg: colors.primarySoft, fg: colors.primary },
+  seller_delivers: { bg: '#E8F0FB', fg: '#2A5DB0' },
+  buyer_collects: { bg: '#EFEAF9', fg: '#6A4CAF' },
+  cash_only: { bg: '#FFF3DF', fg: '#B4700A' },
+  bank_transfer: { bg: colors.surface, fg: colors.textSecondary },
+};
+
+function DealBadge({ id, label }: { id: string; label: string }) {
+  const c = BADGE_COLORS[id] ?? { bg: colors.surface, fg: colors.textSecondary };
+  return (
+    <View style={[styles.badge, { backgroundColor: c.bg }]}>
+      <Text style={[styles.badgeText, { color: c.fg }]} numberOfLines={1}>
+        {label}
+      </Text>
+    </View>
+  );
+}
 
 export function ListingRow({
   item,
@@ -18,11 +43,14 @@ export function ListingRow({
 }) {
   const { t } = useTranslation();
   const photo = [...item.listing_photos].sort((a, b) => a.sort_order - b.sort_order)[0];
-  const snippet = attributeSnippet(item.attributes);
   const distance =
     viewerPos && item.lat != null && item.lng != null
       ? formatDistance(haversineKm(viewerPos.lat, viewerPos.lng, item.lat, item.lng))
       : null;
+  const badges: { id: string; label: string }[] = [];
+  if (item.pickup_mode) badges.push({ id: item.pickup_mode, label: t(`pickupModes.${item.pickup_mode}`) });
+  if (item.payment_method && item.payment_method !== 'any')
+    badges.push({ id: item.payment_method, label: t(`paymentMethods.${item.payment_method}`) });
   return (
     <Pressable
       style={({ pressed }) => [styles.card, pressed && { backgroundColor: colors.surface }]}
@@ -53,21 +81,16 @@ export function ListingRow({
         <Text style={styles.cardTitle} numberOfLines={2}>
           {item.title}
         </Text>
-        {snippet && (
-          <Text style={styles.snippet} numberOfLines={1}>
-            {snippet}
-          </Text>
+        {badges.length > 0 && (
+          <View style={styles.badgeRow}>
+            {badges.map((b) => (
+              <DealBadge key={b.id} id={b.id} label={b.label} />
+            ))}
+          </View>
         )}
-        <View style={styles.metaRow}>
-          <Text style={styles.cardMeta}>
-            {[item.suburb, distance, timeAgo(item.created_at)].filter(Boolean).join(' · ')}
-          </Text>
-          {item.pickup_mode === 'pickup_only' && (
-            <View style={styles.pickupBadge}>
-              <Text style={styles.pickupBadgeText}>{t('pickupModes.pickup_only')}</Text>
-            </View>
-          )}
-        </View>
+        <Text style={styles.cardMeta} numberOfLines={1}>
+          {[item.suburb, distance, timeAgo(item.created_at)].filter(Boolean).join(' · ')}
+        </Text>
         <View style={styles.priceRow}>
           <Text style={styles.cardPrice}>{formatPrice(item.price_cents, t('common.free'))}</Text>
           {(item.favorites_count ?? 0) > 0 && (
@@ -92,35 +115,23 @@ const styles = StyleSheet.create({
   },
   cardImage: { width: 104, height: 104, borderRadius: radius.md, backgroundColor: colors.surface },
   cardImagePlaceholder: { alignItems: 'center', justifyContent: 'center' },
-  cardBody: { flex: 1, gap: 2, justifyContent: 'center' },
+  cardBody: { flex: 1, gap: 3, justifyContent: 'center' },
   cardTitle: { fontSize: 15, color: colors.text, lineHeight: 20 },
-  snippet: {
-    fontSize: 12,
-    color: colors.primary,
-    fontWeight: '600',
-    backgroundColor: '#E8F3F1',
-    alignSelf: 'flex-start',
-    paddingHorizontal: 6,
-    paddingVertical: 1,
+  badgeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 4 },
+  badge: {
+    paddingHorizontal: 7,
+    paddingVertical: 2,
     borderRadius: radius.sm,
     overflow: 'hidden',
   },
+  badgeText: { fontSize: 11, fontWeight: '700' },
   cardMeta: { fontSize: 12, color: colors.textSecondary },
-  metaRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  pickupBadge: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.sm,
-    paddingHorizontal: 5,
-    paddingVertical: 1,
-  },
-  pickupBadgeText: { fontSize: 10, color: colors.textSecondary, fontWeight: '600' },
   cardPrice: { fontSize: 16, fontWeight: '700', color: colors.text },
   priceRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 2,
+    marginTop: 1,
   },
   likes: { flexDirection: 'row', alignItems: 'center', gap: 3 },
   statusOverlay: {

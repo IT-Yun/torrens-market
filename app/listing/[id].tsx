@@ -317,6 +317,9 @@ export default function ListingDetailScreen() {
               );
             })()}
 
+          {/* Description first, then the category attribute card (brand, warranty, ...) as supporting info */}
+          {listing.description ? <Text style={styles.description}>{listing.description}</Text> : null}
+
           {attributeRows.length > 0 && (
             <View style={styles.attrCard}>
               <Text style={styles.attrTitle}>{t('listingDetail.detailsTitle')}</Text>
@@ -328,8 +331,6 @@ export default function ListingDetailScreen() {
               ))}
             </View>
           )}
-
-          {listing.description ? <Text style={styles.description}>{listing.description}</Text> : null}
 
           {session?.user.id !== listing.seller_id && (
           <Pressable

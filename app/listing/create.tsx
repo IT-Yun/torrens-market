@@ -31,7 +31,7 @@ import { GuestCta } from '../../src/components/GuestCta';
 import { useAppConfig } from '../../src/lib/appConfig';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
-import { Camera, MapPin, ShieldCheck, Sparkles, X } from 'lucide-react-native';
+import { Camera, ChevronLeft, ChevronRight, MapPin, ShieldCheck, Sparkles, X } from 'lucide-react-native';
 import { SuburbField } from '../../src/components/SuburbField';
 import { suggestCategorySlug } from '../../src/lib/categorize';
 import { getApproxPosition } from '../../src/lib/location';
@@ -268,6 +268,7 @@ export default function CreateListingScreen() {
           {t('listingCreate.photos')} ({photos.length}/{MAX_PHOTOS})
         </Text>
         <Text style={styles.photoTip}>{t('listingCreate.photoTip')}</Text>
+        {photos.length > 1 && <Text style={styles.photoTip}>{t('listingCreate.photoOrderTip')}</Text>}
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.photoRow}>
             <Pressable
@@ -281,13 +282,58 @@ export default function CreateListingScreen() {
               <Camera size={24} color={colors.textSecondary} strokeWidth={1.8} />
               <Text style={styles.addPhotoText}>{t('listingCreate.addPhotos')}</Text>
             </Pressable>
+            {/* Photo order = upload order = what buyers see. Index 0 is the cover.
+                Tap = make cover, arrows = move one step, X = remove. */}
             {photos.map((p, idx) => (
-              <Pressable
-                key={p.assetId ?? p.uri}
-                onPress={() => setPhotos((prev) => prev.filter((_, i) => i !== idx))}
-              >
-                <Image source={{ uri: p.uri }} style={styles.photo} />
-              </Pressable>
+              <View key={p.assetId ?? p.uri} style={styles.photoCell}>
+                <Pressable
+                  onPress={() =>
+                    setPhotos((prev) => (idx === 0 ? prev : [prev[idx], ...prev.filter((_, i) => i !== idx)]))
+                  }
+                >
+                  <Image source={{ uri: p.uri }} style={[styles.photo, idx === 0 && styles.photoCover]} />
+                  <View style={[styles.photoIndex, idx === 0 && styles.photoIndexCover]}>
+                    <Text style={styles.photoIndexText}>{idx === 0 ? t('listingCreate.cover') : idx + 1}</Text>
+                  </View>
+                </Pressable>
+                <Pressable
+                  style={styles.photoRemove}
+                  hitSlop={6}
+                  onPress={() => setPhotos((prev) => prev.filter((_, i) => i !== idx))}
+                >
+                  <X size={12} color={colors.white} strokeWidth={2.5} />
+                </Pressable>
+                <View style={styles.photoMoveRow}>
+                  <Pressable
+                    style={[styles.photoMove, idx === 0 && styles.photoMoveDisabled]}
+                    disabled={idx === 0}
+                    hitSlop={4}
+                    onPress={() =>
+                      setPhotos((prev) => {
+                        const next = [...prev];
+                        [next[idx - 1], next[idx]] = [next[idx], next[idx - 1]];
+                        return next;
+                      })
+                    }
+                  >
+                    <ChevronLeft size={14} color={colors.text} strokeWidth={2.5} />
+                  </Pressable>
+                  <Pressable
+                    style={[styles.photoMove, idx === photos.length - 1 && styles.photoMoveDisabled]}
+                    disabled={idx === photos.length - 1}
+                    hitSlop={4}
+                    onPress={() =>
+                      setPhotos((prev) => {
+                        const next = [...prev];
+                        [next[idx], next[idx + 1]] = [next[idx + 1], next[idx]];
+                        return next;
+                      })
+                    }
+                  >
+                    <ChevronRight size={14} color={colors.text} strokeWidth={2.5} />
+                  </Pressable>
+                </View>
+              </View>
             ))}
           </View>
         </ScrollView>
@@ -510,6 +556,44 @@ const styles = StyleSheet.create({
   },
   addPhotoText: { fontSize: 10, color: colors.textSecondary, marginTop: 2 },
   photo: { width: 84, height: 84, borderRadius: radius.md },
+  photoCover: { borderWidth: 2, borderColor: colors.primary },
+  photoCell: { width: 84, gap: 4 },
+  photoIndex: {
+    position: 'absolute',
+    left: 4,
+    top: 4,
+    minWidth: 18,
+    height: 18,
+    paddingHorizontal: 5,
+    borderRadius: 9,
+    backgroundColor: 'rgba(20, 20, 20, 0.65)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  photoIndexCover: { backgroundColor: colors.primary },
+  photoIndexText: { color: colors.white, fontSize: 10, fontWeight: '700' },
+  photoRemove: {
+    position: 'absolute',
+    right: 4,
+    top: 4,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: 'rgba(20, 20, 20, 0.65)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  photoMoveRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  photoMove: {
+    width: 40,
+    height: 24,
+    borderRadius: radius.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  photoMoveDisabled: { opacity: 0.3 },
   chipWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   chipScroll: { flexDirection: 'row', gap: spacing.sm, paddingVertical: 2 },
   detailsCard: {

@@ -121,7 +121,9 @@
     "paymentMethod": "결제 방식",
     "requiredHint": "* 이 카테고리의 필수 항목",
     "offersEnabled": "가격 제안 받기",
-    "offersHint": "끄면 정가 판매 — 구매자가 가격 제안을 보낼 수 없어요."
+    "offersHint": "끄면 정가 판매 — 구매자가 가격 제안을 보낼 수 없어요.",
+    "cover": "대표",
+    "photoOrderTip": "사진을 누르면 대표사진이 됩니다. 화살표로 순서를 바꾸세요. 구매자에게 이 순서로 보입니다."
   },
   "listingDetail": {
     "chat": "판매자와 채팅",

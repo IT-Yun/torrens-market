@@ -121,7 +121,9 @@
     "paymentMethod": "支付方式",
     "requiredHint": "* 此分类的必填项",
     "offersEnabled": "接受出价",
-    "offersHint": "关闭后为一口价，买家无法出价。"
+    "offersHint": "关闭后为一口价，买家无法出价。",
+    "cover": "封面",
+    "photoOrderTip": "点击照片设为封面。用箭头调整顺序，买家将按此顺序看到照片。"
   },
   "listingDetail": {
     "chat": "联系卖家",

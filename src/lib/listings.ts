@@ -31,6 +31,7 @@ export type ListingCard = {
   lat: number | null;
   lng: number | null;
   pickup_mode: string;
+  payment_method?: string | null;
   bumped_at?: string | null;
   favorites_count?: number;
   listing_photos: { storage_path: string; sort_order: number }[];
@@ -92,7 +93,7 @@ export async function fetchListings(categoryId?: number | null): Promise<Listing
   let query = supabase
     .from('listings')
     .select(
-      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, bumped_at, listing_photos (storage_path, sort_order)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, payment_method, bumped_at, listing_photos (storage_path, sort_order)',
     )
     .eq('status', 'active')
     .order('sort_ts', { ascending: false })
@@ -270,7 +271,7 @@ export async function fetchSellerListings(
   let query = supabase
     .from('listings')
     .select(
-      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, bumped_at, listing_photos (storage_path, sort_order)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, payment_method, bumped_at, listing_photos (storage_path, sort_order)',
     )
     .eq('seller_id', sellerId)
     .eq('status', 'active')
@@ -286,7 +287,7 @@ export async function fetchMyListings(userId: string): Promise<ListingCard[]> {
   const { data, error } = await supabase
     .from('listings')
     .select(
-      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, bumped_at, listing_photos (storage_path, sort_order)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, payment_method, bumped_at, listing_photos (storage_path, sort_order)',
     )
     .eq('seller_id', userId)
     .neq('status', 'deleted')
