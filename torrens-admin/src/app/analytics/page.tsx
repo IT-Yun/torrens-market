@@ -45,7 +45,7 @@ export default async function Analytics() {
         <Card><Breakdown title="Language" rows={topN(P.map((p) => p.preferred_language))} total={P.length} /></Card>
         <Card><Breakdown title="Nationality" rows={topN(P.map((p) => p.nationality))} total={P.length} /></Card>
         <Card><Breakdown title="Member suburbs" rows={topN(P.map((p) => p.suburb))} total={P.length} /></Card>
-        <Card><Breakdown title="Trust tiers" rows={topN((trust.data ?? []).map((t) => tier(t.trust_points ?? 0)), 6)} total={trust.data?.length ?? 0} /></Card>
+        <Card><Breakdown title="Trust tiers" rows={topN([...(trust.data ?? []).map((t) => tier(t.trust_points ?? 0)), ...Array(Math.max(0, P.length - (trust.data?.length ?? 0))).fill('quokka')], 6)} total={P.length} /></Card>
       </div>
       <div className="mt-6 grid gap-4 lg:grid-cols-4">
         <Card><Breakdown title="Listing categories" rows={topN(L.map((l: { category_id: number }) => catName(l.category_id)))} total={L.length} /></Card>

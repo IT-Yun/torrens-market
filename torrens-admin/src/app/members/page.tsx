@@ -2,6 +2,7 @@ import { db, type Profile } from '@/lib/db';
 import { H1, Table, Badge, Btn, Empty } from '@/components/ui';
 import { when, ago } from '@/lib/format';
 import { setBanned, deleteUser } from '@/lib/actions';
+import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,7 +33,7 @@ export default async function Members({ searchParams }: { searchParams: Promise<
           {rows.map((p) => (
             <tr key={p.id} className="align-top">
               <td className="px-4 py-3">
-                <div className="font-medium">{p.display_name || <span className="text-stone-400">(no name)</span>}</div>
+                <Link href={`/members/${p.id}`} className="font-medium text-teal-800 hover:underline">{p.display_name || <span className="text-stone-400">(no name)</span>}</Link>
                 <div className="text-xs text-stone-500">{email(p.id)}</div>
                 <div className="font-mono text-[10px] text-stone-400">{p.id}</div>
               </td>

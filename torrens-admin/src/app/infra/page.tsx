@@ -45,7 +45,7 @@ export default async function Infra() {
             <dt className="text-stone-500">Latest builds</dt><dd className="text-xs">{bl.slice(0, 3).map((x) => <div key={x.id}>{x.appVersion} ({x.appBuildVersion}) <Badge tone={x.status === 'FINISHED' ? 'green' : x.status === 'IN_PROGRESS' ? 'amber' : 'stone'}>{x.status}</Badge> <span className="text-stone-400">{ago(x.createdAt)}</span></div>)}{!bl.length && '—'}</dd>
           </dl>
           <div className="mt-3 text-sm font-semibold">Production OTA (newest first)</div>
-          <ul className="mt-1 space-y-1 text-xs">{ota.map((u) => <li key={u.group}><span className="font-mono text-teal-700">{u.group.slice(0, 8)}</span> <span className="text-stone-400">rt {u.runtimeVersion} · {ago(u.createdAt)}</span> — {u.message}</li>)}{!ota.length && <li className="text-stone-400">eas-cli unavailable</li>}</ul>
+          <ul className="mt-1 space-y-1 text-xs">{ota.map((u) => <li key={u.group}><span className="font-mono text-teal-700">{u.group.slice(0, 8)}</span> <span className="text-stone-400">rt {u.runtimeVersion}</span> — {u.message}</li>)}{!ota.length && <li className="text-stone-400">eas-cli unavailable</li>}</ul>
           <p className="mt-2 text-[11px] text-stone-500">Rollback: <code>eas update:republish --group &lt;previous&gt;</code></p>
         </Card>
       </div>
