@@ -29,6 +29,7 @@ export default async function Dashboard() {
     db.from('profiles').select('id', { count: 'exact', head: true }).eq('banned', true),
   ]);
   const b = lastBackup();
+  const bAgeH = b?.stamp ? (Date.now() - new Date(`${b.stamp.slice(0,4)}-${b.stamp.slice(4,6)}-${b.stamp.slice(6,8)}T${b.stamp.slice(9,11)}:${b.stamp.slice(11,13)}:00`).getTime()) / 3600e3 : Infinity;
   const mb = (n?: number) => (n ? (n / 1048576).toFixed(1) + ' MB' : '—');
   return (
     <>
@@ -41,15 +42,15 @@ export default async function Dashboard() {
       </div>
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         <Card>
-          <div className="text-sm font-semibold">Last local backup</div>
-          {b ? (
+          <div className="flex items-center justify-between"><div className="text-sm font-semibold">Last local backup</div>{bAgeH > 36 && <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800">STALE {Math.round(bAgeH)}h</span>}</div>
+          {b && b.dbBytes ? (
             <dl className="mt-2 grid grid-cols-2 gap-y-1 text-sm">
               <dt className="text-stone-500">Snapshot</dt><dd className="tabular-nums">{b.stamp} ({b.count} kept)</dd>
               <dt className="text-stone-500">Database</dt><dd>{mb(b.dbBytes)}</dd>
               <dt className="text-stone-500">Storage files</dt><dd>{b.files ?? '—'} · {mb(b.fileBytes)}</dd>
               <dt className="text-stone-500">Took</dt><dd>{b.tookSec ? `${b.tookSec}s` : '—'}</dd>
             </dl>
-          ) : <p className="mt-2 text-sm text-stone-500">No snapshot found in {process.env.BACKUP_DIR}</p>}
+          ) : <p className="mt-2 rounded-md bg-red-50 p-2 text-sm font-medium text-red-700">⚠ No usable snapshot — last backup failed or never ran. Run one from Infra &amp; releases.</p>}
           <p className="mt-3 text-xs text-stone-500">Daily 03:30 via launchd · mirrored to iCloud Drive · Telegram on failure</p>
         </Card>
         <Card>

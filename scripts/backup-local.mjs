@@ -28,7 +28,12 @@ const PG_DUMP = ['/opt/homebrew/opt/postgresql@17/bin/pg_dump', '/opt/homebrew/b
 const NOTIFY = '/Users/seungyunlee/Workspace/나만의 ai 만들기 /seanwiki/telegram-bridge/notify.py';
 const BASE = join(homedir(), 'Backups', 'torrens-market');
 const ICLOUD = join(homedir(), 'Library/Mobile Documents/com~apple~CloudDocs/TorrensMarket-Backups');
-const stamp = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, '').replace(/(\d{8})(\d{4})/, '$1-$2');
+// Local (Adelaide) time: a snapshot named 20260830-1812 for a 31 Aug 03:42 run
+// reads like a day-old backup to the operator. Name by wall-clock time.
+const _now = new Date();
+const _p = (n) => String(n).padStart(2, '0');
+const _l = new Date(_now.toLocaleString('en-US', { timeZone: 'Australia/Adelaide' }));
+const stamp = `${_l.getFullYear()}${_p(_l.getMonth() + 1)}${_p(_l.getDate())}-${_p(_l.getHours())}${_p(_l.getMinutes())}`;
 const dir = join(BASE, stamp);
 mkdirSync(dir, { recursive: true });
 const t0 = Date.now();
@@ -80,6 +85,9 @@ try {
 } catch (e) {
   const msg = String(e?.message ?? e).slice(0, 300);
   console.error('BACKUP FAILED:', msg);
+  // never leave a partial snapshot behind — the console treats the newest
+  // folder as the last good backup
+  try { rmSync(dir, { recursive: true, force: true }); } catch {}
   notify('error', `Backup FAILED ${stamp}: ${msg}`);
   process.exit(1);
 }
