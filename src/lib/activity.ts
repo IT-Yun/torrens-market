@@ -7,7 +7,14 @@ import { supabase } from './supabase';
  * and flip read_at via RPCs.
  */
 
-export type ActivityKind = 'message' | 'offer' | 'meetup' | 'review' | 'favorite' | 'system';
+export type ActivityKind =
+  | 'message'
+  | 'offer'
+  | 'meetup'
+  | 'review'
+  | 'favorite'
+  | 'review_request'
+  | 'system';
 
 export type Activity = {
   id: string;

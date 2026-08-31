@@ -9,6 +9,8 @@ import { ArrowUp, MoreHorizontal } from 'lucide-react-native';
 import {
   bumpListing,
   canBump,
+  fetchListingChatPartners,
+  markListingSold,
   fetchMyListings,
   formatPrice,
   photoUrl,
@@ -120,8 +122,19 @@ export default function MyListingsScreen() {
                     styles.bumpButton,
                     (item.status !== 'active' || !canBump(item.bumped_at)) && { opacity: 0.35 },
                   ]}
-                  disabled={item.status !== 'active' || !canBump(item.bumped_at)}
+                  disabled={item.status !== 'active'}
                   onPress={async () => {
+                    if (!canBump(item.bumped_at)) {
+                      const hours = Math.max(
+                        1,
+                        Math.ceil(
+                          (24 * 3600 * 1000 - (Date.now() - new Date(item.bumped_at!).getTime())) /
+                            3600000,
+                        ),
+                      );
+                      sheet.showToast(t('myListings.bumpIn', { hours }));
+                      return;
+                    }
                     try {
                       await bumpListing(item.id);
                       sheet.showToast(t('myListings.bumped'));
@@ -143,6 +156,40 @@ export default function MyListingsScreen() {
                       label: t(ACTION_LABEL[next]),
                       variant: 'secondary' as const,
                       onPress: async () => {
+                        if (next === 'sold') {
+                          if (!session) return;
+                          const partners = await fetchListingChatPartners(item.id, session.user.id).catch(
+                            () => [],
+                          );
+                          setTimeout(
+                            () =>
+                              sheet.showConfirm(
+                                t('soldTo.title'),
+                                t('soldTo.body'),
+                                [
+                                  ...partners.map((partner) => ({
+                                    label: partner.name,
+                                    variant: 'secondary' as const,
+                                    onPress: async () => {
+                                      await markListingSold(item.id, partner.userId).catch(() => {});
+                                      sheet.showToast(t('soldTo.reviewRequested'));
+                                      load();
+                                    },
+                                  })),
+                                  {
+                                    label: t('soldTo.outside'),
+                                    variant: 'secondary' as const,
+                                    onPress: async () => {
+                                      await markListingSold(item.id, null).catch(() => {});
+                                      load();
+                                    },
+                                  },
+                                ],
+                              ),
+                            380,
+                          );
+                          return;
+                        }
                         await updateListingStatus(item.id, next).catch(() => {});
                         load();
                       },
@@ -177,17 +224,17 @@ export default function MyListingsScreen() {
                           router.push({ pathname: '/listing/create', params: { editId: item.id } }),
                       },
                       {
-                        label: t('myListings.delete'),
+                        label: t(sold ? 'myListings.hide' : 'myListings.delete'),
                         variant: 'destructive',
                         onPress: () =>
                           setTimeout(
                             () =>
                               sheet.showConfirm(
-                                t('myListings.deleteTitle'),
-                                t('myListings.deleteConfirm'),
+                                t(sold ? 'myListings.hideTitle' : 'myListings.deleteTitle'),
+                                t(sold ? 'myListings.hideConfirm' : 'myListings.deleteConfirm'),
                                 [
                                   {
-                                    label: t('myListings.delete'),
+                                    label: t(sold ? 'myListings.hide' : 'myListings.delete'),
                                     variant: 'destructive',
                                     onPress: async () => {
                                       await updateListingStatus(item.id, 'deleted').catch(() => {});

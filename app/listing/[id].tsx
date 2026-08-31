@@ -26,6 +26,8 @@ import { useSession } from '../../src/lib/session';
 import {
   fetchCategories,
   fetchListing,
+  fetchListingChatPartners,
+  markListingSold,
   flawPhotos as flawPhotosOf,
   mainPhotos,
   updateListingStatus,
@@ -509,9 +511,34 @@ export default function ListingDetailScreen() {
               variant="secondary"
               title={t(listing.status === 'sold' ? 'myListings.markActive' : 'myListings.markSold')}
               onPress={async () => {
-                const next = listing.status === 'sold' ? 'active' : 'sold';
-                await updateListingStatus(listing.id, next).catch(() => {});
-                fetchListing(listing.id).then(setListing).catch(() => {});
+                if (listing.status === 'sold') {
+                  await updateListingStatus(listing.id, 'active').catch(() => {});
+                  fetchListing(listing.id).then(setListing).catch(() => {});
+                  return;
+                }
+                if (!session) return;
+                const partners = await fetchListingChatPartners(listing.id, session.user.id).catch(
+                  () => [],
+                );
+                sheet.showConfirm(t('soldTo.title'), t('soldTo.body'), [
+                  ...partners.map((partner) => ({
+                    label: partner.name,
+                    variant: 'secondary' as const,
+                    onPress: async () => {
+                      await markListingSold(listing.id, partner.userId).catch(() => {});
+                      sheet.showToast(t('soldTo.reviewRequested'));
+                      fetchListing(listing.id).then(setListing).catch(() => {});
+                    },
+                  })),
+                  {
+                    label: t('soldTo.outside'),
+                    variant: 'secondary' as const,
+                    onPress: async () => {
+                      await markListingSold(listing.id, null).catch(() => {});
+                      fetchListing(listing.id).then(setListing).catch(() => {});
+                    },
+                  },
+                ]);
               }}
             />
           </View>

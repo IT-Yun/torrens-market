@@ -213,7 +213,11 @@
     "showSold": "판매완료 보기",
     "review": "후기 쓰기",
     "noChatYet": "이 매물의 채팅이 아직 없어요.",
-    "changeStatus": "상태 변경"
+    "changeStatus": "상태 변경",
+    "bumpIn": "다음 끌올까지 약 {{hours}}시간",
+    "hide": "숨기기",
+    "hideTitle": "판매완료 매물을 숨길까요?",
+    "hideConfirm": "다른 사람에게는 보이지 않게 되고, 기록(채팅·후기)은 그대로 남아요."
   },
   "report": {
     "menuTitle": "신고 또는 차단",
@@ -365,7 +369,8 @@
     "kind_meetup": "{{name}}님이 직거래를 제안했어요",
     "kind_review": "새 거래 후기가 도착했어요",
     "kind_favorite": "{{name}}님이 매물을 찜했어요",
-    "kind_system": "안내"
+    "kind_system": "안내",
+    "kind_review_request": "구매 확정 — 판매자에게 후기를 남겨주세요!"
   },
   "photoSource": {
     "camera": "사진 찍기",
@@ -389,5 +394,11 @@
     "none": "하자 없음 — 이 섹션 비우기",
     "flawFull": "하자 사진이 가득 찼어요 (5장)",
     "mainFull": "대표 사진이 가득 찼어요 (10장)"
+  },
+  "soldTo": {
+    "title": "누구에게 판매했나요?",
+    "body": "구매자를 선택하면 그분에게 후기 요청이 가요.",
+    "outside": "앱 밖에서 판매했어요 (지인 등)",
+    "reviewRequested": "판매완료! 구매자에게 후기 요청을 보냈어요"
   }
 }

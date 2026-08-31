@@ -372,6 +372,41 @@ export async function updateListing(
   if (error) throw error;
 }
 
+export type ChatPartner = { userId: string; name: string };
+
+/** People the seller has chat rooms with on this listing (buyer candidates). */
+export async function fetchListingChatPartners(
+  listingId: string,
+  sellerId: string,
+): Promise<ChatPartner[]> {
+  const { data } = await supabase
+    .from('chat_rooms')
+    .select('chat_participants (user_id, profiles (display_name))')
+    .eq('listing_id', listingId);
+  const rows = (data ?? []) as unknown as {
+    chat_participants: { user_id: string; profiles: { display_name: string } | null }[];
+  }[];
+  const partners = new Map<string, string>();
+  for (const room of rows) {
+    for (const p of room.chat_participants) {
+      if (p.user_id !== sellerId) partners.set(p.user_id, p.profiles?.display_name ?? '?');
+    }
+  }
+  return [...partners.entries()].map(([userId, name]) => ({ userId, name }));
+}
+
+/** Mark sold with the buyer recorded (null = sold outside the app). */
+export async function markListingSold(
+  listingId: string,
+  soldToUserId: string | null,
+): Promise<void> {
+  const { error } = await supabase
+    .from('listings')
+    .update({ status: 'sold', sold_to_user_id: soldToUserId })
+    .eq('id', listingId);
+  if (error) throw error;
+}
+
 export async function updateListingStatus(
   listingId: string,
   status: 'active' | 'reserved' | 'sold' | 'deleted',

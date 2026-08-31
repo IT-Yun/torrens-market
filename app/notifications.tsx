@@ -23,6 +23,7 @@ import {
   type ActivityKind,
 } from '../src/lib/activity';
 import { formatPrice, timeAgo } from '../src/lib/format';
+import { findRoomForListing } from '../src/lib/chat';
 import { useSession } from '../src/lib/session';
 import { colors, radius, spacing } from '../src/theme';
 
@@ -31,6 +32,7 @@ const KIND_ICON: Record<ActivityKind, typeof Bell> = {
   offer: BadgeDollarSign,
   meetup: CalendarClock,
   review: Star,
+  review_request: Star,
   favorite: Heart,
   system: Info,
 };
@@ -60,6 +62,8 @@ export default function NotificationsScreen() {
       case 'review':
         // reviewer stays anonymous (ADR-015) — actor_id is NULL by design
         return t('notifCenter.kind_review');
+      case 'review_request':
+        return t('notifCenter.kind_review_request');
       case 'favorite':
         return t('notifCenter.kind_favorite', { name });
       default:
@@ -72,6 +76,13 @@ export default function NotificationsScreen() {
     setItems((prev) =>
       prev.map((row) => (row.id === item.id ? { ...row, read_at: new Date().toISOString() } : row)),
     );
+    if (item.kind === 'review_request' && item.listing_id && session) {
+      const room = await findRoomForListing(item.listing_id, session.user.id).catch(() => null);
+      if (room) {
+        router.push(`/chat/${room}`);
+        return;
+      }
+    }
     if (item.room_id) router.push(`/chat/${item.room_id}`);
     else if (item.kind === 'review') router.push('/my-reviews');
     else if (item.listing_id) router.push(`/listing/${item.listing_id}`);

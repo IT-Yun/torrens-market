@@ -213,7 +213,11 @@
     "showSold": "显示已售",
     "review": "写评价",
     "noChatYet": "该商品还没有聊天记录。",
-    "changeStatus": "更改状态"
+    "changeStatus": "更改状态",
+    "bumpIn": "距下次置顶约 {{hours}} 小时",
+    "hide": "隐藏",
+    "hideTitle": "隐藏这个已售商品？",
+    "hideConfirm": "其他人将看不到它，但记录（聊天·评价）会保留。"
   },
   "report": {
     "menuTitle": "举报或屏蔽",
@@ -365,7 +369,8 @@
     "kind_meetup": "{{name}}提议面交",
     "kind_review": "收到新的交易评价",
     "kind_favorite": "{{name}}收藏了你的商品",
-    "kind_system": "通知"
+    "kind_system": "通知",
+    "kind_review_request": "购买确认 — 给卖家留个评价吧！"
   },
   "photoSource": {
     "camera": "拍照",
@@ -389,5 +394,11 @@
     "none": "无瑕疵 — 清空此栏",
     "flawFull": "瑕疵照片已满（5张）",
     "mainFull": "主图已满（10张）"
+  },
+  "soldTo": {
+    "title": "卖给了谁？",
+    "body": "选择买家，我们会请对方给你留评价。",
+    "outside": "在应用外卖出（熟人等）",
+    "reviewRequested": "已标记售出！已向买家发送评价请求"
   }
 }

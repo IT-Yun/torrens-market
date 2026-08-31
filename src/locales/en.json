@@ -213,7 +213,11 @@
     "showSold": "Show sold",
     "review": "Review",
     "noChatYet": "No chat for this listing yet.",
-    "changeStatus": "Change status"
+    "changeStatus": "Change status",
+    "bumpIn": "Next bump in about {{hours}}h",
+    "hide": "Hide",
+    "hideTitle": "Hide this sold listing?",
+    "hideConfirm": "It disappears for everyone else, but the record — chats and reviews — is kept."
   },
   "report": {
     "menuTitle": "Report or block",
@@ -365,7 +369,8 @@
     "kind_meetup": "{{name}} proposed a meetup",
     "kind_review": "You received a new review",
     "kind_favorite": "{{name}} favourited your listing",
-    "kind_system": "Notice"
+    "kind_system": "Notice",
+    "kind_review_request": "Purchase confirmed — leave the seller a review!"
   },
   "photoSource": {
     "camera": "Take photo",
@@ -389,5 +394,11 @@
     "none": "No flaws — clear this section",
     "flawFull": "Flaw photos are full (5)",
     "mainFull": "Main photos are full (10)"
+  },
+  "soldTo": {
+    "title": "Who did you sell to?",
+    "body": "Pick the buyer so they can leave you a review.",
+    "outside": "Sold outside the app",
+    "reviewRequested": "Marked sold — we asked the buyer for a review"
   }
 }
