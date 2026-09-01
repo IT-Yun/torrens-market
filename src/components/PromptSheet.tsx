@@ -87,8 +87,12 @@ export function PromptSheetProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (request) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
       modalRef.current?.present();
+      // Haptic fired off the critical path — its promise resolution inside
+      // the same microtask drain has been implicated in Hermes segfaults.
+      setTimeout(() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+      }, 120);
     }
   }, [request]);
 

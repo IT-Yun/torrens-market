@@ -77,7 +77,14 @@ export default function ProfileSetupScreen() {
           i18n.language === 'zh' ? 'zh-CN' : i18n.language,
           { year: 'numeric', month: 'short', day: 'numeric' },
         );
-        sheet.showInfo(t('profileSetup.nameCooldown'), t('profileSetup.nameCooldownUntil', { date }));
+        // Plain deferred Alert here, NOT the gorhom sheet: presenting the
+        // reanimated-backed sheet from this keyboard-focused save flow
+        // segfaults Hermes (drainJobs) reproducibly — the deferred Alert
+        // path has been crash-free since 8/21. Tracked as a known issue.
+        setTimeout(
+          () => Alert.alert(t('profileSetup.nameCooldown'), t('profileSetup.nameCooldownUntil', { date })),
+          50,
+        );
         return;
       }
     }
