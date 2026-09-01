@@ -11,6 +11,7 @@ import {
   canBump,
   fetchListingChatPartners,
   markListingSold,
+  setListingHidden,
   fetchMyListings,
   formatPrice,
   photoUrl,
@@ -94,6 +95,7 @@ export default function MyListingsScreen() {
                     {item.title}
                   </Text>
                   <Text style={styles.price}>{formatPrice(item.price_cents, t('common.free'))}</Text>
+                  <View style={{ flexDirection: 'row', gap: 6 }}>
                   <View
                     style={[
                       styles.statusPill,
@@ -112,6 +114,14 @@ export default function MyListingsScreen() {
                     >
                       {t(`myListings.status.${item.status}`)}
                     </Text>
+                  </View>
+                  {item.hidden && (
+                    <View style={[styles.statusPill, { backgroundColor: '#E9E4F4' }]}>
+                      <Text style={[styles.statusPillText, { color: '#6B4FA1' }]}>
+                        {t('myListings.hiddenBadge')}
+                      </Text>
+                    </View>
+                  )}
                   </View>
                 </View>
               </Pressable>
@@ -223,18 +233,35 @@ export default function MyListingsScreen() {
                         onPress: () =>
                           router.push({ pathname: '/listing/create', params: { editId: item.id } }),
                       },
-                      {
-                        label: t(sold ? 'myListings.hide' : 'myListings.delete'),
-                        variant: 'destructive',
+                      ...(sold
+                        ? [
+                            {
+                              label: t(item.hidden ? 'myListings.unhide' : 'myListings.hide'),
+                              variant: 'secondary' as const,
+                              onPress: async () => {
+                                await setListingHidden(item.id, !item.hidden).catch(() => {});
+                                sheet.showToast(
+                                  t(item.hidden ? 'myListings.unhidden' : 'myListings.hiddenDone'),
+                                );
+                                load();
+                              },
+                            },
+                          ]
+                        : []),
+                      ...(sold
+                        ? []
+                        : [{
+                        label: t('myListings.delete'),
+                        variant: 'destructive' as const,
                         onPress: () =>
                           setTimeout(
                             () =>
                               sheet.showConfirm(
-                                t(sold ? 'myListings.hideTitle' : 'myListings.deleteTitle'),
-                                t(sold ? 'myListings.hideConfirm' : 'myListings.deleteConfirm'),
+                                t('myListings.deleteTitle'),
+                                t('myListings.deleteConfirm'),
                                 [
                                   {
-                                    label: t(sold ? 'myListings.hide' : 'myListings.delete'),
+                                    label: t('myListings.delete'),
                                     variant: 'destructive',
                                     onPress: async () => {
                                       await updateListingStatus(item.id, 'deleted').catch(() => {});
@@ -245,7 +272,7 @@ export default function MyListingsScreen() {
                               ),
                             380,
                           ),
-                      },
+                      }]),
                     ])
                   }
                   accessibilityRole="button"

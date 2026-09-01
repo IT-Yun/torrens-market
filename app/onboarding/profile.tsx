@@ -96,7 +96,10 @@ export default function ProfileSetupScreen() {
       const { error } = await supabase.from('profiles').update(patch).eq('id', session.user.id);
       if (error) throw error;
       await refreshProfile();
-      router.replace('/(tabs)/home');
+      // Deferred: navigating straight out of the response microtask is the
+      // same Hermes-fragile window as the old Alert crash (live user report
+      // 8/31) — hop to the event loop before unmounting the screen.
+      setTimeout(() => router.replace('/(tabs)/home'), 0);
     } catch (e) {
       const msg = (e as Error).message ?? '';
       // Deferred: alerting synchronously from the rejection microtask

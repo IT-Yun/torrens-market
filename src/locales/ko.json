@@ -129,7 +129,8 @@
     "cover": "대표",
     "photoOrderTip": "탭 = 대표 사진 · 순서 정하기 = 원하는 순서로 탭 · 길게 눌러 하자 사진으로 이동",
     "optionalHint": "모르면 비워두세요",
-    "arrange": "순서 정하기"
+    "arrange": "순서 정하기",
+    "photoTipShort": "끌어서 순서 변경 — 1번이 대표 사진이에요. 정직한 사진이 더 빨리 팔려요."
   },
   "listingDetail": {
     "chat": "판매자와 채팅",
@@ -217,7 +218,11 @@
     "bumpIn": "다음 끌올까지 약 {{hours}}시간",
     "hide": "숨기기",
     "hideTitle": "판매완료 매물을 숨길까요?",
-    "hideConfirm": "다른 사람에게는 보이지 않게 되고, 기록(채팅·후기)은 그대로 남아요."
+    "hideConfirm": "다른 사람에게는 보이지 않게 되고, 기록(채팅·후기)은 그대로 남아요.",
+    "unhide": "숨김 해제",
+    "hiddenBadge": "숨김",
+    "hiddenDone": "숨겼어요 — 이제 나에게만 보여요",
+    "unhidden": "다시 공개했어요"
   },
   "report": {
     "menuTitle": "신고 또는 차단",
@@ -393,7 +398,9 @@
     "moveToMain": "대표 사진으로 이동",
     "none": "하자 없음 — 이 섹션 비우기",
     "flawFull": "하자 사진이 가득 찼어요 (5장)",
-    "mainFull": "대표 사진이 가득 찼어요 (10장)"
+    "mainFull": "대표 사진이 가득 찼어요 (10장)",
+    "noneCheck": "하자 없음",
+    "toFlawShort": "→ 하자"
   },
   "soldTo": {
     "title": "누구에게 판매했나요?",

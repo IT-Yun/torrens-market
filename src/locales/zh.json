@@ -129,7 +129,8 @@
     "cover": "封面",
     "photoOrderTip": "点按 = 封面 · 排序 = 按想要的顺序点按 · 长按移到瑕疵照片",
     "optionalHint": "不确定可留空",
-    "arrange": "排序"
+    "arrange": "排序",
+    "photoTipShort": "拖动排序 — 第1张是封面。诚实的照片卖得更快。"
   },
   "listingDetail": {
     "chat": "联系卖家",
@@ -217,7 +218,11 @@
     "bumpIn": "距下次置顶约 {{hours}} 小时",
     "hide": "隐藏",
     "hideTitle": "隐藏这个已售商品？",
-    "hideConfirm": "其他人将看不到它，但记录（聊天·评价）会保留。"
+    "hideConfirm": "其他人将看不到它，但记录（聊天·评价）会保留。",
+    "unhide": "取消隐藏",
+    "hiddenBadge": "已隐藏",
+    "hiddenDone": "已隐藏 — 现在只有你能看到",
+    "unhidden": "已重新公开"
   },
   "report": {
     "menuTitle": "举报或屏蔽",
@@ -393,7 +398,9 @@
     "moveToMain": "移到主图",
     "none": "无瑕疵 — 清空此栏",
     "flawFull": "瑕疵照片已满（5张）",
-    "mainFull": "主图已满（10张）"
+    "mainFull": "主图已满（10张）",
+    "noneCheck": "无瑕疵",
+    "toFlawShort": "→ 瑕疵"
   },
   "soldTo": {
     "title": "卖给了谁？",

@@ -129,7 +129,8 @@
     "cover": "Cover",
     "photoOrderTip": "Tap = cover · Arrange = tap photos in your order · long-press to move to flaws",
     "optionalHint": "Leave blank if unsure",
-    "arrange": "Arrange"
+    "arrange": "Arrange",
+    "photoTipShort": "Drag to reorder — #1 is the cover. Honest photos sell faster."
   },
   "listingDetail": {
     "chat": "Chat with seller",
@@ -217,7 +218,11 @@
     "bumpIn": "Next bump in about {{hours}}h",
     "hide": "Hide",
     "hideTitle": "Hide this sold listing?",
-    "hideConfirm": "It disappears for everyone else, but the record — chats and reviews — is kept."
+    "hideConfirm": "It disappears for everyone else, but the record — chats and reviews — is kept.",
+    "unhide": "Unhide",
+    "hiddenBadge": "Hidden",
+    "hiddenDone": "Hidden — only you can see it now",
+    "unhidden": "Visible again"
   },
   "report": {
     "menuTitle": "Report or block",
@@ -393,7 +398,9 @@
     "moveToMain": "Move to main photos",
     "none": "No flaws — clear this section",
     "flawFull": "Flaw photos are full (5)",
-    "mainFull": "Main photos are full (10)"
+    "mainFull": "Main photos are full (10)",
+    "noneCheck": "No flaws to disclose",
+    "toFlawShort": "→ Flaw"
   },
   "soldTo": {
     "title": "Who did you sell to?",

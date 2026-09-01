@@ -37,6 +37,7 @@ import { useAppConfig } from '../../src/lib/appConfig';
 import { useSession } from '../../src/lib/session';
 import { supabase } from '../../src/lib/supabase';
 import { Camera, ChevronLeft, ChevronRight, MapPin, ShieldCheck, Sparkles, X } from 'lucide-react-native';
+import { DraggableGrid } from 'react-native-draggable-grid';
 import { SuburbField } from '../../src/components/SuburbField';
 import { suggestCategorySlug } from '../../src/lib/categorize';
 import { getApproxPosition } from '../../src/lib/location';
@@ -159,8 +160,9 @@ export default function CreateListingScreen() {
   const [suburb, setSuburb] = useState(profile?.suburb ?? '');
   const [attributes, setAttributes] = useState<Record<string, unknown>>({});
   const [busy, setBusy] = useState(false);
-  const [hasFlaws, setHasFlaws] = useState(false);
+  const [hasFlaws, setHasFlaws] = useState(true); // flaw section shows by default; '하자 없음' unchecks it
   const [arrangeMode, setArrangeMode] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const [arrangeSel, setArrangeSel] = useState<string[]>([]);
   const [flawShots, setFlawShots] = useState<ImagePickerAsset[]>([]);
   const [flawNote, setFlawNote] = useState('');
@@ -212,6 +214,45 @@ export default function CreateListingScreen() {
     (editId != null || photos.length > 0) &&
     requiredFieldsFilled;
 
+
+  function openMainPhotoSource() {
+    const remaining = MAX_PHOTOS - photos.length;
+    if (remaining <= 0) {
+      sheet.showToast(t('flaws.mainFull'));
+      return;
+    }
+    sheet.showConfirm(t('listingCreate.addPhotos'), undefined, [
+      {
+        label: t('photoSource.camera'),
+        variant: 'primary',
+        onPress: async () => {
+          if (!(await ensureCameraPermission())) {
+            sheet.showConfirm(t('photoSource.cameraDenied'), t('photoSource.cameraDeniedBody'), [
+              {
+                label: t('photoSource.openSettings'),
+                variant: 'primary',
+                onPress: () => Linking.openSettings(),
+              },
+            ]);
+            return;
+          }
+          await captureImages(remaining, (asset, taken) => {
+            setPhotos((prev) => [...prev, asset]);
+            sheet.showToast(t('photoSource.shotAdded', { n: taken, total: remaining }));
+          });
+        },
+      },
+      {
+        label: t('photoSource.library'),
+        variant: 'secondary',
+        onPress: async () => {
+          const assets = await pickImages(remaining);
+          if (assets.length) setPhotos((prev) => [...prev, ...assets]);
+        },
+      },
+    ]);
+  }
+
   async function post() {
     if (!session || categoryId == null) return;
     setBusy(true);
@@ -224,7 +265,7 @@ export default function CreateListingScreen() {
           price_cents: Math.round(parseFloat(price || '0') * 100),
           condition,
           flaw_note: hasFlaws ? flawNote.trim() || null : null,
-          has_flaws: hasFlaws,
+          has_flaws: hasFlaws && (flawShots.length > 0 || flawNote.trim() !== '' || condition === 'worn'),
           pickup_mode: pickupMode,
           payment_method: paymentMethod,
           offers_enabled: offersEnabled,
@@ -246,7 +287,7 @@ export default function CreateListingScreen() {
           condition,
           flawNote: hasFlaws ? flawNote.trim() || null : null,
           flawPhotos: hasFlaws ? flawShots : [],
-          hasFlaws,
+          hasFlaws: hasFlaws && (flawShots.length > 0 || flawNote.trim() !== ''),
           pickupMode,
           paymentMethod,
           offersEnabled: price.trim() === '0' ? false : offersEnabled,
@@ -297,6 +338,7 @@ export default function CreateListingScreen() {
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
+        scrollEnabled={!dragging}
       >
         {/* photos (unchanged in edit mode) */}
         {!editId && (
@@ -333,8 +375,8 @@ export default function CreateListingScreen() {
             </Pressable>
           )}
         </View>
-        <Text style={styles.photoTip}>{t('listingCreate.photoTip')}</Text>
-        {photos.length > 1 && <Text style={styles.photoTip}>{t('listingCreate.photoOrderTip')}</Text>}
+        <Text style={styles.photoTip}>{t('listingCreate.photoTipShort')}</Text>
+        {arrangeMode ? (
         <View style={styles.photoGrid}>
             <Pressable
               style={[styles.addPhoto, !uploadsEnabled && { opacity: 0.4 }]}
@@ -449,7 +491,100 @@ export default function CreateListingScreen() {
               );
             })}
         </View>
+        ) : (
+          <DraggableGrid
+            numColumns={3}
+            data={[
+              { key: '__add', disabledDrag: true, disabledReSorted: true },
+              ...photos.map((p) => ({ key: p.assetId ?? p.uri, photo: p })),
+            ] as { key: string; photo?: ImagePickerAsset; disabledDrag?: boolean; disabledReSorted?: boolean }[]}
+            onDragStart={() => setDragging(true)}
+            onDragRelease={(data: { key: string; photo?: ImagePickerAsset }[]) => {
+              setDragging(false);
+              setPhotos(
+                data
+                  .map((d) => d.photo)
+                  .filter(Boolean) as ImagePickerAsset[],
+              );
+            }}
+            renderItem={(item: { key: string; photo?: ImagePickerAsset }) => {
+              if (!item.photo) {
+                return (
+                  <View style={styles.dragCell}>
+                    <Pressable
+                      style={[styles.addPhoto, !uploadsEnabled && { opacity: 0.4 }]}
+                      disabled={!uploadsEnabled}
+                      onPress={openMainPhotoSource}
+                    >
+                      <Camera size={24} color={colors.textSecondary} strokeWidth={1.8} />
+                      <Text style={styles.addPhotoText}>{t('listingCreate.addPhotos')}</Text>
+                    </Pressable>
+                  </View>
+                );
+              }
+              const idx = photos.findIndex((p) => (p.assetId ?? p.uri) === item.key);
+              return (
+                <View style={styles.dragCell}>
+                  <Image
+                    source={{ uri: item.photo.uri }}
+                    style={[styles.photo, idx === 0 && styles.photoCover]}
+                  />
+                  <View style={[styles.photoIndex, idx === 0 && styles.photoIndexCover]}>
+                    <Text style={styles.photoIndexText}>
+                      {idx === 0 ? t('listingCreate.cover') : idx + 1}
+                    </Text>
+                  </View>
+                  <Pressable
+                    style={styles.photoRemove}
+                    hitSlop={6}
+                    onPress={() => setPhotos((prev) => prev.filter((_, i) => i !== idx))}
+                  >
+                    <X size={12} color={colors.white} strokeWidth={2.5} />
+                  </Pressable>
+                  <Pressable
+                    style={styles.toFlawBtn}
+                    hitSlop={6}
+                    onPress={() => {
+                      if (flawShots.length >= 5) {
+                        sheet.showToast(t('flaws.flawFull'));
+                        return;
+                      }
+                      const asset = photos[idx];
+                      setPhotos((prev) => prev.filter((_, i) => i !== idx));
+                      setFlawShots((prev) => [...prev, asset]);
+                      setHasFlaws(true);
+                    }}
+                  >
+                    <Text style={styles.toFlawBtnText}>{t('flaws.toFlawShort')}</Text>
+                  </Pressable>
+                </View>
+              );
+            }}
+          />
+        )}
           </>
+        )}
+
+        {!editId && (
+          <Pressable
+            style={styles.noFlawsRow}
+            onPress={() => {
+              if (hasFlaws) {
+                setFlawShots([]);
+                setFlawNote('');
+                setHasFlaws(false);
+              } else {
+                setHasFlaws(true);
+              }
+            }}
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: !hasFlaws }}
+          >
+            <View style={[styles.noFlawsBox, !hasFlaws && styles.noFlawsBoxOn]}>
+              {!hasFlaws && <Text style={styles.noFlawsTick}>✓</Text>}
+            </View>
+            <Text style={styles.noFlawsText}>{t('flaws.noneCheck')}</Text>
+          </Pressable>
         )}
 
         {!editId && hasFlaws && (
@@ -521,17 +656,6 @@ export default function CreateListingScreen() {
                   </View>
                 ))}
             </View>
-            <Pressable
-              style={styles.flawNone}
-              onPress={() => {
-                setFlawShots([]);
-                setFlawNote('');
-                setHasFlaws(false);
-              }}
-              accessibilityRole="button"
-            >
-              <Text style={styles.flawNoneText}>{t('flaws.none')}</Text>
-            </Pressable>
             {flawShots.length === 0 && !flawNote.trim() && (
               <Text style={styles.flawNudge}>{t('flaws.defectiveNudge')}</Text>
             )}
@@ -717,6 +841,31 @@ export default function CreateListingScreen() {
 
 const styles = StyleSheet.create({
   flawNudge: { fontSize: 12, color: '#9A6B00', marginTop: -4 },
+  noFlawsRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 2 },
+  noFlawsBox: {
+    width: 20,
+    height: 20,
+    borderRadius: 5,
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    backgroundColor: colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noFlawsBoxOn: { backgroundColor: colors.primary, borderColor: colors.primary },
+  noFlawsTick: { color: colors.white, fontSize: 13, fontWeight: '800' },
+  noFlawsText: { fontSize: 14, color: colors.text },
+  dragCell: { padding: 4 },
+  toFlawBtn: {
+    position: 'absolute',
+    left: 8,
+    bottom: 8,
+    backgroundColor: 'rgba(20,30,26,0.72)',
+    borderRadius: radius.sm,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+  },
+  toFlawBtnText: { color: colors.white, fontSize: 10, fontWeight: '700' },
   photoHeaderRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   photoGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   arrangeBtn: {

@@ -36,6 +36,7 @@ export type ListingCard = {
   favorites_count?: number;
   flaw_note?: string | null;
   has_flaws?: boolean;
+  hidden?: boolean;
   listing_photos: { storage_path: string; sort_order: number; section?: 'main' | 'flaw' }[];
 };
 
@@ -95,7 +96,7 @@ export async function fetchListings(categoryId?: number | null): Promise<Listing
   let query = supabase
     .from('listings')
     .select(
-      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, payment_method, bumped_at, flaw_note, has_flaws, listing_photos (storage_path, sort_order, section)',
+      'id, seller_id, title, price_cents, suburb, status, created_at, category_id, attributes, lat, lng, pickup_mode, payment_method, bumped_at, hidden, flaw_note, has_flaws, listing_photos (storage_path, sort_order, section)',
     )
     .eq('status', 'active')
     .order('sort_ts', { ascending: false })
@@ -393,6 +394,12 @@ export async function fetchListingChatPartners(
     }
   }
   return [...partners.entries()].map(([userId, name]) => ({ userId, name }));
+}
+
+/** Owner-only visibility toggle for sold listings (records stay). */
+export async function setListingHidden(listingId: string, hidden: boolean): Promise<void> {
+  const { error } = await supabase.from('listings').update({ hidden }).eq('id', listingId);
+  if (error) throw error;
 }
 
 /** Mark sold with the buyer recorded (null = sold outside the app). */
