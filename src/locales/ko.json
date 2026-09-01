@@ -130,7 +130,8 @@
     "photoOrderTip": "탭 = 대표 사진 · 순서 정하기 = 원하는 순서로 탭 · 길게 눌러 하자 사진으로 이동",
     "optionalHint": "모르면 비워두세요",
     "arrange": "순서 정하기",
-    "photoTipShort": "끌어서 순서 변경 — 1번이 대표 사진이에요. 정직한 사진이 더 빨리 팔려요."
+    "photoTipShort": "끌어서 순서 변경 — 1번이 대표 사진이에요. 정직한 사진이 더 빨리 팔려요.",
+    "cellTapHint": "탭 = 옵션"
   },
   "listingDetail": {
     "chat": "판매자와 채팅",

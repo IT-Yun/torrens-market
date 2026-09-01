@@ -499,6 +499,34 @@ export default function CreateListingScreen() {
               ...photos.map((p) => ({ key: p.assetId ?? p.uri, photo: p })),
             ] as { key: string; photo?: ImagePickerAsset; disabledDrag?: boolean; disabledReSorted?: boolean }[]}
             onDragStart={() => setDragging(true)}
+            onItemPress={(item: { key: string; photo?: ImagePickerAsset }) => {
+              if (!item.photo) {
+                openMainPhotoSource();
+                return;
+              }
+              const idx = photos.findIndex((p) => (p.assetId ?? p.uri) === item.key);
+              sheet.showConfirm(t('flaws.movePhoto'), undefined, [
+                {
+                  label: t('flaws.moveToFlaws'),
+                  variant: 'secondary',
+                  onPress: () => {
+                    if (flawShots.length >= 5) {
+                      sheet.showToast(t('flaws.flawFull'));
+                      return;
+                    }
+                    const asset = photos[idx];
+                    setPhotos((prev) => prev.filter((_, i) => i !== idx));
+                    setFlawShots((prev) => [...prev, asset]);
+                    setHasFlaws(true);
+                  },
+                },
+                {
+                  label: t('myListings.delete'),
+                  variant: 'destructive',
+                  onPress: () => setPhotos((prev) => prev.filter((_, i) => i !== idx)),
+                },
+              ]);
+            }}
             onDragRelease={(data: { key: string; photo?: ImagePickerAsset }[]) => {
               setDragging(false);
               setPhotos(
@@ -534,29 +562,9 @@ export default function CreateListingScreen() {
                       {idx === 0 ? t('listingCreate.cover') : idx + 1}
                     </Text>
                   </View>
-                  <Pressable
-                    style={styles.photoRemove}
-                    hitSlop={6}
-                    onPress={() => setPhotos((prev) => prev.filter((_, i) => i !== idx))}
-                  >
-                    <X size={12} color={colors.white} strokeWidth={2.5} />
-                  </Pressable>
-                  <Pressable
-                    style={styles.toFlawBtn}
-                    hitSlop={6}
-                    onPress={() => {
-                      if (flawShots.length >= 5) {
-                        sheet.showToast(t('flaws.flawFull'));
-                        return;
-                      }
-                      const asset = photos[idx];
-                      setPhotos((prev) => prev.filter((_, i) => i !== idx));
-                      setFlawShots((prev) => [...prev, asset]);
-                      setHasFlaws(true);
-                    }}
-                  >
-                    <Text style={styles.toFlawBtnText}>{t('flaws.toFlawShort')}</Text>
-                  </Pressable>
+                  <View style={styles.tapHint}>
+                    <Text style={styles.tapHintText}>{t('listingCreate.cellTapHint')}</Text>
+                  </View>
                 </View>
               );
             }}
@@ -866,6 +874,16 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
   },
   toFlawBtnText: { color: colors.white, fontSize: 10, fontWeight: '700' },
+  tapHint: {
+    position: 'absolute',
+    left: 8,
+    bottom: 8,
+    backgroundColor: 'rgba(20,30,26,0.6)',
+    borderRadius: radius.sm,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+  },
+  tapHintText: { color: colors.white, fontSize: 9, fontWeight: '600' },
   photoHeaderRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   photoGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   arrangeBtn: {

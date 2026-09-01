@@ -130,7 +130,8 @@
     "photoOrderTip": "Tap = cover · Arrange = tap photos in your order · long-press to move to flaws",
     "optionalHint": "Leave blank if unsure",
     "arrange": "Arrange",
-    "photoTipShort": "Drag to reorder — #1 is the cover. Honest photos sell faster."
+    "photoTipShort": "Drag to reorder — #1 is the cover. Honest photos sell faster.",
+    "cellTapHint": "tap = options"
   },
   "listingDetail": {
     "chat": "Chat with seller",

@@ -130,7 +130,8 @@
     "photoOrderTip": "点按 = 封面 · 排序 = 按想要的顺序点按 · 长按移到瑕疵照片",
     "optionalHint": "不确定可留空",
     "arrange": "排序",
-    "photoTipShort": "拖动排序 — 第1张是封面。诚实的照片卖得更快。"
+    "photoTipShort": "拖动排序 — 第1张是封面。诚实的照片卖得更快。",
+    "cellTapHint": "点按 = 选项"
   },
   "listingDetail": {
     "chat": "联系卖家",
