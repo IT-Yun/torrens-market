@@ -8,7 +8,7 @@ const nav = [
   ['/', 'Dashboard'], ['/analytics', 'Analytics'],
   ['/members', 'Members'], ['/listings', 'Listings'], ['/chats', 'Chats'], ['/reviews', 'Reviews'],
   ['/reports', 'Reports'], ['/feedback', 'Feedback'],
-  ['/config', 'Kill switches'], ['/infra', 'Infra & releases'], ['/audit', 'Audit log'],
+  ['/config', 'Kill switches'], ['/security', 'Security'], ['/infra', 'Infra & releases'], ['/audit', 'Audit log'],
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
