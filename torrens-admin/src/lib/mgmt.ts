@@ -35,6 +35,20 @@ export const ACCEPTED: { name: string; match: string; why: string }[] = [
   { name: 'security_definer_view', match: 'listing_favorite_counts', why: 'owner-rights aggregate view; counts only' },
   { name: 'auth_rls_initplan', match: '', why: 'known perf backlog (24 policies) — deferred post-launch, tracked in wiki log 2026-08-20' },
   { name: 'unindexed_foreign_keys', match: '', why: 'tiny tables at current scale; revisit at growth stage (spec-ops-roadmap)' },
+  { name: 'extension_in_public', match: '', why: 'postgis/pg_net schema move deferred to v1.1 (documented 2026-08-20 sweep)' },
+  { name: 'auth_leaked_password_protection', match: '', why: 'HaveIBeenPwned check is Pro-plan-only; on Free by decision 2026-08-30 — enable on upgrade' },
+  { name: 'anon_security_definer_function_executable', match: 'get_profile_reviews', why: 'public reviews API by design (ADR-015)' },
+  { name: 'anon_security_definer_function_executable', match: 'is_banned', why: 'RLS helper; must be callable for policy evaluation' },
+  { name: 'anon_security_definer_function_executable', match: 'st_estimatedextent', why: 'PostGIS builtin; no user data' },
+  { name: 'authenticated_security_definer_function_executable', match: 'get_profile_reviews', why: 'public reviews API by design' },
+  { name: 'authenticated_security_definer_function_executable', match: 'is_banned', why: 'RLS helper' },
+  { name: 'authenticated_security_definer_function_executable', match: 'is_room_participant', why: 'RLS helper for chat policies (anon is denied)' },
+  { name: 'authenticated_security_definer_function_executable', match: 'bump_listing', why: 'intentional RPC (ADR-010), cooldown-guarded' },
+  { name: 'authenticated_security_definer_function_executable', match: 'start_chat', why: 'intentional RPC' },
+  { name: 'authenticated_security_definer_function_executable', match: 'increment_view', why: 'intentional RPC, anon revoked' },
+  { name: 'authenticated_security_definer_function_executable', match: 'mark_read', why: 'intentional RPC' },
+  { name: 'authenticated_security_definer_function_executable', match: 'st_estimatedextent', why: 'PostGIS builtin' },
+  // NOTE deliberately NOT accepted: notif_on_* trigger fns — real finding, fix handed to the DB owner 2026-09-02.
 ];
 export function acceptedReason(l: Lint): string | null {
   for (const a of ACCEPTED) if (a.name === l.name && (!a.match || l.detail?.includes(a.match))) return a.why;
