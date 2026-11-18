@@ -1,0 +1,65 @@
+════════════════════════════════════════════════
+ 복붙 전용 — App Store Connect 재제출
+ [A] = Messages 답장에 (영상도 같이 첨부)
+ [B] = App Review Information > Notes 란에
+ 각 블록의 ▼▼▼ 부터 ▲▲▲ 까지 전체 복사
+════════════════════════════════════════════════
+
+
+[A] Messages 답장용 (Reply 누르고 붙여넣기 + 📎 영상 첨부 + Send)
+▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+
+Hello, thank you for the review. Please find the requested information below.
+
+1. Screen recording
+Attached is a screen recording captured on a physical iPhone 17 Pro running iOS 26.6, demonstrating: app launch, Sign in with Apple registration, the location permission prompt, browsing and search, posting a listing (camera/photos permission prompts), in-chat price offers and meetup scheduling, user-generated-content reporting and blocking, and account deletion. The app has no paid content, purchases, or subscriptions, and no App Tracking Transparency prompt (no tracking).
+
+2. Devices and operating systems tested
+- iPhone 17 Pro, iOS 26.6 — physical device (TestFlight builds 3–6): full end-to-end testing including Sign in with Apple, Google sign-in, push notifications, and location features.
+- iOS Simulator (Xcode 16): iPhone 16 Pro Max and additional screen sizes — a 46-step end-to-end UI test pass in all three languages (English, Korean, Chinese).
+
+3. App functions and target audience
+Torrens Market is a free local secondhand marketplace for Adelaide, South Australia. Users (16+) list used items with photos, browse and search nearby listings, chat, agree on a price, and meet in person to complete the trade. The problem it solves: Adelaide's large international community (Korean- and Chinese-speaking students and migrants) is underserved by English-only marketplaces, so the entire product is trilingual (English/Korean/Chinese) with local-trust features such as suburb verification, a verified-seller badge, and post-trade reviews. The app processes no payments; trades settle in person.
+
+4. Setup and access instructions
+No demo credentials are required. On the login screen tap "Continue with Apple" (Sign in with Apple) — the reviewer's own Apple ID creates an account immediately. The marketplace is pre-seeded with sample listings, so a fresh account sees a populated feed at once. Main features: Home feed (browse/filters), search tab, + button (post a listing), chat tab (price offers + meetup scheduling), Profile > Settings (language, blocked users, delete account). Email one-time-code login also exists as an alternative; Sign in with Apple is the recommended review path.
+
+5. External services used
+- Supabase (hosted): authentication, Postgres database, file storage, and edge functions — the entire backend.
+- Sign in with Apple and Google Sign-In: federated login only.
+- Expo / EAS (expo.dev): build pipeline, over-the-air JS updates, and the Expo Push Notification service (APNs delivery).
+- GitHub Pages: static hosting for the privacy policy and support pages.
+No payment processors, no ad networks, no analytics SDKs, and no AI services are used.
+
+6. Regional differences
+None — the app functions identically in all regions. The UI language (English/Korean/Chinese) is a user choice, independent of region. Listing content is naturally concentrated in Adelaide, Australia, where the service launches.
+
+7. Regulated industry / third-party material
+Not applicable. Torrens Market is a consumer-to-consumer secondhand marketplace; it processes no payments, offers no financial, medical, or gambling services, and contains no protected third-party material. All app content is user-generated, with reporting, blocking, and auto-hide moderation built in (demonstrated in the recording).
+
+We have also added this information to the App Review Information Notes field for future submissions. Thank you!
+
+▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+
+[B] Notes 란용 (App Review Information > Notes 에 붙여넣고 Save)
+▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+
+SIGN-IN FOR REVIEW: No demo credentials are required. On the login screen tap "Continue with Apple" (Sign in with Apple) — the reviewer's own Apple ID creates an account immediately. The marketplace is pre-seeded with sample listings, so a fresh account sees a populated feed at once. Email one-time-code login also exists as an alternative.
+
+DEVICES TESTED: iPhone 17 Pro, iOS 26.6 — physical device (TestFlight builds 3–6), full end-to-end testing including Sign in with Apple, Google sign-in, push notifications, and location features. iOS Simulator (Xcode 16): iPhone 16 Pro Max and additional screen sizes — a 46-step end-to-end UI test pass in English, Korean, and Chinese.
+
+APP AND AUDIENCE: Torrens Market is a free local secondhand marketplace for Adelaide, South Australia. Users (16+) list used items with photos, browse and search nearby listings, chat, agree on a price, and meet in person to complete the trade. Fully trilingual (English/Korean/Chinese) for Adelaide's international community, with local-trust features (suburb verification, verified-seller badge, post-trade reviews). The app processes no payments; trades settle in person. No paid content, purchases, or subscriptions; no App Tracking Transparency prompt (no tracking).
+
+MAIN FEATURES: Home feed (browse/filters), search tab, + button (post a listing), chat tab (price offers + meetup scheduling), Profile > Settings (language, blocked users, delete account). UGC safety: every listing has Report (reason picker) and Block seller; three distinct reports auto-hide a listing. Account deletion: Profile > Settings > Delete account (type DELETE to confirm).
+
+EXTERNAL SERVICES: Supabase (hosted) — authentication, Postgres database, file storage, edge functions (entire backend). Sign in with Apple and Google Sign-In — federated login only. Expo / EAS (expo.dev) — build pipeline, over-the-air JS updates, Expo Push Notification service (APNs). GitHub Pages — static hosting for the privacy policy and support pages. No payment processors, no ad networks, no analytics SDKs, no AI services.
+
+REGIONAL DIFFERENCES: None — the app functions identically in all regions. UI language (EN/KO/ZH) is a user choice, independent of region. Listings are naturally concentrated in Adelaide, Australia, where the service launches.
+
+REGULATED INDUSTRY / THIRD-PARTY MATERIAL: Not applicable. Consumer-to-consumer secondhand marketplace; no payments processed, no financial/medical/gambling services, no protected third-party material. All content is user-generated with reporting, blocking, and auto-hide moderation built in.
+
+Privacy policy: https://it-yun.github.io/torrens-market/privacy.html
+Support: https://it-yun.github.io/torrens-market/support.html
+
+▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲

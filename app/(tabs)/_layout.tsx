@@ -1,0 +1,99 @@
+import { useCallback, useEffect, useState } from 'react';
+import { Tabs } from 'expo-router';
+import { useTranslation } from 'react-i18next';
+import { Heart, Home, MessageCircle, User } from 'lucide-react-native';
+import { AppState } from 'react-native';
+import { fetchUnreadCount, onUnreadChanged } from '../../src/lib/chat';
+import { useSession } from '../../src/lib/session';
+import { supabase } from '../../src/lib/supabase';
+import { colors } from '../../src/theme';
+import { useUpdatePrompt } from '../../src/components/UpdatePrompt';
+
+
+export default function TabsLayout() {
+  const { t } = useTranslation();
+  const { session } = useSession();
+  const [unread, setUnread] = useState(0);
+  // Once-per-version "new version available" / "restart to apply" prompt (see UpdatePrompt.tsx).
+  useUpdatePrompt();
+
+  const refreshUnread = useCallback(() => {
+    if (session) fetchUnreadCount(session.user.id).then(setUnread).catch(() => {});
+  }, [session]);
+
+  useEffect(() => {
+    refreshUnread();
+    const offLocal = onUnreadChanged(refreshUnread);
+    const appState = AppState.addEventListener('change', (state) => {
+      if (state === 'active') refreshUnread();
+    });
+    if (!session)
+      return () => {
+        offLocal();
+        appState.remove();
+      };
+    const channel = supabase
+      .channel('unread-badge')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, refreshUnread)
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'chat_participants' },
+        refreshUnread,
+      )
+      .subscribe();
+    return () => {
+      offLocal();
+      appState.remove();
+      supabase.removeChannel(channel);
+    };
+  }, [session, refreshUnread]);
+
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textSecondary,
+      }}
+    >
+      <Tabs.Screen
+        name="home"
+        options={{
+          title: t('tabs.home'),
+          tabBarIcon: ({ color, focused }) => (
+            <Home size={24} color={color} strokeWidth={2} fill={focused ? colors.primarySoft : 'none'} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="favorites"
+        options={{
+          title: t('tabs.favorites'),
+          tabBarIcon: ({ color, focused }) => (
+            <Heart size={24} color={color} strokeWidth={2} fill={focused ? color : 'none'} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="chat"
+        options={{
+          title: t('tabs.chat'),
+          tabBarIcon: ({ color, focused }) => (
+            <MessageCircle size={24} color={color} strokeWidth={2} fill={focused ? colors.primarySoft : 'none'} />
+          ),
+          tabBarBadge: unread > 0 ? unread : undefined,
+          tabBarBadgeStyle: { backgroundColor: colors.primary, color: colors.white, fontSize: 11 },
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: t('tabs.profile'),
+          tabBarIcon: ({ color, focused }) => (
+            <User size={24} color={color} strokeWidth={2} fill={focused ? colors.primarySoft : 'none'} />
+          ),
+        }}
+      />
+    </Tabs>
+  );
+}
